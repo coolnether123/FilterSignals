@@ -10,6 +10,7 @@
     <li>
       <packageId>brrainz.harmony</packageId>
       <displayName>Harmony</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
     </li>
     <li>
       <packageId>CoolNether123.Spine</packageId>
@@ -20,5 +21,7 @@
     <li>brrainz.harmony</li>
     <li>CoolNether123.Spine</li>
   </loadAfter>
-  <description>Colony-aware manufacturing classifications and explanations for RimWorld item filters.</description>
+  <description>See what your colony can make directly inside RimWorld item filters.
+
+TechSense Filters adds transient Can make, Unlocked, Locked, and N/A views plus compact status markers and explanations. It never changes the saved allow/deny state of a filter.</description>
 </ModMetaData>

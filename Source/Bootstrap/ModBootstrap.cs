@@ -1,21 +1,27 @@
+using System.Reflection;
+using HarmonyLib;
+using Spine.Harmony;
+using TechSenseFilters.Runtime;
+using TechSenseFilters.Settings;
 using UnityEngine;
 using Verse;
-using TechSenseFilters.Compatibility;
-using TechSenseFilters.Patches;
-using TechSenseFilters.Settings;
 
 namespace TechSenseFilters.Bootstrap
 {
     public sealed class TechSenseFiltersMod : Mod
     {
+        private static bool patchesInstalled;
+
         private readonly TechSenseFiltersSettings settings;
+        private readonly TechSenseSettingsUi settingsUi =
+            new TechSenseSettingsUi();
 
         public TechSenseFiltersMod(ModContentPack content)
             : base(content)
         {
             settings = GetSettings<TechSenseFiltersSettings>();
-            CompatibilityRegistry.InitializeAll();
-            PatchInstaller.InstallAll();
+            TechSenseFiltersSettings.Bind(settings);
+            InstallPatches();
         }
 
         public override string SettingsCategory()
@@ -25,12 +31,47 @@ namespace TechSenseFilters.Bootstrap
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            var listing = new Listing_Standard();
-            listing.Begin(inRect);
-            listing.CheckboxLabeled(
-                "Feature enabled",
-                ref settings.FeatureEnabled);
-            listing.End();
+            settingsUi.Draw(inRect, settings);
+        }
+
+        private static void InstallPatches()
+        {
+            if (patchesInstalled)
+            {
+                return;
+            }
+
+            var harmony = new HarmonyLib.Harmony(
+                "CoolNether123.TechSenseFilters");
+            HarmonyUtil.PatchAll(
+                harmony,
+                Assembly.GetExecutingAssembly(),
+                new HarmonyUtil.PatchOptions
+                {
+                    // The one value-returning target is
+                    // Listing_TreeThingFilter.Visible(ThingDef). Its bool
+                    // result is amended by a postfix; no struct payload is
+                    // copied or rewritten.
+                    AllowStructReturns = true,
+                    OnResult = (target, result) =>
+                    {
+                        if (result.StartsWith("error:") ||
+                            result.StartsWith("skipped:"))
+                        {
+                            Log.Warning(
+                                "[TechSense Filters] " + target + ": " +
+                                result);
+                        }
+                        else if (Prefs.DevMode)
+                        {
+                            Log.Message(
+                                "[TechSense Filters] " + target + ": " +
+                                result);
+                        }
+                    }
+                });
+            patchesInstalled = true;
+            ClassificationService.InvalidateAll();
         }
     }
 }

@@ -4,3 +4,6 @@
 *.suo
 *.user
 Engineering/artifacts/
+Engineering/build-result.json
+1.6/Assemblies/build/
+1.6/Assemblies/*.log

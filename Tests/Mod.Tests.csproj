@@ -7,9 +7,13 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Source\Compatibility\CompatibilityRegistry.cs"
-             Link="CompatibilityRegistry.cs" />
-    <Compile Include="..\Source\Domain\FeatureState.cs"
-             Link="FeatureState.cs" />
+    <Compile Include="..\Source\Domain\ClassificationResult.cs"
+             Link="ClassificationResult.cs" />
+    <Compile Include="..\Source\Domain\ProductionClassification.cs"
+             Link="ProductionClassification.cs" />
+    <Compile Include="..\Source\Domain\ProductionClassifier.cs"
+             Link="ProductionClassifier.cs" />
+    <Compile Include="..\Source\Domain\ProductionPathAssessment.cs"
+             Link="ProductionPathAssessment.cs" />
   </ItemGroup>
 </Project>
