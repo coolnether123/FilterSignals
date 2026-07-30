@@ -21,6 +21,15 @@ open dialog. Saved allow/deny choices are never rewritten.
 - Harmony
 - Spine (`CoolNether123.Spine`)
 
+## Installation
+
+Spine does not yet have a public Workshop or download URL, so this verified
+build is distributed in the local collection at
+`A:\Dev\RimWorld\Releases\1.6\2026-07-30-program-final`. Copy both
+`TechSenseFilters` and `Spine` into RimWorld's `Mods` directory, then enable
+Harmony, Spine, and TechSense Filters in that order. No other gameplay mod in
+the collection is required.
+
 ## Settings
 
 The normal RimWorld mod settings page controls the toolbar, status indicators,
