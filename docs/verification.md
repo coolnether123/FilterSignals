@@ -21,14 +21,18 @@ and Spine dependencies.
 
 ## Final isolated in-game lane
 
-The authoritative release run is performed only after the clean release commit
-and packaged DLL exist. Its generated record is
+The authoritative release run completed against clean commit
+`451d9706e0d4791dd37ed24f289a0cd102d6d320` and packaged DLL SHA-256
+`43F67AD68C279AEE6CFE38F3049CCB05EFD16DFE495DEAC38B43BFA150096F4C`.
+The generated record is
 `Engineering/artifacts/final-runtime-evidence.json` (ignored build evidence,
-not release input). That record must bind the exact source commit and packaged
-DLL SHA-256 to the lane manifest, active mods, game and version-manifest hashes,
-log hash, screenshots, and verification outcomes.
+not release input), with SHA-256
+`E752635AC85524748FC1A86907CD66F66DD103BAC956CBB92B16C4B87C2AE298`.
+It binds the exact source, DLL, lane manifests, active mods, game and
+version-manifest hashes, logs, saves, screenshots, and outcomes.
 
-The final lane covers:
+Final lane `TechSenseFilters-c16476171867471a97186bbf5a507909`
+verified:
 
 - quickstart and existing-save addition;
 - exact active-mod and Harmony-patch ownership;
@@ -42,8 +46,15 @@ The final lane covers:
   a closed-dialog tick sample;
 - save/load, post-load UI and filter-state checks, and loading the resulting
   save without TechSense to confirm safe removal;
-- final log review for TechSense exceptions, errors, repeated warnings, and
-  Harmony failures.
+- final log review with zero TechSense exceptions, errors, repeated warnings,
+  or Harmony failures.
+
+The clean central build recorded `SourceDirty=false`, used tooling commit
+`e27edbb89f998870ea4e1383171ad45e05d115fa`, and reproduced the packaged DLL
+exactly. The removal lane
+`Spine-d3449e33c04b4e3f882b997dd2e1fc8d` loaded and re-saved the final save
+without TechSense and without error or exception matches. All lanes exited
+cleanly with exit code 0.
 
 Historical pre-release screenshots or sessions are not release evidence for a
 later source commit or DLL.
