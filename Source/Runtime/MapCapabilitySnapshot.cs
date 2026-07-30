@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using RimWorld;
+using TechSenseFilters.Domain;
 using Verse;
 
 namespace TechSenseFilters.Runtime
 {
     internal sealed class MapCapabilitySnapshot
     {
-        private readonly Dictionary<ThingDef, SourceAvailability> sources;
+        private readonly Dictionary<ThingDef, List<Building>> sources;
         private readonly IReadOnlyList<Pawn> capablePawns;
 
         private MapCapabilitySnapshot(
-            Dictionary<ThingDef, SourceAvailability> sources,
+            Dictionary<ThingDef, List<Building>> sources,
             IReadOnlyList<Pawn> capablePawns,
             int gameTick)
         {
@@ -21,18 +22,57 @@ namespace TechSenseFilters.Runtime
 
         internal int GameTick { get; }
 
-        internal bool HasSource(ThingDef sourceDef)
+        internal ProductionSourceSelection SelectSource(
+            RecipeDef recipe,
+            IReadOnlyList<ThingDef> sourceDefs,
+            string fallbackPathLabel)
         {
-            return sourceDef != null && sources.ContainsKey(sourceDef);
-        }
+            var candidates = new List<ProductionSourceCandidate>();
+            if (recipe == null || sourceDefs == null)
+            {
+                return ProductionSourceSelector.Select(
+                    fallbackPathLabel,
+                    candidates);
+            }
 
-        internal bool HasUsableSource(ThingDef sourceDef)
-        {
-            return sourceDef != null &&
-                sources.TryGetValue(
-                    sourceDef,
-                    out SourceAvailability availability) &&
-                availability.Usable;
+            for (int sourceIndex = 0;
+                sourceIndex < sourceDefs.Count;
+                sourceIndex++)
+            {
+                ThingDef sourceDef = sourceDefs[sourceIndex];
+                if (sourceDef == null ||
+                    !sources.TryGetValue(
+                        sourceDef,
+                        out List<Building> instances))
+                {
+                    continue;
+                }
+
+                string pathLabel =
+                    sourceDef.label ??
+                    sourceDef.defName ??
+                    fallbackPathLabel;
+                for (int instanceIndex = 0;
+                    instanceIndex < instances.Count;
+                    instanceIndex++)
+                {
+                    Building building = instances[instanceIndex];
+                    bool billGiverUsable =
+                        !(building is IBillGiver billGiver) ||
+                        billGiver.CurrentlyUsableForBills();
+                    bool recipeAvailable =
+                        billGiverUsable &&
+                        RecipeAvailableOnInstance(recipe, building);
+                    candidates.Add(new ProductionSourceCandidate(
+                        pathLabel,
+                        billGiverUsable,
+                        recipeAvailable));
+                }
+            }
+
+            return ProductionSourceSelector.Select(
+                fallbackPathLabel,
+                candidates);
         }
 
         internal bool HasCapablePawn(RecipeDef recipe)
@@ -98,7 +138,7 @@ namespace TechSenseFilters.Runtime
             DefinitionProductionIndex index,
             int gameTick)
         {
-            var sources = new Dictionary<ThingDef, SourceAvailability>();
+            var sources = new Dictionary<ThingDef, List<Building>>();
             var pawns = new List<Pawn>();
             if (map == null)
             {
@@ -117,20 +157,17 @@ namespace TechSenseFilters.Runtime
                     continue;
                 }
 
-                bool usable = !(building is IBillGiver billGiver) ||
-                    billGiver.CurrentlyUsableForBills();
                 if (sources.TryGetValue(
                     building.def,
-                    out SourceAvailability existing))
+                    out List<Building> existing))
                 {
-                    existing.Usable |= usable;
-                    sources[building.def] = existing;
+                    existing.Add(building);
                 }
                 else
                 {
                     sources.Add(
                         building.def,
-                        new SourceAvailability { Usable = usable });
+                        new List<Building> { building });
                 }
             }
 
@@ -152,9 +189,42 @@ namespace TechSenseFilters.Runtime
             return new MapCapabilitySnapshot(sources, pawns, gameTick);
         }
 
-        private struct SourceAvailability
+        private static bool RecipeAvailableOnInstance(
+            RecipeDef recipe,
+            Building building)
         {
-            internal bool Usable;
+            try
+            {
+                return recipe.AvailableOnNow(building);
+            }
+            catch (System.Exception exception)
+            {
+                int key = StableHash(
+                    "TechSense.AvailableOnNow." +
+                    (recipe.defName ?? "<unnamed>"));
+                Log.ErrorOnce(
+                    "[TechSense Filters] RecipeDef.AvailableOnNow failed " +
+                    "for recipe '" + (recipe.defName ?? "<unnamed>") +
+                    "' on '" +
+                    (building?.def?.defName ?? "<unknown source>") +
+                    "' and that source instance was ignored: " + exception,
+                    key);
+                return false;
+            }
+        }
+
+        private static int StableHash(string value)
+        {
+            unchecked
+            {
+                int hash = 17;
+                for (int i = 0; i < value.Length; i++)
+                {
+                    hash = (hash * 31) + value[i];
+                }
+
+                return hash;
+            }
         }
     }
 }

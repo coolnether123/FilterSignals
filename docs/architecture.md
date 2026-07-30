@@ -4,8 +4,11 @@
 
 `DefinitionProductionIndex` builds a definition-only recipe/product/source index
 after RimWorld has loaded definitions. `MapCapabilitySnapshot` then captures the
-small amount of colony state needed to evaluate those paths: present and usable
-production buildings plus eligible player colonists and colony mechs.
+small amount of colony state needed to evaluate those paths: every actual
+production-building instance plus eligible player colonists and colony mechs.
+Per-recipe evaluation requires one instance to pass both bill-giver usability
+and `RecipeDef.AvailableOnNow(instance)`. Buildings are grouped for lookup but
+never reduced to one definition-level usability Boolean.
 
 `ClassificationService` combines that data with registered compatibility
 providers, reduces all paths through the pure `ProductionClassifier`, and
@@ -59,3 +62,25 @@ local and not create a shared utility until a second real consumer appears.
 `CapabilityInvalidation.InvalidateIfProductionSource` has multiple patch
 callers and centralizes the rule that unrelated buildings must not flush the
 cache.
+
+`ProductionSourceSelector.Select` has one production caller,
+`MapCapabilitySnapshot.SelectSource`, plus focused unit-test callers. It remains
+an internal domain policy because separating the pure "any actual instance may
+win" reduction from RimWorld objects is what makes the conditional
+`RecipeWorker` regression testable. The recommended action is to keep it local
+to TechSense; do not promote it to Spine or shared tooling unless another
+production consumer needs the same policy.
+
+`MapCapabilitySnapshot.RecipeAvailableOnInstance` and its local `StableHash`
+helper each have one direct caller. They isolate the modded-code exception
+boundary and stable `ErrorOnce` key from source enumeration. They should remain
+private; moving a one-consumer fault boundary into shared infrastructure would
+not improve reuse.
+
+The four `Run*Probe` diagnostics methods each have one caller in the aggregate
+capability debug action. They remain separate because each produces a
+standalone runtime assertion for conditional instances, workstation
+invalidation, research invalidation, or multi-path definitions. They are
+developer-only acceptance probes, not reusable runtime services; the
+recommended action is to keep them private and local. `TrySpawnSource` is
+shared by the conditional-instance and workstation probes.

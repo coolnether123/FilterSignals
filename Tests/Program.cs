@@ -29,6 +29,15 @@ namespace TechSenseFilters.Tests
             Run(
                 "explicit override wins",
                 ExplicitOverrideWins);
+            Run(
+                "conditional recipe availability uses actual instances",
+                ConditionalRecipeAvailabilityUsesActualInstances);
+            Run(
+                "conditional recipe rejection blocks same-def source",
+                ConditionalRecipeRejectionBlocksSameDefSource);
+            Run(
+                "bill giver usability remains required",
+                BillGiverUsabilityRemainsRequired);
 
             Console.WriteLine("PASS: " + passed + " TechSense domain tests");
             return 0;
@@ -192,6 +201,66 @@ namespace TechSenseFilters.Tests
                 throw new InvalidOperationException(
                     "The exact override result must be preserved.");
             }
+        }
+
+        private static void
+            ConditionalRecipeAvailabilityUsesActualInstances()
+        {
+            ProductionSourceSelection selection =
+                ProductionSourceSelector.Select(
+                    "conditional bench",
+                    new[]
+                    {
+                        new ProductionSourceCandidate(
+                            "conditional bench",
+                            currentlyUsableForBills: true,
+                            recipeAvailableOnInstance: false),
+                        new ProductionSourceCandidate(
+                            "conditional bench",
+                            currentlyUsableForBills: true,
+                            recipeAvailableOnInstance: true)
+                    });
+
+            Equal(true, selection.SourcePresent);
+            Equal(true, selection.BillGiverUsable);
+            Equal(true, selection.SourceUsable);
+        }
+
+        private static void
+            ConditionalRecipeRejectionBlocksSameDefSource()
+        {
+            ProductionSourceSelection selection =
+                ProductionSourceSelector.Select(
+                    "conditional bench",
+                    new[]
+                    {
+                        new ProductionSourceCandidate(
+                            "conditional bench",
+                            currentlyUsableForBills: true,
+                            recipeAvailableOnInstance: false)
+                    });
+
+            Equal(true, selection.SourcePresent);
+            Equal(true, selection.BillGiverUsable);
+            Equal(false, selection.SourceUsable);
+        }
+
+        private static void BillGiverUsabilityRemainsRequired()
+        {
+            ProductionSourceSelection selection =
+                ProductionSourceSelector.Select(
+                    "powered bench",
+                    new[]
+                    {
+                        new ProductionSourceCandidate(
+                            "powered bench",
+                            currentlyUsableForBills: false,
+                            recipeAvailableOnInstance: true)
+                    });
+
+            Equal(true, selection.SourcePresent);
+            Equal(false, selection.BillGiverUsable);
+            Equal(false, selection.SourceUsable);
         }
 
         private static ProductionPathAssessment Path(

@@ -31,10 +31,16 @@ availability gate, while unfinished explicit research prerequisites are
 enumerated to produce a better explanation.
 
 A source is present when a player production building of the matching
-definition is spawned. `IBillGiver.CurrentlyUsableForBills()` supplies the
-usable test, covering normal power, fuel, and breakdown behavior. Pawn
-capability checks required work types, recipe skill requirements, and
-mechanitor-only recipes against active player colonists and colony mechs.
+definition is spawned. The map snapshot retains every actual source instance;
+it does not collapse buildings with the same `ThingDef`. A path is usable only
+when the same instance passes both
+`IBillGiver.CurrentlyUsableForBills()` and
+`RecipeDef.AvailableOnNow(actualBuilding)`, matching the two distinct vanilla
+gates. This preserves conditional behavior implemented by vanilla or modded
+`RecipeWorker` subclasses, while still allowing any accepted instance or
+alternate recipe path to win. Pawn capability checks required work types,
+recipe skill requirements, and mechanitor-only recipes against active player
+colonists and colony mechs.
 
 Material checks use `RecipeDef.PotentiallyMissingIngredients` only when the
 player enables that setting. It is disabled by default because inventory

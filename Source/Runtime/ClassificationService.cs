@@ -134,29 +134,15 @@ namespace TechSenseFilters.Runtime
             IReadOnlyList<ThingDef> sourceDefs = index.SourcesFor(recipe);
             ThingDef preferredSource =
                 sourceDefs.Count > 0 ? sourceDefs[0] : null;
-            ThingDef presentSource = null;
-            ThingDef usableSource = null;
-
-            for (int i = 0; i < sourceDefs.Count; i++)
-            {
-                ThingDef source = sourceDefs[i];
-                if (snapshot.HasSource(source))
-                {
-                    presentSource = presentSource ?? source;
-                }
-
-                if (snapshot.HasUsableSource(source))
-                {
-                    usableSource = source;
-                    break;
-                }
-            }
-
-            ThingDef displaySource =
-                usableSource ?? presentSource ?? preferredSource;
-            string pathLabel = displaySource?.label ??
+            string fallbackPathLabel = preferredSource?.label ??
                 recipe.label ??
                 recipe.defName;
+            ProductionSourceSelection sourceSelection =
+                snapshot.SelectSource(
+                    recipe,
+                    sourceDefs,
+                    fallbackPathLabel);
+            string pathLabel = sourceSelection.PathLabel;
             bool pawnCapable = snapshot.HasCapablePawn(recipe);
             bool materialsAvailable =
                 !TechSenseFiltersSettings.Current.ConsiderMaterialShortages ||
@@ -165,8 +151,9 @@ namespace TechSenseFilters.Runtime
                 BuildLockedReason(recipe, researchUnlocked);
             string unavailableReason = BuildUnavailableReason(
                 researchUnlocked,
-                presentSource != null,
-                usableSource != null,
+                sourceSelection.SourcePresent,
+                sourceSelection.BillGiverUsable,
+                sourceSelection.SourceUsable,
                 pawnCapable,
                 materialsAvailable,
                 pathLabel);
@@ -174,8 +161,8 @@ namespace TechSenseFilters.Runtime
             return new ProductionPathAssessment(
                 pathLabel,
                 researchUnlocked,
-                presentSource != null,
-                usableSource != null,
+                sourceSelection.SourcePresent,
+                sourceSelection.SourceUsable,
                 pawnCapable,
                 materialsAvailable,
                 lockedReason,
@@ -315,6 +302,7 @@ namespace TechSenseFilters.Runtime
         private static string BuildUnavailableReason(
             bool researchUnlocked,
             bool sourcePresent,
+            bool billGiverUsable,
             bool sourceUsable,
             bool pawnCapable,
             bool materialsAvailable,
@@ -331,10 +319,16 @@ namespace TechSenseFilters.Runtime
                     pathLabel + " exists.";
             }
 
-            if (!sourceUsable)
+            if (!billGiverUsable)
             {
                 return "Research is complete, but no usable " +
                     pathLabel + " exists.";
+            }
+
+            if (!sourceUsable)
+            {
+                return "Research is complete, but no currently usable " +
+                    pathLabel + " accepts this recipe.";
             }
 
             if (!pawnCapable)

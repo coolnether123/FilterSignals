@@ -1,14 +1,17 @@
 # Verification
 
-Verified on 2026-07-30 against RimWorld 1.6 using an isolated Agent Harness lane.
+Release-gate verification targets RimWorld 1.6 and uses an isolated Agent
+Harness lane.
 
 ## Automated
 
 `dotnet run --project .\Tests\Mod.Tests.csproj -c Release`
 
-Result: 8/8 domain tests passed. Coverage includes no-path N/A, any-viable-path
+Result: 11/11 domain tests passed. Coverage includes no-path N/A, any-viable-path
 wins, unlocked missing source, locked research, unusable source, pawn
-capability, optional materials, and final override precedence.
+capability, optional materials, final override precedence, conditional
+per-instance recipe acceptance, same-definition conditional rejection, and
+bill-giver usability.
 
 The central RimWorld build pipeline compiled the release assembly with
 RimWorld 1.6, Unity modules, Harmony, and standalone Spine references. The
@@ -16,36 +19,31 @@ package validator returned `RWT-BUILD-PACKAGE-VALID` with package ID
 `CoolNether123.TechSenseFilters`, supported version 1.6, and declared Harmony
 and Spine dependencies.
 
-## Isolated in-game lane
+## Final isolated in-game lane
 
-Session:
-`TechSenseFilters-1fd2b7ac69374cbc97deb85c0ed7b605`
+The authoritative release run is performed only after the clean release commit
+and packaged DLL exist. Its generated record is
+`Engineering/artifacts/final-runtime-evidence.json` (ignored build evidence,
+not release input). That record must bind the exact source commit and packaged
+DLL SHA-256 to the lane manifest, active mods, game and version-manifest hashes,
+log hash, screenshots, and verification outcomes.
 
-- Quickstart reached a ready map with three free colonists.
-- The harness enumerated all 14 TechSense Harmony targets, including
-  `Listing_TreeThingFilter.Visible` and `DoThingDef`.
-- The deterministic verification fixture used the same vanilla
-  `ThingFilterUI.DoThingFilterConfigWindow` path as normal dialogs.
-- Can make, Unlocked, Locked, and N/A toolbar controls rendered with compact
-  per-item markers and hover explanations.
-- Disabling Locked removed the locked Pemmican row while the fixture continued
-  to report `filterUnchanged:true` and `allowedCount:467`.
-- A save named `TechSenseFinal` completed, loaded back as generation 1, and
-  paused at tick 14513. Reopening the fixture after load preserved the UI and
-  again reported the permanent filter unchanged.
-- With the filter dialog closed, a forced 600-tick sample completed in
-  0.257124 seconds (2333.50 ticks/second), demonstrating that the mod adds no
-  per-tick polling path while the UI is closed.
-- The lane log contained no TechSense exception, error, or repeated runtime
-  warning.
+The final lane covers:
 
-Primary screenshots:
+- quickstart and existing-save addition;
+- exact active-mod and Harmony-patch ownership;
+- research completion plus workstation spawn/removal invalidation in the same
+  game tick;
+- two same-definition source instances evaluated by a conditional
+  `RecipeWorker`, multi-path definition handling, and representative tooltip
+  explanations;
+- opening and rendering the real shared `ThingFilterUI` fixture, transient
+  toolbar filtering without `ThingFilter` mutation, warm/cold cache timing, and
+  a closed-dialog tick sample;
+- save/load, post-load UI and filter-state checks, and loading the resulting
+  save without TechSense to confirm safe removal;
+- final log review for TechSense exceptions, errors, repeated warnings, and
+  Harmony failures.
 
-- `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TechSenseFilters-1fd2b7ac69374cbc97deb85c0ed7b605\ipc\captures\techsense-final-all-settled-20260730-194431-404.png`
-- `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TechSenseFilters-1fd2b7ac69374cbc97deb85c0ed7b605\ipc\captures\techsense-final-locked-hidden-settled-20260730-194649-979.png`
-- `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TechSenseFilters-1fd2b7ac69374cbc97deb85c0ed7b605\ipc\captures\techsense-after-save-load-20260730-194752-156.png`
-
-The profile scanner also reports metadata warnings belonging to unpublished
-Spine and unrelated inactive work-in-progress mods present in the development
-catalog. Those are outside this repository; TechSense does not fabricate a
-Spine download URL.
+Historical pre-release screenshots or sessions are not release evidence for a
+later source commit or DLL.

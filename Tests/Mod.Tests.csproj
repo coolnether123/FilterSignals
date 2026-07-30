@@ -15,5 +15,7 @@
              Link="ProductionClassifier.cs" />
     <Compile Include="..\Source\Domain\ProductionPathAssessment.cs"
              Link="ProductionPathAssessment.cs" />
+    <Compile Include="..\Source\Domain\ProductionSourceSelection.cs"
+             Link="ProductionSourceSelection.cs" />
   </ItemGroup>
 </Project>
