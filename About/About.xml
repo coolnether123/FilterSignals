@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>TechSense Filters</name>
+  <author>CoolNether123</author>
+  <packageId>CoolNether123.TechSenseFilters</packageId>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <modDependencies>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+    </li>
+    <li>
+      <packageId>CoolNether123.Spine</packageId>
+      <displayName>Spine</displayName>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>brrainz.harmony</li>
+    <li>CoolNether123.Spine</li>
+  </loadAfter>
+  <description>Colony-aware manufacturing classifications and explanations for RimWorld item filters.</description>
+</ModMetaData>
