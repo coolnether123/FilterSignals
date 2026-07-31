@@ -49,7 +49,11 @@ map and never moves the camera. Custom production paths, stale objects, hidden
 designators, and other ambiguous states do not advertise a click action; if
 clicked, they close the storage panel instead of appearing unresponsive.
 Hover text contains only the classification, a short reason, and an action
-instruction when a real navigation target exists.
+instruction when a real navigation target exists. Because vanilla registers a
+tooltip for the entire item row first, the square clears current-frame tooltips
+only while the pointer is inside its 18-by-18 interaction rectangle, then
+registers the TechSense tooltip. This gives the square one unambiguous tooltip
+while preserving the vanilla item description everywhere else on the row.
 
 Settings and patch installation use the standalone Spine dependency:
 

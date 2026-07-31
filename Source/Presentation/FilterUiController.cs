@@ -115,6 +115,7 @@ namespace TechSenseFilters.Presentation
             string navigation =
                 ClassificationPresentation.NavigationTooltip(
                     target.Decision);
+            TooltipHandler.ClearTooltipsFrom(interactionRect);
             TooltipHandler.TipRegion(
                 interactionRect,
                 ClassificationPresentation.FullLabel(result.Classification) +
