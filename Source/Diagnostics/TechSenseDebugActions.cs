@@ -26,6 +26,17 @@ namespace TechSenseFilters.Diagnostics
 
         [DebugAction(
             "TechSense Filters",
+            "Open small-volume tooltip fixture",
+            actionType = DebugActionType.Action)]
+        private static void OpenSmallVolumeTooltipFixture()
+        {
+            Dialog_TechSenseFixture fixture =
+                new Dialog_TechSenseFixture("Gold");
+            Find.WindowStack.Add(fixture);
+        }
+
+        [DebugAction(
+            "TechSense Filters",
             "Log TechSense fixture state",
             actionType = DebugActionType.Action)]
         private static void LogFixtureState()
@@ -505,9 +516,14 @@ namespace TechSenseFilters.Diagnostics
             new ThingFilterUI.UIState();
         private readonly int initialFingerprint;
 
-        internal Dialog_TechSenseFixture()
+        internal Dialog_TechSenseFixture(string initialSearch = null)
         {
             initialFingerprint = Fingerprint(filter);
+            if (!string.IsNullOrWhiteSpace(initialSearch))
+            {
+                uiState.quickSearch.filter.Text = initialSearch;
+            }
+
             doCloseX = true;
             draggable = true;
             resizeable = true;

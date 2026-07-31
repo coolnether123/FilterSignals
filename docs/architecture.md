@@ -142,3 +142,8 @@ invalidation, research invalidation, or multi-path definitions. They are
 developer-only acceptance probes, not reusable runtime services; the
 recommended action is to keep them private and local. `TrySpawnSource` is
 shared by the conditional-instance and workstation probes.
+
+The small-volume diagnostic action reuses the ordinary filter fixture and only
+seeds its vanilla quick-search text with `Gold`. This gives automated lanes a
+deterministic row for tooltip and layout captures without adding a gameplay
+code path or a separate imitation of RimWorld's filter UI.
