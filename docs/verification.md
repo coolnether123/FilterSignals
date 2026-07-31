@@ -143,6 +143,28 @@ Final lane:
   exception, or Harmony failure matches. Development Mode is enabled and the
   proof lane remains open for manual inspection.
 
+## Small-volume marker layout
+
+Final lane:
+`TechSenseFilters-6bf2ce502b794c12b075783c8b419fa5`
+
+- The clean central build used source commit
+  `eada34f9cd21d3c6b9abdd9de8b7fc0b656e240d` and completed with exit code 0.
+- The 17 domain tests and all three UI gates passed. The indicator gate now
+  protects the spacing reserved for RimWorld's small-volume marker.
+- The old square position covered the `/1` in gold and silver's vanilla `/10`
+  notation, leaving an isolated gray `0`. The status-square column now ends
+  before that reserved area.
+- Capture `techsense-small-volume-expanded-20260731-233706-808.png` shows gold
+  and silver with the complete `/10` marker, no gray oval artifact, and one
+  consistently aligned status-square column.
+- The shipping DLL is 65,536 bytes with SHA-256
+  `5D4D797941C83F0F3CBABC21A23BF9847C092D52F5077B93FC6EC6A6AEA2AC28`.
+  Package validation returned `RWT-BUILD-PACKAGE-VALID`.
+- The live log contains zero UI-root, illegal-OnGUI, TechSense error, root
+  exception, or Harmony failure matches. Development Mode is enabled and the
+  proof lane remains open for manual inspection.
+
 ## Inert no-action clicks and concise producible wording
 
 Final lane:
