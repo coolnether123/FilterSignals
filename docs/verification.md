@@ -91,3 +91,30 @@ used exactly Core, Harmony, RimWorld Agent, Spine, and TechSense Filters:
 - The fixture continued to display `Permanent filter state: unchanged`.
   Log review found no exception matches or TechSense navigation errors.
 - The lane stopped with exit code 0 and `ForcedTermination=false`.
+
+## Camera-preserving navigation polish
+
+Final lane:
+`TechSenseFilters-06b03f88bbc14606b4ea060880b57cbc`
+
+- The clean central build used source commit
+  `6df93beb64c0f531bcc82073baec5139f2853ffb`.
+- The 17 existing domain tests passed unchanged. The toolbar-default gate and
+  the new navigation UI boundary gate also passed.
+- Before clicking Kibble's colored square, structured camera state was
+  `camera.cell=124,120` and `camera.view=80,95..168,145`.
+- The click selected the available Architect build designator. Camera state
+  afterward was exactly `camera.cell=124,120` and
+  `camera.view=80,95..168,145`; no recentering occurred.
+- Hover text contains only a short status, short reason, and action line when
+  an action exists. No-target squares advertise no unavailable-action prose
+  and close the selected stockpile's storage panel when clicked.
+- Capture `techsense-architect-camera-preserved-final-20260731-055936-651.png`
+  records the open Architect tab, active Kibble row, and short three-line
+  TechSense text without changing the visible map position.
+- The shipping DLL SHA-256 is
+  `0C971A0420F98516FBFB3C99F317D8958853107C9FD10F6AAB00B205B89A8472`.
+  Package validation returned `RWT-BUILD-PACKAGE-VALID`.
+- The live log contains zero UI-root, illegal-OnGUI, TechSense navigation, or
+  Harmony failures. Development Mode is enabled and the proof lane remains
+  open.
