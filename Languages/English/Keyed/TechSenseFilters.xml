@@ -9,6 +9,7 @@
   <TechSense_Unlocked>Research unlocked</TechSense_Unlocked>
   <TechSense_Locked>Cannot make yet</TechSense_Locked>
   <TechSense_NotApplicable>Not applicable</TechSense_NotApplicable>
+  <TechSense_SmallVolume>Small-volume: 10 units = 1.</TechSense_SmallVolume>
   <TechSense_ToggleTooltip>Click to show or hide this classification in this dialog only. Your allowed-item configuration is never changed.</TechSense_ToggleTooltip>
   <TechSense_Settings_Feature_Label>Enable TechSense Filters</TechSense_Settings_Feature_Label>
   <TechSense_Settings_Feature_Tooltip>Adds transient production classifications to vanilla ThingFilter dialogs. Disabling this leaves every stored ThingFilter unchanged.</TechSense_Settings_Feature_Tooltip>

@@ -13,6 +13,8 @@ filter itself:
 
 The colored square beside each item shows one short status explanation on
 hover, without stacking the item's normal description underneath it.
+Small-volume materials explain “10 units = 1” there instead of displaying
+RimWorld's inline `/10` marker in the item row.
 Clicking it navigates to a usable workstation, the relevant research project,
 or an available Architect build option when a safe vanilla target exists.
 Architect navigation preserves the current camera position. If no action is

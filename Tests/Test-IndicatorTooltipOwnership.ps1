@@ -5,6 +5,11 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $filterUi = [System.IO.File]::ReadAllText(
     (Join-Path $root 'Source\Presentation\FilterUiController.cs'))
+$rowPatch = [System.IO.File]::ReadAllText(
+    (Join-Path $root 'Source\Patches\ThingFilterUiPatches.cs'))
+$language = [System.IO.File]::ReadAllText(
+    (Join-Path $root `
+        'Languages\English\Keyed\TechSenseFilters.xml'))
 
 $indicator = [regex]::Match(
     $filterUi,
@@ -31,16 +36,39 @@ if ($clear -lt 0 -or $tip -lt 0 -or $clear -gt $tip)
     exit 1
 }
 if ($filterUi -notmatch
-    'private const float StatusIndicatorRightInset = 61f' -or
+    'private const float StatusIndicatorRightInset = 45f' -or
     $indicator.Value -notmatch
     'listing\.ColumnWidth - StatusIndicatorRightInset')
 {
     Write-Error (
-        'The status-square column must leave RimWorld''s small-volume /10 ' +
-        'marker unobstructed.')
+        'The status-square column must use the space freed by the hidden ' +
+        'small-volume marker.')
+    exit 1
+}
+if ($rowPatch -notmatch
+    'ref List<ThingDef> ___suppressSmallVolumeTags' -or
+    $rowPatch -notmatch
+    '___suppressSmallVolumeTags\.Add\(tDef\)' -or
+    $rowPatch -notmatch
+    '(?s)private static Exception Finalizer\(.*?' +
+    'RestoreSmallVolumeSuppression')
+{
+    Write-Error (
+        'The vanilla /10 marker must be suppressed only during the patched ' +
+        'item row and restored even when drawing fails.')
+    exit 1
+}
+if ($indicator.Value -notmatch
+    '(?s)thingDef\.IsStuff && thingDef\.smallVolume.*?' +
+    '"TechSense_SmallVolume"\.Translate\(\)' -or
+    $language -notmatch
+    '<TechSense_SmallVolume>Small-volume: 10 units = 1\.</TechSense_SmallVolume>')
+{
+    Write-Error (
+        'The square tooltip must carry the concise small-volume detail.')
     exit 1
 }
 
 Write-Output (
     'PASS: The status square owns its hover area without stacking the ' +
-    'vanilla item tooltip or clipping the small-volume /10 marker.')
+    'vanilla item tooltip; /10 is hidden and explained on square hover.')

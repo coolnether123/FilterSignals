@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
 using TechSenseFilters.Presentation;
@@ -67,22 +68,87 @@ namespace TechSenseFilters.Patches
 
         private static void Prefix(
             Listing_TreeThingFilter __instance,
-            out float __state)
+            ThingDef tDef,
+            ref List<ThingDef> ___suppressSmallVolumeTags,
+            out RowPatchState __state)
         {
-            __state = __instance.CurHeight;
+            __state = new RowPatchState
+            {
+                RowY = __instance.CurHeight
+            };
+            if (tDef == null || !tDef.IsStuff || !tDef.smallVolume)
+            {
+                return;
+            }
+
+            if (___suppressSmallVolumeTags == null)
+            {
+                ___suppressSmallVolumeTags = new List<ThingDef>();
+                __state.CreatedSuppressionList = true;
+            }
+
+            __state.SuppressionList = ___suppressSmallVolumeTags;
+            if (!___suppressSmallVolumeTags.Contains(tDef))
+            {
+                ___suppressSmallVolumeTags.Add(tDef);
+                __state.AddedSuppression = true;
+            }
         }
 
         private static void Postfix(
             Listing_TreeThingFilter __instance,
             ThingDef tDef,
             Map map,
-            float __state)
+            ref List<ThingDef> ___suppressSmallVolumeTags,
+            RowPatchState __state)
         {
             FilterUiController.DrawIndicator(
                 __instance,
                 tDef,
                 map,
+                __state.RowY);
+            RestoreSmallVolumeSuppression(
+                tDef,
+                ref ___suppressSmallVolumeTags,
                 __state);
+        }
+
+        private static Exception Finalizer(
+            Exception __exception,
+            ThingDef tDef,
+            ref List<ThingDef> ___suppressSmallVolumeTags,
+            RowPatchState __state)
+        {
+            RestoreSmallVolumeSuppression(
+                tDef,
+                ref ___suppressSmallVolumeTags,
+                __state);
+            return __exception;
+        }
+
+        private static void RestoreSmallVolumeSuppression(
+            ThingDef tDef,
+            ref List<ThingDef> currentSuppressions,
+            RowPatchState state)
+        {
+            if (state.AddedSuppression)
+            {
+                state.SuppressionList?.Remove(tDef);
+            }
+
+            if (state.CreatedSuppressionList &&
+                ReferenceEquals(currentSuppressions, state.SuppressionList))
+            {
+                currentSuppressions = null;
+            }
+        }
+
+        private struct RowPatchState
+        {
+            internal float RowY;
+            internal List<ThingDef> SuppressionList;
+            internal bool CreatedSuppressionList;
+            internal bool AddedSuppression;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace TechSenseFilters.Presentation
     internal static class FilterUiController
     {
         private const float ToolbarOuterPadding = 4f;
-        private const float StatusIndicatorRightInset = 61f;
+        private const float StatusIndicatorRightInset = 45f;
         private static readonly ConditionalWeakTable<
             ThingFilterUI.UIState,
             FilterPresentationState> States =
@@ -125,6 +125,11 @@ namespace TechSenseFilters.Presentation
             if (explanation.Length > 0)
             {
                 tooltip += "\n" + explanation;
+            }
+
+            if (thingDef.IsStuff && thingDef.smallVolume)
+            {
+                tooltip += "\n" + "TechSense_SmallVolume".Translate();
             }
 
             if (navigation.Length > 0)
