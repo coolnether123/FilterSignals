@@ -142,3 +142,26 @@ Final lane:
 - The live log contains zero UI-root, illegal-OnGUI, TechSense error, root
   exception, or Harmony failure matches. Development Mode is enabled and the
   proof lane remains open for manual inspection.
+
+## Inert no-action clicks and concise producible wording
+
+Final lane:
+`TechSenseFilters-3f82afc247724eaa9df4b932ce3c444c`
+
+- The clean central build used source commit
+  `4eb5380d89f40d55146904380a0a35f65aa2bd2c` and completed with exit code 0.
+- The 17 domain tests passed unchanged. All three UI gates passed, including
+  the revised requirement that a no-action square never clears selection.
+- Clicking Chocolate's non-actionable square left the filter fixture visibly
+  open. Capture `techsense-inert-after-click-storage-open-20260731-232240-024.png`
+  records the result, and the structured fixture probe reported
+  `open:true filterUnchanged:true allowedCount:467` afterward.
+- A fully satisfied production path now displays "Able to be produced in this
+  colony" without a redundant research or production-detail line. The UI gate
+  protects both the exact English text and the empty extra-explanation branch.
+- The shipping DLL is 65,536 bytes with SHA-256
+  `FB8103CC73EC6F02DA93C9EBCB069A2FA3DCB93B3396835139E541A00ECD77BC`.
+  Package validation returned `RWT-BUILD-PACKAGE-VALID`.
+- The live log contains zero UI-root, illegal-OnGUI, TechSense error, root
+  exception, or Harmony failure matches. Development Mode is enabled and the
+  proof lane remains open for manual inspection.
