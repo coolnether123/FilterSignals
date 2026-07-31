@@ -118,3 +118,26 @@ Final lane:
 - The live log contains zero UI-root, illegal-OnGUI, TechSense navigation, or
   Harmony failures. Development Mode is enabled and the proof lane remains
   open.
+
+## Status-square tooltip ownership
+
+Final lane:
+`TechSenseFilters-f5b1df97e54e40689884662915ae0541`
+
+- The clean central build used source commit
+  `3924f0cd91ecaaad8828dbb211425a5f680d895c` and completed with exit code 0.
+- The 17 existing domain tests passed unchanged. The toolbar-default,
+  navigation UI boundary, and new indicator-tooltip ownership gates all
+  passed.
+- Capture `techsense-square-single-tooltip-20260731-214617-318.png` shows that
+  hovering Kibble's colored square displays only the short three-line
+  TechSense tooltip. RimWorld's item description is no longer stacked with it.
+- Capture `techsense-row-vanilla-tooltip-preserved-20260731-214637-649.png`
+  shows that hovering the Kibble name still displays the normal vanilla item
+  description by itself.
+- The shipping DLL is 66,048 bytes with SHA-256
+  `5095C207492AA0D10F0A645BF4B1444867349AAE16A9A874BF7D19E8D7F34724`.
+  Package validation returned `RWT-BUILD-PACKAGE-VALID`.
+- The live log contains zero UI-root, illegal-OnGUI, TechSense error, root
+  exception, or Harmony failure matches. Development Mode is enabled and the
+  proof lane remains open for manual inspection.
