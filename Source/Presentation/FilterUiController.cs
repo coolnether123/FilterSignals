@@ -105,22 +105,35 @@ namespace TechSenseFilters.Presentation
             GUI.color = previous;
 
             Rect interactionRect = iconRect.ExpandedBy(3f);
+            ClassificationNavigationTarget target =
+                Mouse.IsOver(interactionRect)
+                    ? ClassificationNavigationResolver.Resolve(
+                        thingDef,
+                        effectiveMap,
+                        result)
+                    : ClassificationNavigationTarget.None;
+            string navigation =
+                ClassificationPresentation.NavigationTooltip(
+                    target.Decision);
             TooltipHandler.TipRegion(
                 interactionRect,
                 ClassificationPresentation.FullLabel(result.Classification) +
-                "\n\n" + result.Explanation +
-                "\n\n" +
-                ClassificationPresentation.NavigationTooltip(result));
-            if (Widgets.ButtonInvisible(interactionRect) &&
-                !ClassificationNavigationController.TryNavigate(
-                    thingDef,
-                    effectiveMap,
-                    result))
+                "\n" +
+                ClassificationPresentation.BriefExplanation(
+                    result,
+                    target.Decision) +
+                (navigation.Length == 0
+                    ? string.Empty
+                    : "\n" + navigation));
+            if (!Widgets.ButtonInvisible(interactionRect))
             {
-                Messages.Message(
-                    "TechSense_NavigationUnavailable".Translate(),
-                    MessageTypeDefOf.RejectInput,
-                    historical: false);
+                return;
+            }
+
+            if (!target.IsActionable ||
+                !ClassificationNavigationController.TryNavigate(target))
+            {
+                Find.Selector.ClearSelection();
             }
         }
 

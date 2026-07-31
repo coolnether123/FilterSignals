@@ -44,8 +44,12 @@ It deterministically chooses recipe and source definitions by ordinal
 definition name and production-building instances by thing ID. A click selects
 a usable existing source, opens and selects missing research, or activates an
 available build designator for the workstation or its first missing building
-prerequisite. Custom production paths, stale objects, hidden designators, and
-other ambiguous states fail with an explanatory message instead of guessing.
+prerequisite. Architect selection is allowed only for the currently displayed
+map and never moves the camera. Custom production paths, stale objects, hidden
+designators, and other ambiguous states do not advertise a click action; if
+clicked, they close the storage panel instead of appearing unresponsive.
+Hover text contains only the classification, a short reason, and an action
+instruction when a real navigation target exists.
 
 Settings and patch installation use the standalone Spine dependency:
 

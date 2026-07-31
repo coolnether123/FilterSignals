@@ -54,42 +54,66 @@ namespace TechSenseFilters.Presentation
             }
         }
 
-        internal static string NavigationTooltip(
-            ClassificationResult result)
+        internal static string BriefExplanation(
+            ClassificationResult result,
+            ProductionNavigationDecision decision)
         {
             if (result == null)
             {
-                return "TechSense_NavigationUnavailable".Translate();
+                return string.Empty;
             }
 
-            string instruction;
             switch (result.Classification)
             {
                 case ProductionClassification.CanMakeNow:
-                    instruction =
-                        "TechSense_NavigateCanMake".Translate();
-                    break;
+                    return string.IsNullOrWhiteSpace(result.PathLabel)
+                        ? "Ready to make."
+                        : "Made at " + result.PathLabel + ".";
                 case ProductionClassification.ResearchUnlocked:
-                    instruction =
-                        "TechSense_NavigateUnlocked".Translate();
-                    break;
-                case ProductionClassification.CannotMakeYet:
-                    instruction =
-                        "TechSense_NavigateLocked".Translate();
-                    break;
-                default:
-                    return "TechSense_NavigationUnavailable".Translate();
-            }
+                    if (decision.Kind ==
+                        ProductionNavigationKind.SelectBuildOption)
+                    {
+                        return "Workbench missing.";
+                    }
 
-            string path = string.IsNullOrWhiteSpace(result.PathLabel)
-                ? string.Empty
-                : "\n" +
-                    "TechSense_SelectedPath".Translate() +
-                    " " + result.PathLabel.CapitalizeFirst() + ".";
-            return instruction +
-                path +
-                "\n" +
-                "TechSense_NavigationChoiceRule".Translate();
+                    if (result.Explanation.IndexOf(
+                        "material",
+                        System.StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        return "Missing materials.";
+                    }
+
+                    if (result.Explanation.IndexOf(
+                        "colonist",
+                        System.StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        return "No capable colonist.";
+                    }
+
+                    return string.IsNullOrWhiteSpace(result.PathLabel)
+                        ? "Not currently usable."
+                        : "Needs " + result.PathLabel + ".";
+                case ProductionClassification.CannotMakeYet:
+                    return "Research required.";
+                default:
+                    return "This colony is unable to make it.";
+            }
+        }
+
+        internal static string NavigationTooltip(
+            ProductionNavigationDecision decision)
+        {
+            switch (decision.Kind)
+            {
+                case ProductionNavigationKind.SelectProductionSource:
+                    return "Click to select the workbench.";
+                case ProductionNavigationKind.OpenResearch:
+                    return "Click to open research.";
+                case ProductionNavigationKind.SelectBuildOption:
+                    return "Click to open Architect.";
+                default:
+                    return string.Empty;
+            }
         }
     }
 }

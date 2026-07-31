@@ -11,9 +11,11 @@ filter itself:
   is not complete.
 - **N/A**: no known production path exists.
 
-The colored square beside each item opens a precise explanation on hover.
+The colored square beside each item shows a short status explanation on hover.
 Clicking it navigates to a usable workstation, the relevant research project,
 or an available Architect build option when a safe vanilla target exists.
+Architect navigation preserves the current camera position. If no action is
+available, clicking the square simply closes the storage panel.
 The colored squares are the default interface. An optional four-button toolbar
 can temporarily hide or show classifications only in the open dialog; it is
 disabled by default and can be enabled in mod settings. Saved allow/deny

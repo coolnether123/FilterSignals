@@ -10,17 +10,15 @@ namespace TechSenseFilters.Presentation
     internal static class ClassificationNavigationController
     {
         internal static bool TryNavigate(
-            ThingDef item,
-            Map map,
-            ClassificationResult result)
+            ClassificationNavigationTarget target)
         {
             try
             {
-                ClassificationNavigationTarget target =
-                    ClassificationNavigationResolver.Resolve(
-                        item,
-                        map,
-                        result);
+                if (target == null || !target.IsActionable)
+                {
+                    return false;
+                }
+
                 switch (target.Decision.Kind)
                 {
                     case ProductionNavigationKind.SelectProductionSource:
@@ -81,15 +79,11 @@ namespace TechSenseFilters.Presentation
                 target.Map == null ||
                 Find.MainTabsRoot == null ||
                 MainButtonDefOf.Architect == null ||
-                !Find.Maps.Contains(target.Map))
+                Find.CurrentMap != target.Map)
             {
                 return false;
             }
 
-            CameraJumper.TryJump(
-                target.Map.Center,
-                target.Map,
-                CameraJumper.MovementMode.Cut);
             Designator_Build designator =
                 FindBuildDesignator(target.Buildable);
             if (designator == null)
