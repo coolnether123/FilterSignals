@@ -66,9 +66,7 @@ namespace TechSenseFilters.Presentation
             switch (result.Classification)
             {
                 case ProductionClassification.CanMakeNow:
-                    return string.IsNullOrWhiteSpace(result.PathLabel)
-                        ? "Ready to make."
-                        : "Made at " + result.PathLabel + ".";
+                    return string.Empty;
                 case ProductionClassification.ResearchUnlocked:
                     if (decision.Kind ==
                         ProductionNavigationKind.SelectBuildOption)

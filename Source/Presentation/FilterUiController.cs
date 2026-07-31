@@ -115,26 +115,34 @@ namespace TechSenseFilters.Presentation
             string navigation =
                 ClassificationPresentation.NavigationTooltip(
                     target.Decision);
+            string explanation =
+                ClassificationPresentation.BriefExplanation(
+                    result,
+                    target.Decision);
+            string tooltip =
+                ClassificationPresentation.FullLabel(result.Classification);
+            if (explanation.Length > 0)
+            {
+                tooltip += "\n" + explanation;
+            }
+
+            if (navigation.Length > 0)
+            {
+                tooltip += "\n" + navigation;
+            }
+
             TooltipHandler.ClearTooltipsFrom(interactionRect);
             TooltipHandler.TipRegion(
                 interactionRect,
-                ClassificationPresentation.FullLabel(result.Classification) +
-                "\n" +
-                ClassificationPresentation.BriefExplanation(
-                    result,
-                    target.Decision) +
-                (navigation.Length == 0
-                    ? string.Empty
-                    : "\n" + navigation));
+                tooltip);
             if (!Widgets.ButtonInvisible(interactionRect))
             {
                 return;
             }
 
-            if (!target.IsActionable ||
-                !ClassificationNavigationController.TryNavigate(target))
+            if (target.IsActionable)
             {
-                Find.Selector.ClearSelection();
+                ClassificationNavigationController.TryNavigate(target);
             }
         }
 

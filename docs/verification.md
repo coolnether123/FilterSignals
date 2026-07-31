@@ -107,8 +107,9 @@ Final lane:
   afterward was exactly `camera.cell=124,120` and
   `camera.view=80,95..168,145`; no recentering occurred.
 - Hover text contains only a short status, short reason, and action line when
-  an action exists. No-target squares advertise no unavailable-action prose
-  and close the selected stockpile's storage panel when clicked.
+  an action exists. No-target squares advertise no unavailable-action prose.
+  Their earlier close-on-click behavior was superseded by the later inert-click
+  verification below.
 - Capture `techsense-architect-camera-preserved-final-20260731-055936-651.png`
   records the open Architect tab, active Kibble row, and short three-line
   TechSense text without changing the visible map position.

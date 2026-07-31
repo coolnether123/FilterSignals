@@ -16,7 +16,7 @@ hover, without stacking the item's normal description underneath it.
 Clicking it navigates to a usable workstation, the relevant research project,
 or an available Architect build option when a safe vanilla target exists.
 Architect navigation preserves the current camera position. If no action is
-available, clicking the square simply closes the storage panel.
+available, clicking the square leaves the storage panel open and unchanged.
 The colored squares are the default interface. An optional four-button toolbar
 can temporarily hide or show classifications only in the open dialog; it is
 disabled by default and can be enabled in mod settings. Saved allow/deny

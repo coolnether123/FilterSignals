@@ -11,6 +11,9 @@ $filterUi = [System.IO.File]::ReadAllText(
 $presentation = [System.IO.File]::ReadAllText(
     (Join-Path $root `
         'Source\Presentation\ClassificationPresentation.cs'))
+$language = [System.IO.File]::ReadAllText(
+    (Join-Path $root `
+        'Languages\English\Keyed\TechSenseFilters.xml'))
 
 $failures = [System.Collections.Generic.List[string]]::new()
 $buildOption = [regex]::Match(
@@ -31,11 +34,27 @@ if ($controller -notmatch 'Find\.CurrentMap\s*!=\s*target\.Map')
     $failures.Add(
         'Architect navigation must fail safely for a non-current map.')
 }
-if ($filterUi -notmatch
-    '(?s)!target\.IsActionable.*?Find\.Selector\.ClearSelection\(\)')
+$indicator = [regex]::Match(
+    $filterUi,
+    '(?s)internal static void DrawIndicator\(.*?' +
+    '(?=\s*private static void DrawToolbar)')
+if (-not $indicator.Success)
 {
     $failures.Add(
-        'A square with no action must close the storage panel.')
+        'Could not isolate status-square click handling.')
+}
+elseif ($indicator.Value -match 'ClearSelection\(\)')
+{
+    $failures.Add(
+        'A square with no action must leave the storage panel open.')
+}
+elseif ($indicator.Value -notmatch
+    '(?s)ButtonInvisible\(interactionRect\).*?' +
+    'if \(target\.IsActionable\).*?' +
+    'ClassificationNavigationController\.TryNavigate\(target\)')
+{
+    $failures.Add(
+        'Status-square navigation must run only for an actionable target.')
 }
 if ($presentation -match 'NavigationUnavailable' -or
     $presentation -match 'NavigationChoiceRule' -or
@@ -51,6 +70,21 @@ if ($presentation -notmatch
     $failures.Add(
         'A square with no navigation action must add no navigation text.')
 }
+if ($language -notmatch
+    '<TechSense_CanMake>Able to be produced in this colony</TechSense_CanMake>')
+{
+    $failures.Add(
+        'A producible item must use the requested concise colony wording.')
+}
+$canMakeExplanation = [regex]::Match(
+    $presentation,
+    '(?s)case ProductionClassification\.CanMakeNow:\s*' +
+    'return string\.Empty;')
+if (-not $canMakeExplanation.Success)
+{
+    $failures.Add(
+        'A producible item must not add a redundant explanation line.')
+}
 
 if ($failures.Count -gt 0)
 {
@@ -63,4 +97,4 @@ if ($failures.Count -gt 0)
 
 Write-Output (
     'PASS: Architect navigation preserves the camera, no-target clicks ' +
-    'close storage, and tooltips omit unavailable-action prose.')
+    'leave storage open, and tooltips omit unavailable-action prose.')

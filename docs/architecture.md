@@ -47,9 +47,11 @@ available build designator for the workstation or its first missing building
 prerequisite. Architect selection is allowed only for the currently displayed
 map and never moves the camera. Custom production paths, stale objects, hidden
 designators, and other ambiguous states do not advertise a click action; if
-clicked, they close the storage panel instead of appearing unresponsive.
+clicked, they leave the storage panel open and unchanged.
 Hover text contains only the classification, a short reason, and an action
-instruction when a real navigation target exists. Because vanilla registers a
+instruction when a real navigation target exists. A fully satisfied path uses
+the single status line "Able to be produced in this colony" rather than
+repeating its research or workstation state. Because vanilla registers a
 tooltip for the entire item row first, the square clears current-frame tooltips
 only while the pointer is inside its 18-by-18 interaction rectangle, then
 registers the TechSense tooltip. This gives the square one unambiguous tooltip
