@@ -25,12 +25,13 @@ namespace TechSenseFilters.Settings
                 Toggle(
                     "presentation.toolbar",
                     nameof(TechSenseFiltersSettings.ShowClassificationToolbar),
-                    "Show classification toolbar",
+                    "Show optional filter toolbar",
                     "TechSense_Settings_Toolbar_Label",
-                    "Shows four temporary view toggles above vanilla item " +
-                    "filters. These toggles never change allowed items.",
+                    "Shows four temporary classification toggles above " +
+                    "vanilla item filters. Hidden by default because the " +
+                    "colored status squares remain available.",
                     "TechSense_Settings_Toolbar_Tooltip",
-                    true,
+                    false,
                     10,
                     "feature.enabled",
                     true),

@@ -14,8 +14,10 @@ filter itself:
 The colored square beside each item opens a precise explanation on hover.
 Clicking it navigates to a usable workstation, the relevant research project,
 or an available Architect build option when a safe vanilla target exists.
-The four toolbar buttons temporarily hide or show classifications only in the
-open dialog. Saved allow/deny choices are never rewritten.
+The colored squares are the default interface. An optional four-button toolbar
+can temporarily hide or show classifications only in the open dialog; it is
+disabled by default and can be enabled in mod settings. Saved allow/deny
+choices are never rewritten.
 
 ## Requirements
 
@@ -34,10 +36,10 @@ the collection is required.
 
 ## Settings
 
-The normal RimWorld mod settings page controls the toolbar, status indicators,
-and whether current material shortages count against **Can make**. Material
-shortages are ignored by default so normal inventory churn does not make the UI
-noisy.
+The normal RimWorld mod settings page can enable the optional filter toolbar,
+controls status indicators, and chooses whether current material shortages
+count against **Can make**. The toolbar and material-shortage check are
+disabled by default so the stockpile panel stays close to vanilla.
 
 ## Compatibility
 

@@ -19,8 +19,8 @@
 
   <TechSense_Settings_Feature_Label>Enable TechSense Filters</TechSense_Settings_Feature_Label>
   <TechSense_Settings_Feature_Tooltip>Adds transient production classifications to vanilla ThingFilter dialogs. Disabling this leaves every stored ThingFilter unchanged.</TechSense_Settings_Feature_Tooltip>
-  <TechSense_Settings_Toolbar_Label>Show classification toolbar</TechSense_Settings_Toolbar_Label>
-  <TechSense_Settings_Toolbar_Tooltip>Shows four temporary view toggles above vanilla item filters. These toggles never change allowed items.</TechSense_Settings_Toolbar_Tooltip>
+  <TechSense_Settings_Toolbar_Label>Show optional filter toolbar</TechSense_Settings_Toolbar_Label>
+  <TechSense_Settings_Toolbar_Tooltip>Shows four temporary classification toggles above vanilla item filters. Hidden by default because the colored status squares remain available. These toggles never change allowed items.</TechSense_Settings_Toolbar_Tooltip>
   <TechSense_Settings_Indicators_Label>Show status indicators</TechSense_Settings_Indicators_Label>
   <TechSense_Settings_Indicators_Tooltip>Draws a compact colored indicator beside each visible item. Hover it for the production-path explanation.</TechSense_Settings_Indicators_Tooltip>
   <TechSense_Settings_Materials_Label>Consider current material shortages</TechSense_Settings_Materials_Label>

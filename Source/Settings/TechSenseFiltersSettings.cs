@@ -9,7 +9,7 @@ namespace TechSenseFilters.Settings
             new TechSenseFiltersSettings();
 
         public bool FeatureEnabled = true;
-        public bool ShowClassificationToolbar = true;
+        public bool ShowClassificationToolbar;
         public bool ShowStatusIndicators = true;
         public bool ConsiderMaterialShortages;
 

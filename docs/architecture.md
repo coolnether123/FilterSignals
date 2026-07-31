@@ -25,6 +25,11 @@ FilterPresentationState>`. Its toolbar only affects the return value of
 method is called. Closing the dialog releases that transient relationship
 naturally.
 
+The colored per-item square is the default stockpile interaction. The
+classification toolbar is an opt-in setting, disabled by default; when hidden,
+the controller reserves no vertical space and `Visible(ThingDef)` remains
+vanilla-authoritative.
+
 `ToolbarLayout` is an engine-free responsive layout policy. It keeps the title
 and four buttons on one row only while every button retains at least 72 pixels.
 At ordinary narrow filter widths it reserves a title row and a readable
