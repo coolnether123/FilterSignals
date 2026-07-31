@@ -56,6 +56,9 @@ tooltip for the entire item row first, the square clears current-frame tooltips
 only while the pointer is inside its 18-by-18 interaction rectangle, then
 registers the TechSense tooltip. This gives the square one unambiguous tooltip
 while preserving the vanilla item description everywhere else on the row.
+The square column ends before RimWorld's reserved small-volume marker area, so
+the vanilla `/10` notation for materials such as gold and silver remains whole
+instead of leaving a clipped `0` beside the square.
 
 Settings and patch installation use the standalone Spine dependency:
 

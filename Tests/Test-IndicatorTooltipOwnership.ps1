@@ -30,7 +30,17 @@ if ($clear -lt 0 -or $tip -lt 0 -or $clear -gt $tip)
         'before registering its own tooltip.')
     exit 1
 }
+if ($filterUi -notmatch
+    'private const float StatusIndicatorRightInset = 61f' -or
+    $indicator.Value -notmatch
+    'listing\.ColumnWidth - StatusIndicatorRightInset')
+{
+    Write-Error (
+        'The status-square column must leave RimWorld''s small-volume /10 ' +
+        'marker unobstructed.')
+    exit 1
+}
 
 Write-Output (
     'PASS: The status square owns its hover area without stacking the ' +
-    'vanilla item tooltip.')
+    'vanilla item tooltip or clipping the small-volume /10 marker.')

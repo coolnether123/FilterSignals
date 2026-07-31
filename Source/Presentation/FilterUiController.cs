@@ -12,6 +12,7 @@ namespace TechSenseFilters.Presentation
     internal static class FilterUiController
     {
         private const float ToolbarOuterPadding = 4f;
+        private const float StatusIndicatorRightInset = 61f;
         private static readonly ConditionalWeakTable<
             ThingFilterUI.UIState,
             FilterPresentationState> States =
@@ -92,7 +93,7 @@ namespace TechSenseFilters.Presentation
             ClassificationResult result =
                 ClassificationService.Get(thingDef, effectiveMap);
             Rect iconRect = new Rect(
-                listing.ColumnWidth - 45f,
+                listing.ColumnWidth - StatusIndicatorRightInset,
                 rowY + 4f,
                 12f,
                 12f);
