@@ -133,6 +133,47 @@ namespace TechSenseFilters.Runtime
             return false;
         }
 
+        internal Building FindUsableSource(
+            RecipeDef recipe,
+            IReadOnlyList<ThingDef> sourceDefs)
+        {
+            if (recipe == null || sourceDefs == null)
+            {
+                return null;
+            }
+
+            for (int sourceIndex = 0;
+                sourceIndex < sourceDefs.Count;
+                sourceIndex++)
+            {
+                ThingDef sourceDef = sourceDefs[sourceIndex];
+                if (sourceDef == null ||
+                    !sources.TryGetValue(
+                        sourceDef,
+                        out List<Building> instances))
+                {
+                    continue;
+                }
+
+                for (int instanceIndex = 0;
+                    instanceIndex < instances.Count;
+                    instanceIndex++)
+                {
+                    Building building = instances[instanceIndex];
+                    bool billGiverUsable =
+                        !(building is IBillGiver billGiver) ||
+                        billGiver.CurrentlyUsableForBills();
+                    if (billGiverUsable &&
+                        RecipeAvailableOnInstance(recipe, building))
+                    {
+                        return building;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         internal static MapCapabilitySnapshot Capture(
             Map map,
             DefinitionProductionIndex index,
@@ -169,6 +210,12 @@ namespace TechSenseFilters.Runtime
                         building.def,
                         new List<Building> { building });
                 }
+            }
+
+            foreach (List<Building> instances in sources.Values)
+            {
+                instances.Sort((left, right) =>
+                    left.thingIDNumber.CompareTo(right.thingIDNumber));
             }
 
             IReadOnlyList<Pawn> spawnedPawns = map.mapPawns.AllPawnsSpawned;

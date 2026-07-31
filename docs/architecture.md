@@ -25,6 +25,23 @@ FilterPresentationState>`. Its toolbar only affects the return value of
 method is called. Closing the dialog releases that transient relationship
 naturally.
 
+`ToolbarLayout` is an engine-free responsive layout policy. It keeps the title
+and four buttons on one row only while every button retains at least 72 pixels.
+At ordinary narrow filter widths it reserves a title row and a readable
+two-column button grid; exceptionally narrow widths fall back to one column.
+The calculated height is removed from the vanilla filter content rectangle, so
+the toolbar never overlays the search, hit-point, or quality controls.
+
+The status square is an additive navigation affordance and never writes to a
+`ThingFilter`. `ClassificationNavigationResolver` considers vanilla recipe
+paths only and uses the same map-specific recipe assessment as classification.
+It deterministically chooses recipe and source definitions by ordinal
+definition name and production-building instances by thing ID. A click selects
+a usable existing source, opens and selects missing research, or activates an
+available build designator for the workstation or its first missing building
+prerequisite. Custom production paths, stale objects, hidden designators, and
+other ambiguous states fail with an explanatory message instead of guessing.
+
 Settings and patch installation use the standalone Spine dependency:
 
 - `Spine.UI.SettingsFramework` provides settings scribing, hierarchy, and list
@@ -51,13 +68,14 @@ other provider paths from being classified.
 ## Single-caller helper audit
 
 Several private methods currently have one direct caller:
-`EvaluateOverrides`, `AddCustomPaths`, `MaterialsAvailable`,
-`BuildLockedReason`, `BuildUnavailableReason`, and `StableHash`. They are kept
-private because each isolates one policy or failure boundary inside
-`ClassificationService`; inlining them would mix compatibility execution,
-RimWorld queries, explanation composition, and log-key generation into the hot
-classification method. The recommended architectural action is to keep them
-local and not create a shared utility until a second real consumer appears.
+`EvaluateOverrides`, `AddCustomPaths`, and `StableHash` in
+`ClassificationService`, plus `MaterialsAvailable`, `BuildLockedReason`, and
+`BuildUnavailableReason` in `RecipeAssessmentFactory`. They are kept private
+because each isolates one policy or failure boundary; inlining them would mix
+compatibility execution, RimWorld queries, explanation composition, and
+log-key generation into the hot classification method. The recommended
+architectural action is to keep them local and not create a shared utility
+until a second real consumer appears.
 
 `CapabilityInvalidation.InvalidateIfProductionSource` has multiple patch
 callers and centralizes the rule that unrelated buildings must not flush the
@@ -76,6 +94,25 @@ helper each have one direct caller. They isolate the modded-code exception
 boundary and stable `ErrorOnce` key from source enumeration. They should remain
 private; moving a one-consumer fault boundary into shared infrastructure would
 not improve reuse.
+
+The follow-up adds several intentional one-caller seams:
+
+- `LayoutRect.Overlaps` is pure layout-test geometry, while
+  `ToolbarLayout.IsFinite` protects its single public calculation boundary.
+- `ClassificationService.ProductionIndex` and
+  `MapCapabilitySnapshot.FindUsableSource` expose the minimum read-only state
+  needed by the click-only navigation resolver.
+- The collection-level `ResolveBuildRequirement` overload and
+  `MissingBuildResearch` isolate deterministic prerequisite reduction.
+- `SelectProductionSource`, `OpenResearch`, `SelectBuildOption`, and the outer
+  `FindBuildDesignator` method isolate three distinct RimWorld UI actions and
+  their failure checks.
+- `ClassificationPresentation.NavigationTooltip` keeps navigation wording out
+  of row drawing.
+
+Recommendation: keep these methods local. They each guard an engine boundary
+or a testable policy seam; promoting them to Spine or a general helper would
+add coupling without a second production consumer.
 
 The four `Run*Probe` diagnostics methods each have one caller in the aggregate
 capability debug action. They remain separate because each produces a

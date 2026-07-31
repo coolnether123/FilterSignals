@@ -58,3 +58,36 @@ cleanly with exit code 0.
 
 Historical pre-release screenshots or sessions are not release evidence for a
 later source commit or DLL.
+
+## Responsive-toolbar and navigation follow-up
+
+Automated coverage now reports `PASS: 17 TechSense domain tests`. The added
+tests verify a 264-pixel two-row layout with four non-overlapping buttons,
+wide inline layout, colony-specific no-path wording, deterministic usable-source
+selection across multiple paths, missing-research navigation, missing-workbench
+build navigation, and safe no-target behavior.
+
+The final central Release build completed with exit code 0 against clean
+RimWorld-Tooling commit
+`b639ebf6ddedd1d26064903c2391837b5c8c58f9`. Package validation returned
+`RWT-BUILD-PACKAGE-VALID`; the packaged `TechSenseFilters.dll` is 65,536 bytes
+with SHA-256
+`52014D7DAE3F29EF7281422F9386C6C7C430448618278B00929184F1ACA5A996`.
+
+Isolated lane `TechSenseFilters-e971922cf9c74a2f9d8b3fa945c2b082`
+used exactly Core, Harmony, RimWorld Agent, Spine, and TechSense Filters:
+
+- `narrow-toolbar-drag2-20260731-013504-787.png` shows the real resizable
+  `ThingFilterUI` fixture at approximately 300 pixels of filter width. The
+  title remains separate and the four full labels render in a readable 2x2
+  grid above untouched vanilla controls.
+- Clicking Pemmican's locked square changed the active main tab to Research
+  and selected the Pemmican project.
+  `navigation-click-locked-20260731-013542-863.png` shows the selected research
+  detail and the full deterministic-navigation tooltip.
+- Clicking Kibble's unlocked square changed the active main tab to Architect
+  and activated the missing butcher-spot build path.
+  `navigation-click-unlocked-20260731-013628-104.png` preserves that state.
+- The fixture continued to display `Permanent filter state: unchanged`.
+  Log review found no exception matches or TechSense navigation errors.
+- The lane stopped with exit code 0 and `ForcedTermination=false`.

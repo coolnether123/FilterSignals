@@ -12,6 +12,8 @@ filter itself:
 - **N/A**: no known production path exists.
 
 The colored square beside each item opens a precise explanation on hover.
+Clicking it navigates to a usable workstation, the relevant research project,
+or an available Architect build option when a safe vanilla target exists.
 The four toolbar buttons temporarily hide or show classifications only in the
 open dialog. Saved allow/deny choices are never rewritten.
 

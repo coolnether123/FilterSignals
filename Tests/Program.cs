@@ -1,5 +1,6 @@
 using System;
 using TechSenseFilters.Domain;
+using TechSenseFilters.Presentation;
 
 namespace TechSenseFilters.Tests
 {
@@ -38,6 +39,24 @@ namespace TechSenseFilters.Tests
             Run(
                 "bill giver usability remains required",
                 BillGiverUsabilityRemainsRequired);
+            Run(
+                "narrow toolbar uses readable rows",
+                NarrowToolbarUsesReadableRows);
+            Run(
+                "wide toolbar remains inline",
+                WideToolbarRemainsInline);
+            Run(
+                "navigation chooses a stable usable source",
+                NavigationChoosesStableUsableSource);
+            Run(
+                "navigation opens missing research",
+                NavigationOpensMissingResearch);
+            Run(
+                "navigation selects missing workstation build option",
+                NavigationSelectsMissingWorkstationBuildOption);
+            Run(
+                "navigation fails safely without a target",
+                NavigationFailsSafelyWithoutTarget);
 
             Console.WriteLine("PASS: " + passed + " TechSense domain tests");
             return 0;
@@ -51,7 +70,10 @@ namespace TechSenseFilters.Tests
             Equal(
                 ProductionClassification.NotApplicable,
                 result.Classification);
-            Contains("No player production recipe", result.Explanation);
+            Contains(
+                "This colony is unable to make this item",
+                result.Explanation);
+            NotContains("player", result.Explanation);
         }
 
         private static void AnyViablePathWins()
@@ -263,6 +285,173 @@ namespace TechSenseFilters.Tests
             Equal(false, selection.SourceUsable);
         }
 
+        private static void NarrowToolbarUsesReadableRows()
+        {
+            ToolbarLayoutPlan layout =
+                ToolbarLayout.Calculate(264f);
+            Equal(ToolbarLayoutMode.TwoColumn, layout.Mode);
+            Equal(4, layout.Buttons.Length);
+            if (layout.Height <= 30f)
+            {
+                throw new InvalidOperationException(
+                    "A narrow toolbar must reserve a second button row.");
+            }
+
+            for (int index = 0;
+                index < layout.Buttons.Length;
+                index++)
+            {
+                LayoutRect button = layout.Buttons[index];
+                if (button.Width < 100f ||
+                    button.X < 0f ||
+                    button.XMax > 264f ||
+                    button.Y < 0f ||
+                    button.YMax > layout.Height)
+                {
+                    throw new InvalidOperationException(
+                        "Narrow toolbar button " + index +
+                        " is clipped or unreadably small.");
+                }
+
+                for (int other = index + 1;
+                    other < layout.Buttons.Length;
+                    other++)
+                {
+                    if (button.Overlaps(layout.Buttons[other]))
+                    {
+                        throw new InvalidOperationException(
+                            "Narrow toolbar buttons overlap.");
+                    }
+                }
+            }
+        }
+
+        private static void WideToolbarRemainsInline()
+        {
+            ToolbarLayoutPlan layout =
+                ToolbarLayout.Calculate(500f);
+            Equal(ToolbarLayoutMode.Inline, layout.Mode);
+            Equal(30f, layout.Height);
+            for (int index = 0;
+                index < layout.Buttons.Length;
+                index++)
+            {
+                if (layout.Buttons[index].Width < 72f)
+                {
+                    throw new InvalidOperationException(
+                        "Wide toolbar button is below its readable width.");
+                }
+            }
+        }
+
+        private static void NavigationChoosesStableUsableSource()
+        {
+            ProductionNavigationDecision decision =
+                ProductionNavigationPolicy.Decide(
+                    ProductionClassification.CanMakeNow,
+                    new[]
+                    {
+                        NavigationCandidate(
+                            "Recipe_Beta",
+                            canMake: true,
+                            sourceTarget: "source:20"),
+                        NavigationCandidate(
+                            "Recipe_Alpha",
+                            canMake: true,
+                            sourceTarget: "source:10")
+                    });
+
+            Equal(
+                ProductionNavigationKind.SelectProductionSource,
+                decision.Kind);
+            Equal("source:10", decision.TargetId);
+            Equal("Recipe_Alpha", decision.PathId);
+            Equal(2, decision.AlternativeCount);
+        }
+
+        private static void NavigationOpensMissingResearch()
+        {
+            ProductionNavigationDecision decision =
+                ProductionNavigationPolicy.Decide(
+                    ProductionClassification.CannotMakeYet,
+                    new[]
+                    {
+                        NavigationCandidate(
+                            "Recipe_Locked",
+                            research: false,
+                            researchTarget: "research:Fabrication")
+                    });
+
+            Equal(
+                ProductionNavigationKind.OpenResearch,
+                decision.Kind);
+            Equal("research:Fabrication", decision.TargetId);
+        }
+
+        private static void
+            NavigationSelectsMissingWorkstationBuildOption()
+        {
+            ProductionNavigationDecision decision =
+                ProductionNavigationPolicy.Decide(
+                    ProductionClassification.ResearchUnlocked,
+                    new[]
+                    {
+                        NavigationCandidate(
+                            "Recipe_ZLater",
+                            research: true,
+                            sourcePresent: false,
+                            researchTarget:
+                                "research:AdvancedFabrication"),
+                        NavigationCandidate(
+                            "Recipe_Ready",
+                            research: true,
+                            sourcePresent: false,
+                            buildTarget: "build:FabricationBench")
+                    });
+
+            Equal(
+                ProductionNavigationKind.SelectBuildOption,
+                decision.Kind);
+            Equal("build:FabricationBench", decision.TargetId);
+        }
+
+        private static void NavigationFailsSafelyWithoutTarget()
+        {
+            ProductionNavigationDecision decision =
+                ProductionNavigationPolicy.Decide(
+                    ProductionClassification.ResearchUnlocked,
+                    new[]
+                    {
+                        NavigationCandidate(
+                            "Recipe_NoPawn",
+                            research: true,
+                            sourcePresent: true)
+                    });
+
+            Equal(ProductionNavigationKind.None, decision.Kind);
+            Equal(false, decision.IsActionable);
+        }
+
+        private static ProductionNavigationCandidate NavigationCandidate(
+            string pathId,
+            bool canMake = false,
+            bool research = true,
+            bool sourcePresent = true,
+            string sourceTarget = null,
+            string researchTarget = null,
+            string buildTarget = null)
+        {
+            return new ProductionNavigationCandidate(
+                pathId,
+                pathId,
+                canMake,
+                research,
+                sourcePresent,
+                sourceTarget,
+                researchTarget,
+                buildTarget);
+        }
+
         private static ProductionPathAssessment Path(
             string label,
             bool research,
@@ -308,6 +497,19 @@ namespace TechSenseFilters.Tests
             {
                 throw new InvalidOperationException(
                     "Expected text containing '" + expected +
+                    "' but received '" + actual + "'.");
+            }
+        }
+
+        private static void NotContains(string expected, string actual)
+        {
+            if (actual != null &&
+                actual.IndexOf(
+                    expected,
+                    StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                throw new InvalidOperationException(
+                    "Expected text without '" + expected +
                     "' but received '" + actual + "'.");
             }
         }

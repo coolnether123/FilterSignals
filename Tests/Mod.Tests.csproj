@@ -17,5 +17,9 @@
              Link="ProductionPathAssessment.cs" />
     <Compile Include="..\Source\Domain\ProductionSourceSelection.cs"
              Link="ProductionSourceSelection.cs" />
+    <Compile Include="..\Source\Domain\ClassificationNavigation.cs"
+             Link="ClassificationNavigation.cs" />
+    <Compile Include="..\Source\Presentation\ToolbarLayout.cs"
+             Link="ToolbarLayout.cs" />
   </ItemGroup>
 </Project>

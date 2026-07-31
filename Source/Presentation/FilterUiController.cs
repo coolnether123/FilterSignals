@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using RimWorld;
 using TechSenseFilters.Domain;
 using TechSenseFilters.Runtime;
 using TechSenseFilters.Settings;
@@ -10,7 +11,7 @@ namespace TechSenseFilters.Presentation
 {
     internal static class FilterUiController
     {
-        private const float ToolbarHeight = 34f;
+        private const float ToolbarOuterPadding = 4f;
         private static readonly ConditionalWeakTable<
             ThingFilterUI.UIState,
             FilterPresentationState> States =
@@ -42,13 +43,16 @@ namespace TechSenseFilters.Presentation
                 return;
             }
 
+            float toolbarWidth = Mathf.Max(0f, rect.width - 6f);
+            ToolbarLayoutPlan layout =
+                ToolbarLayout.Calculate(toolbarWidth);
             Rect toolbarRect = new Rect(
                 rect.x + 3f,
                 rect.y + 2f,
-                rect.width - 6f,
-                ToolbarHeight - 4f);
-            DrawToolbar(toolbarRect, state);
-            rect.yMin += ToolbarHeight;
+                toolbarWidth,
+                layout.Height);
+            DrawToolbar(toolbarRect, state, layout);
+            rect.yMin += layout.Height + ToolbarOuterPadding;
         }
 
         internal static void End()
@@ -100,32 +104,38 @@ namespace TechSenseFilters.Presentation
             Widgets.DrawBox(iconRect, 1);
             GUI.color = previous;
 
+            Rect interactionRect = iconRect.ExpandedBy(3f);
             TooltipHandler.TipRegion(
-                iconRect.ExpandedBy(3f),
+                interactionRect,
                 ClassificationPresentation.FullLabel(result.Classification) +
-                "\n\n" + result.Explanation);
+                "\n\n" + result.Explanation +
+                "\n\n" +
+                ClassificationPresentation.NavigationTooltip(result));
+            if (Widgets.ButtonInvisible(interactionRect) &&
+                !ClassificationNavigationController.TryNavigate(
+                    thingDef,
+                    effectiveMap,
+                    result))
+            {
+                Messages.Message(
+                    "TechSense_NavigationUnavailable".Translate(),
+                    MessageTypeDefOf.RejectInput,
+                    historical: false);
+            }
         }
 
         private static void DrawToolbar(
             Rect rect,
-            FilterPresentationState state)
+            FilterPresentationState state,
+            ToolbarLayoutPlan layout)
         {
             Widgets.DrawMenuSection(rect);
-            const float titleWidth = 74f;
-            Rect titleRect = new Rect(
-                rect.x + 6f,
-                rect.y,
-                titleWidth,
-                rect.height);
+            Rect titleRect = ToRect(rect, layout.Title);
             TextAnchor previousAnchor = Text.Anchor;
             Text.Anchor = TextAnchor.MiddleLeft;
             Widgets.Label(titleRect, "TechSense_Title".Translate());
             Text.Anchor = previousAnchor;
 
-            float gap = 3f;
-            float buttonsX = titleRect.xMax + 2f;
-            float buttonWidth =
-                (rect.xMax - buttonsX - (gap * 4f) - 3f) / 4f;
             ProductionClassification[] classifications =
             {
                 ProductionClassification.CanMakeNow,
@@ -138,11 +148,9 @@ namespace TechSenseFilters.Presentation
             {
                 ProductionClassification classification =
                     classifications[i];
-                Rect buttonRect = new Rect(
-                    buttonsX + (i * (buttonWidth + gap)),
-                    rect.y + 3f,
-                    buttonWidth,
-                    rect.height - 6f);
+                Rect buttonRect = ToRect(
+                    rect,
+                    layout.Buttons[i]);
                 bool enabled = state.IsEnabled(classification);
                 Color previous = GUI.color;
                 Color statusColor =
@@ -167,6 +175,17 @@ namespace TechSenseFilters.Presentation
                     ClassificationPresentation.FullLabel(classification) +
                     "\n" + "TechSense_ToggleTooltip".Translate());
             }
+        }
+
+        private static Rect ToRect(
+            Rect origin,
+            LayoutRect relative)
+        {
+            return new Rect(
+                origin.x + relative.X,
+                origin.y + relative.Y,
+                relative.Width,
+                relative.Height);
         }
 
         private sealed class FilterDialogContext

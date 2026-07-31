@@ -64,6 +64,9 @@ namespace TechSenseFilters.Runtime
                     .Where(source => source != null &&
                         source.category == ThingCategory.Building)
                     .Distinct()
+                    .OrderBy(
+                        source => source.defName,
+                        System.StringComparer.Ordinal)
                     .ToArray();
                 sourcesByRecipe[recipe] = sourceDefs;
                 foreach (ThingDef sourceDef in sourceDefs)

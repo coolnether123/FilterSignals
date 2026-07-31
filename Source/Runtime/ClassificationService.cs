@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using Spine.Caching;
 using TechSenseFilters.Compatibility;
@@ -62,6 +61,15 @@ namespace TechSenseFilters.Runtime
             return index.IsProductionSource(thingDef);
         }
 
+        internal static DefinitionProductionIndex ProductionIndex
+        {
+            get
+            {
+                EnsureInitialized();
+                return index;
+            }
+        }
+
         internal static void Invalidate(Map map)
         {
             if (map == null)
@@ -115,58 +123,15 @@ namespace TechSenseFilters.Runtime
                 recipeIndex < recipes.Count;
                 recipeIndex++)
             {
-                paths.Add(EvaluateRecipe(
+                paths.Add(RecipeAssessmentFactory.Evaluate(
                     recipes[recipeIndex],
                     map,
-                    snapshot));
+                    snapshot,
+                    index));
             }
 
             AddCustomPaths(paths, item, map);
             return ProductionClassifier.Classify(paths);
-        }
-
-        private static ProductionPathAssessment EvaluateRecipe(
-            RecipeDef recipe,
-            Map map,
-            MapCapabilitySnapshot snapshot)
-        {
-            bool researchUnlocked = recipe.AvailableNow;
-            IReadOnlyList<ThingDef> sourceDefs = index.SourcesFor(recipe);
-            ThingDef preferredSource =
-                sourceDefs.Count > 0 ? sourceDefs[0] : null;
-            string fallbackPathLabel = preferredSource?.label ??
-                recipe.label ??
-                recipe.defName;
-            ProductionSourceSelection sourceSelection =
-                snapshot.SelectSource(
-                    recipe,
-                    sourceDefs,
-                    fallbackPathLabel);
-            string pathLabel = sourceSelection.PathLabel;
-            bool pawnCapable = snapshot.HasCapablePawn(recipe);
-            bool materialsAvailable =
-                !TechSenseFiltersSettings.Current.ConsiderMaterialShortages ||
-                MaterialsAvailable(recipe, map);
-            string lockedReason =
-                BuildLockedReason(recipe, researchUnlocked);
-            string unavailableReason = BuildUnavailableReason(
-                researchUnlocked,
-                sourceSelection.SourcePresent,
-                sourceSelection.BillGiverUsable,
-                sourceSelection.SourceUsable,
-                pawnCapable,
-                materialsAvailable,
-                pathLabel);
-
-            return new ProductionPathAssessment(
-                pathLabel,
-                researchUnlocked,
-                sourceSelection.SourcePresent,
-                sourceSelection.SourceUsable,
-                pawnCapable,
-                materialsAvailable,
-                lockedReason,
-                unavailableReason);
         }
 
         private static ClassificationResult EvaluateOverrides(
@@ -240,110 +205,6 @@ namespace TechSenseFilters.Runtime
                         exception);
                 }
             }
-        }
-
-        private static bool MaterialsAvailable(RecipeDef recipe, Map map)
-        {
-            if (map == null ||
-                recipe.ingredients == null ||
-                recipe.ingredients.Count == 0)
-            {
-                return true;
-            }
-
-            return !recipe.PotentiallyMissingIngredients(null, map).Any();
-        }
-
-        private static string BuildLockedReason(
-            RecipeDef recipe,
-            bool availableNow)
-        {
-            if (availableNow)
-            {
-                return string.Empty;
-            }
-
-            var missingResearch = new List<ResearchProjectDef>();
-            if (recipe.researchPrerequisite != null &&
-                !recipe.researchPrerequisite.IsFinished)
-            {
-                missingResearch.Add(recipe.researchPrerequisite);
-            }
-
-            if (recipe.researchPrerequisites != null)
-            {
-                for (int i = 0;
-                    i < recipe.researchPrerequisites.Count;
-                    i++)
-                {
-                    ResearchProjectDef project =
-                        recipe.researchPrerequisites[i];
-                    if (project != null &&
-                        !project.IsFinished &&
-                        !missingResearch.Contains(project))
-                    {
-                        missingResearch.Add(project);
-                    }
-                }
-            }
-
-            if (missingResearch.Count > 0)
-            {
-                return "Requires " +
-                    string.Join(
-                        ", ",
-                        missingResearch.Select(project => project.label)) +
-                    " research.";
-            }
-
-            return "The production path is locked by current colony prerequisites.";
-        }
-
-        private static string BuildUnavailableReason(
-            bool researchUnlocked,
-            bool sourcePresent,
-            bool billGiverUsable,
-            bool sourceUsable,
-            bool pawnCapable,
-            bool materialsAvailable,
-            string pathLabel)
-        {
-            if (!researchUnlocked)
-            {
-                return string.Empty;
-            }
-
-            if (!sourcePresent)
-            {
-                return "Research is complete, but no " +
-                    pathLabel + " exists.";
-            }
-
-            if (!billGiverUsable)
-            {
-                return "Research is complete, but no usable " +
-                    pathLabel + " exists.";
-            }
-
-            if (!sourceUsable)
-            {
-                return "Research is complete, but no currently usable " +
-                    pathLabel + " accepts this recipe.";
-            }
-
-            if (!pawnCapable)
-            {
-                return "Research is complete, but no colonist currently " +
-                    "meets the recipe's work and skill requirements.";
-            }
-
-            if (!materialsAvailable)
-            {
-                return "The production path is available, but required " +
-                    "materials are currently missing.";
-            }
-
-            return string.Empty;
         }
 
         private static void EnsureInitialized()

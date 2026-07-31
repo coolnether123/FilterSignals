@@ -22,7 +22,7 @@ namespace TechSenseFilters.Domain
             {
                 return new ClassificationResult(
                     ProductionClassification.NotApplicable,
-                    "No player production recipe is available.");
+                    "This colony is unable to make this item.");
             }
 
             ProductionPathAssessment ready =

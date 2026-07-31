@@ -53,5 +53,43 @@ namespace TechSenseFilters.Presentation
                     return new Color(0.58f, 0.66f, 0.76f);
             }
         }
+
+        internal static string NavigationTooltip(
+            ClassificationResult result)
+        {
+            if (result == null)
+            {
+                return "TechSense_NavigationUnavailable".Translate();
+            }
+
+            string instruction;
+            switch (result.Classification)
+            {
+                case ProductionClassification.CanMakeNow:
+                    instruction =
+                        "TechSense_NavigateCanMake".Translate();
+                    break;
+                case ProductionClassification.ResearchUnlocked:
+                    instruction =
+                        "TechSense_NavigateUnlocked".Translate();
+                    break;
+                case ProductionClassification.CannotMakeYet:
+                    instruction =
+                        "TechSense_NavigateLocked".Translate();
+                    break;
+                default:
+                    return "TechSense_NavigationUnavailable".Translate();
+            }
+
+            string path = string.IsNullOrWhiteSpace(result.PathLabel)
+                ? string.Empty
+                : "\n" +
+                    "TechSense_SelectedPath".Translate() +
+                    " " + result.PathLabel.CapitalizeFirst() + ".";
+            return instruction +
+                path +
+                "\n" +
+                "TechSense_NavigationChoiceRule".Translate();
+        }
     }
 }
