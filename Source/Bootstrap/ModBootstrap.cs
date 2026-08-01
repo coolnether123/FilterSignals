@@ -1,5 +1,6 @@
 using System.Reflection;
 using HarmonyLib;
+using Spine.Api;
 using Spine.Harmony;
 using TechSenseFilters.Runtime;
 using TechSenseFilters.Settings;
@@ -11,6 +12,7 @@ namespace TechSenseFilters.Bootstrap
     public sealed class TechSenseFiltersMod : Mod
     {
         private static bool patchesInstalled;
+        private static System.IDisposable tooltipSizingLease;
 
         private readonly TechSenseFiltersSettings settings;
         private readonly TechSenseSettingsUi settingsUi =
@@ -19,6 +21,19 @@ namespace TechSenseFilters.Bootstrap
         public TechSenseFiltersMod(ModContentPack content)
             : base(content)
         {
+            SpineApi.Runtime.Require(new SpineRequirement(
+                "CoolNether123.TechSenseFilters",
+                new SemanticVersion(1, 0, 0),
+                SpineCapability.Settings |
+                SpineCapability.HarmonyPatching |
+                SpineCapability.BoundedCaches |
+                SpineCapability.TooltipSizing));
+            if (tooltipSizingLease == null)
+            {
+                tooltipSizingLease = SpineApi.Tooltips.Acquire(
+                    "CoolNether123.TechSenseFilters");
+            }
+
             settings = GetSettings<TechSenseFiltersSettings>();
             TechSenseFiltersSettings.Bind(settings);
             InstallPatches();
