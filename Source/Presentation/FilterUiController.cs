@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
 using RimWorld;
+using Spine.UI.ContextualSettings;
+using TechSenseFilters.Bootstrap;
 using TechSenseFilters.Domain;
 using TechSenseFilters.Runtime;
 using TechSenseFilters.Settings;
@@ -138,9 +140,24 @@ namespace TechSenseFilters.Presentation
             }
 
             TooltipHandler.ClearTooltipsFrom(interactionRect);
-            TooltipHandler.TipRegion(
+            ContextualSettingsTarget settingsTarget =
+                result.Reason == ClassificationReason.MaterialShortage
+                    ? ContextualSettingsTarget.Exact(
+                        "classification.materials",
+                        "feature.enabled")
+                    : ContextualSettingsTarget.Exact(
+                        "presentation.indicators",
+                        "feature.enabled");
+            if (TechSenseFiltersMod.ContextualSettings?.Bind(
                 interactionRect,
-                tooltip);
+                settingsTarget,
+                ContextualSettingsBindingOptions.WithTooltip(
+                    tooltip,
+                    priority: 20)) == true)
+            {
+                return;
+            }
+
             if (!Widgets.ButtonInvisible(interactionRect))
             {
                 return;
@@ -157,6 +174,14 @@ namespace TechSenseFilters.Presentation
             FilterPresentationState state,
             ToolbarLayoutPlan layout)
         {
+            if (TechSenseFiltersMod.ContextualSettings?.Bind(
+                rect,
+                ContextualSettingsTarget.Group("presentation.toolbar"),
+                new ContextualSettingsBindingOptions(priority: 0)) == true)
+            {
+                return;
+            }
+
             Widgets.DrawMenuSection(rect);
             Rect titleRect = ToRect(rect, layout.Title);
             TextAnchor previousAnchor = Text.Anchor;
@@ -190,6 +215,22 @@ namespace TechSenseFilters.Presentation
                         statusColor.g,
                         statusColor.b,
                         0.34f);
+                string buttonTooltip =
+                    ClassificationPresentation.FullLabel(classification) +
+                    "\n" + "TechSense_ToggleTooltip".Translate();
+                if (TechSenseFiltersMod.ContextualSettings?.Bind(
+                    buttonRect,
+                    ContextualSettingsTarget.Exact(
+                        "presentation.toolbar",
+                        "feature.enabled"),
+                    ContextualSettingsBindingOptions.WithTooltip(
+                        buttonTooltip,
+                        priority: 10)) == true)
+                {
+                    GUI.color = previous;
+                    continue;
+                }
+
                 if (Widgets.ButtonText(
                     buttonRect,
                     ClassificationPresentation.ShortLabel(classification)))
@@ -198,10 +239,6 @@ namespace TechSenseFilters.Presentation
                 }
 
                 GUI.color = previous;
-                TooltipHandler.TipRegion(
-                    buttonRect,
-                    ClassificationPresentation.FullLabel(classification) +
-                    "\n" + "TechSense_ToggleTooltip".Translate());
             }
         }
 

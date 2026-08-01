@@ -42,7 +42,10 @@ namespace TechSenseFilters.Domain
                 return new ClassificationResult(
                     ProductionClassification.ResearchUnlocked,
                     ExplainUnlockedButUnavailable(unlocked),
-                    unlocked.PathLabel);
+                    unlocked.PathLabel,
+                    !unlocked.MaterialsAvailable
+                        ? ClassificationReason.MaterialShortage
+                        : ClassificationReason.General);
             }
 
             ProductionPathAssessment locked = candidates[0];

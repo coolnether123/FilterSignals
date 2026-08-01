@@ -25,6 +25,8 @@ namespace TechSenseFilters.Settings
             };
         private SettingsViewMode viewMode = SettingsViewMode.Simple;
 
+        internal SettingsListDrawer Drawer => drawer;
+
         internal void Draw(
             Rect rect,
             TechSenseFiltersSettings settings)

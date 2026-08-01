@@ -2,6 +2,7 @@ using System.Reflection;
 using HarmonyLib;
 using Spine.Api;
 using Spine.Harmony;
+using Spine.UI.ContextualSettings;
 using TechSenseFilters.Runtime;
 using TechSenseFilters.Settings;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace TechSenseFilters.Bootstrap
     {
         private static bool patchesInstalled;
         private static System.IDisposable tooltipSizingLease;
+        private static IContextualSettingsLease contextualSettingsLease;
 
         private readonly TechSenseFiltersSettings settings;
         private readonly TechSenseSettingsUi settingsUi =
@@ -23,11 +25,12 @@ namespace TechSenseFilters.Bootstrap
         {
             SpineApi.Runtime.Require(new SpineRequirement(
                 "CoolNether123.TechSenseFilters",
-                new SemanticVersion(1, 0, 0),
+                new SemanticVersion(1, 1, 0),
                 SpineCapability.Settings |
                 SpineCapability.HarmonyPatching |
                 SpineCapability.BoundedCaches |
-                SpineCapability.TooltipSizing));
+                SpineCapability.TooltipSizing |
+                SpineCapability.ContextualSettings));
             if (tooltipSizingLease == null)
             {
                 tooltipSizingLease = SpineApi.Tooltips.Acquire(
@@ -36,8 +39,19 @@ namespace TechSenseFilters.Bootstrap
 
             settings = GetSettings<TechSenseFiltersSettings>();
             TechSenseFiltersSettings.Bind(settings);
+            if (contextualSettingsLease == null)
+            {
+                contextualSettingsLease = SpineApi.ContextualSettings.Acquire(
+                    "CoolNether123.TechSenseFilters",
+                    this,
+                    settingsUi.Drawer,
+                    settings);
+            }
             InstallPatches();
         }
+
+        internal static IContextualSettingsLease ContextualSettings =>
+            contextualSettingsLease;
 
         public override string SettingsCategory()
         {
