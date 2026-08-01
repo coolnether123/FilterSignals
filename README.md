@@ -24,6 +24,10 @@ can temporarily hide or show classifications only in the open dialog; it is
 disabled by default and can be enabled in mod settings. Saved allow/deny
 choices are never rewritten.
 
+Alt-click a status square or optional toolbar control to open and highlight
+its setting. Alt-click never navigates to research, a workstation, or the
+Architect menu and never toggles the temporary view filter.
+
 ## Requirements
 
 - RimWorld 1.6
