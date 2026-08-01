@@ -143,7 +143,7 @@ Final lane:
   exception, or Harmony failure matches. Development Mode is enabled and the
   proof lane remains open for manual inspection.
 
-## Small-volume marker layout
+## Small-volume marker layout (superseded by tooltip-only detail)
 
 Final lane:
 `TechSenseFilters-6bf2ce502b794c12b075783c8b419fa5`
@@ -164,6 +164,29 @@ Final lane:
 - The live log contains zero UI-root, illegal-OnGUI, TechSense error, root
   exception, or Harmony failure matches. Development Mode is enabled and the
   proof lane remains open for manual inspection.
+
+## Tooltip-only small-volume detail and stable sizing
+
+Final combined lane:
+`codex-root-b6379d6f4d6d43979f0b930ef8bd92e2`
+
+- The final clean central build used source commit
+  `f6db7a21c3c4caf4ca103c5e22c12642d948287b` and tooling commit
+  `b810187ae950ace82484f0c5679b7e3e34e6f1e1`; the shipping DLL is 67,072
+  bytes with SHA-256
+  `87747350840B362CFFDADDE48861CC943D819D083A8D147CDD9DAD91870C7C1D`.
+- All 17 domain tests and four UI/diagnostic gates passed. Package validation
+  returned `RWT-BUILD-PACKAGE-VALID`.
+- Capture `small-volume-focused-ready-20260801-000028-640.png` proves the
+  vanilla inline `/10` is absent and only the status square remains.
+- Captures `gold-status-tooltip-final-20260801-000338-063.png` and
+  `gold-status-tooltip-moved-20260801-000354-887.png` show the same compact
+  three-line tooltip before and after moving within the square. The bottom
+  line remains intact and reads `Small-volume: 10 units = 1.`
+- The fixture state remained `open:true filterUnchanged:true allowedCount:555`.
+  The final combined lane has Core, Harmony, RimWorld Agent, Spine, Vehicle
+  Framework, Save Our Ship 2, and all four new mods active. Development Mode
+  is enabled and the lane remains open.
 
 ## Inert no-action clicks and concise producible wording
 
