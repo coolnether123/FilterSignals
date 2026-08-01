@@ -182,8 +182,10 @@ scales/resolutions; and thirty-minute accelerated simulation.
 
 ## Grouped full-DLC coverage checklist
 
-The shared full-DLC lane must use the same H-drive build and record the exact DLC
-set. It must verify: (1) two ordinary colonies with different capabilities;
+The shared full-DLC lane must use the isolated Steam/full-DLC runtime only for
+these DLC-dependent assertions and record its exact build and DLC set. Ordinary
+Core pairwise conclusions remain tied to the H-drive runtime. The grouped lane
+must verify: (1) two ordinary colonies with different capabilities;
 (2) capability on one map never changes the other map's indicator; (3) two
 instances of the same workstation with only one powered, fueled, connected, or
 otherwise usable; (4) Odyssey gravship transition and destination map; (5) a
@@ -196,6 +198,8 @@ cases.
 
 ## Evidence hygiene
 
-Four earlier `TSCompatCurrent*` launches used the wrong D-drive game runtime and
-are invalid-environment evidence only. They were terminated and are excluded
-from every compatibility conclusion above.
+Four earlier `TSCompatCurrent*` launches targeted the live D-drive game root,
+where a duplicate pre-existing RimWorld Agent invalidated isolation. They are
+invalid-environment evidence only. They were terminated and are excluded from
+every compatibility conclusion above. The later clean staged full-DLC root is
+a separate grouped-test environment and does not rehabilitate those launches.
