@@ -210,3 +210,17 @@ Final lane:
 - The live log contains zero UI-root, illegal-OnGUI, TechSense error, root
   exception, or Harmony failure matches. Development Mode is enabled and the
   proof lane remains open for manual inspection.
+
+## Tooltip ownership fallback correction
+
+The status square now registers its sole TechSense tooltip directly after
+clearing the overlapping vanilla row tooltip. Spine remains responsible only
+for contextual Alt-click routing on that rectangle, so the tooltip is present
+even when contextual settings do not consume the event and is never registered
+twice by TechSense and Spine.
+
+The unchanged 17 domain tests and all four structural/UI gates pass. The
+RimWorld 1.6 Release build completed with zero warnings and zero errors, and
+package validation returned `RWT-BUILD-PACKAGE-VALID`. The shipping DLL is
+68,096 bytes with SHA-256
+`719809ED8FC57548E2DD545148B2668163D0484EB82D94AE10D7EDE65C6747CC`.

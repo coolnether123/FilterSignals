@@ -140,6 +140,7 @@ namespace TechSenseFilters.Presentation
             }
 
             TooltipHandler.ClearTooltipsFrom(interactionRect);
+            TooltipHandler.TipRegion(interactionRect, tooltip);
             ContextualSettingsTarget settingsTarget =
                 result.Reason == ClassificationReason.MaterialShortage
                     ? ContextualSettingsTarget.Exact(
@@ -151,9 +152,7 @@ namespace TechSenseFilters.Presentation
             if (TechSenseFiltersMod.ContextualSettings?.Bind(
                 interactionRect,
                 settingsTarget,
-                ContextualSettingsBindingOptions.WithTooltip(
-                    tooltip,
-                    priority: 20)) == true)
+                new ContextualSettingsBindingOptions(priority: 20)) == true)
             {
                 return;
             }
