@@ -42,7 +42,7 @@ and the focused small-volume runtime fixture.
 
 The central build wrapper compiled commit
 `d540a4e7895bc610ca602643382154c85d6541a7` from the canonical
-`A:\Dev\RimWorld\Mods\FilterSignals` root against RimWorld 1.6, Harmony
+`<repo-root>` root against RimWorld 1.6, Harmony
 2.4.2, and the refreshed Spine assembly. The build completed with zero
 warnings and zero errors.
 
@@ -52,15 +52,30 @@ The shipping `FilterSignals.dll` is 68,096 bytes with SHA-256
 `CoolNether123.FilterSignals`, RimWorld 1.6, Harmony, and Spine.
 
 The build result is stored outside the source repository at
-`C:\Users\PrecisionX\AppData\Local\Temp\FilterSignalsRenameBuild\build-result.json`.
+`<local-temp>\FilterSignalsRenameBuild\build-result.json`.
 Its source was clean; the shared tooling checkout was concurrently dirty and
 is therefore recorded as such rather than described as a clean tooling build.
 
+## Second-review invalidation checkpoint
+
+Building spawn/despawn and power-state Harmony hooks were removed. Capability
+snapshots already refresh on their bounded 120-tick cadence, so those broad
+hooks duplicated normal cache expiry. Immediate research completion
+invalidation remains because it changes every map's classification at once;
+`Map.Dispose` remains for lifecycle cleanup.
+
+The domain suite still passes 17 contracts and 38 assertions, along with the
+toolbar, navigation, tooltip-ownership, and small-volume fixtures. The final
+centralized RC rebuild produced a 47,616-byte `FilterSignals.dll` with SHA-256
+`682501205C52E7CA40F5F90F263C2621F3C13C0201C250550B2755DC2A2A655A`.
+In the combined live lane, its Harmony owner count fell from 12 to 8 and no
+Filter Signals error was present in either harness or Player.log output.
+
 ## Runtime boundary
 
-Earlier gameplay sessions remain useful behavioral baselines because the
-rename did not alter classification or UI behavior. They are not treated as
-proof of the new package, assembly, or Harmony identity. A post-rename harness
-run must verify startup, patch ownership, the real filter fixture, tooltip and
-navigation behavior, settings persistence, save/reload, and suite coexistence
-before release sign-off.
+Earlier focused gameplay sessions remain the behavioral evidence for the real
+filter fixture, tooltip/navigation behavior, settings persistence, and
+save/reload. The final combined lane
+`coolnether-suite-355cca1875a740909cbc91d9c1a59c57` proves the renamed package,
+assembly, and Harmony identity coexist in the complete suite: it reached a map,
+reported eight Filter Signals-owned patches, and produced no target-mod Error.

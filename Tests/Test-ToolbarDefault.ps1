@@ -17,16 +17,22 @@ if ($settings -match
     $failures.Add(
         'The classification toolbar must be hidden by default.')
 }
-if ($registry -notmatch
-    '"presentation\.toolbar"[\s\S]{0,700}?false,\s*10,')
+if ($settings -notmatch
+    'public\s+bool\s+ShowClassificationToolbar(?:\s*=\s*false)?\s*;')
 {
     $failures.Add(
-        'The persisted toolbar setting must default to false.')
+        'The settings field must retain its false fresh-install default.')
+}
+if ($registry -notmatch
+    '"presentation\.toolbar"[\s\S]{0,400}?nameof\(FilterSignalsSettings\.ShowClassificationToolbar\)')
+{
+    $failures.Add(
+        'The persisted toolbar definition must bind to the defaulted field.')
 }
 if ($controller -notmatch
     '!settings\.ShowClassificationToolbar' -or
     $controller -notmatch
-    '!FilterSignalsSettings\.Current\.ShowClassificationToolbar')
+    '!FilterSignalsMod\.Settings\.ShowClassificationToolbar')
 {
     $failures.Add(
         'Hidden toolbar state must reserve no space or filter item rows.')

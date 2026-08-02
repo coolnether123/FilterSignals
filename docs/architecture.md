@@ -14,9 +14,10 @@ never reduced to one definition-level usability Boolean.
 providers, reduces all paths through the pure `ProductionClassifier`, and
 caches final results. A viable path wins when an item has multiple recipes.
 Each map owns a 256 KiB bounded LRU result cache. Snapshots expire after 120
-game ticks as a safety net, while research, relevant building state, pawn
-presence, power, fuel, breakdowns, and map disposal trigger targeted
-invalidation.
+game ticks as a safety net. Research, relevant building topology, power, and
+map disposal trigger targeted invalidation. Pawn, fuel, and breakdown changes
+use the bounded refresh instead of hot-path Harmony hooks for a cosmetic status
+signal.
 
 Presentation is separate from classification. `FilterUiController` stores
 per-dialog presentation state in a `ConditionalWeakTable<ThingFilterUI.UIState,
@@ -67,8 +68,8 @@ Settings and patch installation use the standalone Spine dependency:
 
 - `Spine.UI.SettingsFramework` provides settings scribing, hierarchy, and list
   drawing.
-- `Spine.Harmony.HarmonyUtil` installs the assembly patches and reports skipped
-  or failed patches.
+- Spine's patch-installer facade owns the one consumer Harmony instance,
+  install-once state, and target-specific skipped/failed diagnostics.
 
 The Harmony option `AllowStructReturns` is enabled because the guarded patch
 set contains the value-returning `Visible(ThingDef)` method. That postfix
@@ -97,10 +98,6 @@ compatibility execution, RimWorld queries, explanation composition, and
 log-key generation into the hot classification method. The recommended
 architectural action is to keep them local and not create a shared utility
 until a second real consumer appears.
-
-`CapabilityInvalidation.InvalidateIfProductionSource` has multiple patch
-callers and centralizes the rule that unrelated buildings must not flush the
-cache.
 
 `ProductionSourceSelector.Select` has one production caller,
 `MapCapabilitySnapshot.SelectSource`, plus focused unit-test callers. It remains
@@ -139,7 +136,7 @@ The four `Run*Probe` diagnostics methods each have one caller in the aggregate
 capability debug action. They remain separate because each produces a
 standalone runtime assertion for conditional instances, workstation
 invalidation, research invalidation, or multi-path definitions. They are
-developer-only acceptance probes, not reusable runtime services; the
+developer-only test-fixture assembly's acceptance probes, not reusable runtime services; the
 recommended action is to keep them private and local. `TrySpawnSource` is
 shared by the conditional-instance and workstation probes.
 

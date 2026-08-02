@@ -39,7 +39,7 @@ namespace FilterSignals.Presentation
             current = new FilterDialogContext(state, effectiveMap);
 
             FilterSignalsSettings settings =
-                FilterSignalsSettings.Current;
+                FilterSignalsMod.Settings;
             if (!settings.FeatureEnabled ||
                 !settings.ShowClassificationToolbar)
             {
@@ -66,8 +66,8 @@ namespace FilterSignals.Presentation
         internal static bool ShouldShow(ThingDef thingDef)
         {
             if (current == null ||
-                !FilterSignalsSettings.Current.FeatureEnabled ||
-                !FilterSignalsSettings.Current.ShowClassificationToolbar)
+                !FilterSignalsMod.Settings.FeatureEnabled ||
+                !FilterSignalsMod.Settings.ShowClassificationToolbar)
             {
                 return true;
             }
@@ -85,8 +85,8 @@ namespace FilterSignals.Presentation
         {
             if (listing == null ||
                 thingDef == null ||
-                !FilterSignalsSettings.Current.FeatureEnabled ||
-                !FilterSignalsSettings.Current.ShowStatusIndicators)
+                !FilterSignalsMod.Settings.FeatureEnabled ||
+                !FilterSignalsMod.Settings.ShowStatusIndicators)
             {
                 return;
             }

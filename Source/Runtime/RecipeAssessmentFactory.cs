@@ -30,7 +30,7 @@ namespace FilterSignals.Runtime
             string pathLabel = sourceSelection.PathLabel;
             bool pawnCapable = snapshot.HasCapablePawn(recipe);
             bool materialsAvailable =
-                !FilterSignalsSettings.Current.ConsiderMaterialShortages ||
+                !FilterSignals.Bootstrap.FilterSignalsMod.Settings.ConsiderMaterialShortages ||
                 MaterialsAvailable(recipe, map);
             IReadOnlyList<ResearchProjectDef> missingResearch =
                 MissingResearch(recipe);

@@ -1,15 +1,15 @@
 using System;
 using FilterSignals.Domain;
 using FilterSignals.Presentation;
+using static RimWorld.ModTestSupport.Test;
 
 namespace FilterSignals.Tests
 {
     internal static class Program
     {
-        private static int passed;
-
         private static int Main()
         {
+            Start("Filter Signals domain tests");
             Run("no paths are not applicable", NoPathsAreNotApplicable);
             Run("any viable path wins", AnyViablePathWins);
             Run(
@@ -58,8 +58,7 @@ namespace FilterSignals.Tests
                 "navigation fails safely without a target",
                 NavigationFailsSafelyWithoutTarget);
 
-            Console.WriteLine("PASS: " + passed + " FilterSignals domain tests");
-            return 0;
+            return Finish();
         }
 
         private static void NoPathsAreNotApplicable()
@@ -471,47 +470,5 @@ namespace FilterSignals.Tests
                 locked);
         }
 
-        private static void Run(string name, Action test)
-        {
-            test();
-            passed++;
-            Console.WriteLine("PASS: " + name);
-        }
-
-        private static void Equal<T>(T expected, T actual)
-        {
-            if (!Equals(expected, actual))
-            {
-                throw new InvalidOperationException(
-                    "Expected '" + expected + "' but received '" +
-                    actual + "'.");
-            }
-        }
-
-        private static void Contains(string expected, string actual)
-        {
-            if (actual == null ||
-                actual.IndexOf(
-                    expected,
-                    StringComparison.OrdinalIgnoreCase) < 0)
-            {
-                throw new InvalidOperationException(
-                    "Expected text containing '" + expected +
-                    "' but received '" + actual + "'.");
-            }
-        }
-
-        private static void NotContains(string expected, string actual)
-        {
-            if (actual != null &&
-                actual.IndexOf(
-                    expected,
-                    StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                throw new InvalidOperationException(
-                    "Expected text without '" + expected +
-                    "' but received '" + actual + "'.");
-            }
-        }
     }
 }

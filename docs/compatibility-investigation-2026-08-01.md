@@ -8,7 +8,7 @@ migration. They remain behavioral baselines, but they do not prove the current
 package, assembly, Harmony-owner, or settings identity. Exact prior identity
 labels are intentionally omitted rather than rewritten into evidence that did
 not exist. All valid runtime results below used
-`H:\Games\RimWorld1-6-4871Win64\RimWorldWin64.exe`, RimWorld
+`<rimworld-install>\RimWorldWin64.exe`, RimWorld
 `1.6.4871 rev573`, developer mode enabled, Core only, and an isolated harness
 profile. Workshop folders on `D:` were inputs only. The investigated Filter Signals
 revision was `f0bdc59166c082a33095fd1d221b6e0f5fe990f0`; its DLL SHA-256 was
@@ -51,7 +51,7 @@ order is explicitly shown.
   hooks; BWM owned its bill and `Dialog_BillConfig` hooks. No shared method had
   competing patches in the inspected inventory.
 - Evidence:
-  `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatTsBwm-23cfafca522746809b35a16a7da35c04`,
+  `<harness-evidence-root>\TSCompatTsBwm-23cfafca522746809b35a16a7da35c04`,
   `...\TSCompatBwmTs-0b89533f046d4e12a71e8516b4e2c097`, and
   `...\TSCompatBwmOnly-9ba05bbc2fa044119a6893f331d91a1d`. The strongest UI
   capture is `ipc\captures\ts-bwm-bill-details-filter-20260801-005915-726.png`.
@@ -72,7 +72,7 @@ order is explicitly shown.
   rendering; ASF patched `ThingFilter.ExposeData` and a special filter worker.
   The fixture remained unchanged with 467 allowed definitions.
 - Evidence:
-  `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatAsf-9b1ce74bc13044b3a7b79f710cc33e49`.
+  `<harness-evidence-root>\TSCompatAsf-9b1ce74bc13044b3a7b79f710cc33e49`.
 - Limitation: ASF is a framework and this lane did not include a concrete ASF
   storage content mod, so presentation inside an ASF storage building remains
   pending.
@@ -89,7 +89,7 @@ order is explicitly shown.
   patches without a demonstrated collision. Cold classification was 1 ms and
   warm classification 0 ms in this diagnostic run.
 - Evidence:
-  `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatMint-64367224e73c449a8035941f7a7987b1`,
+  `<harness-evidence-root>\TSCompatMint-64367224e73c449a8035941f7a7987b1`,
   especially `ipc\captures\ts-mint-filter-20260801-010709-393.png`.
 - Limitation: the Mint Menus research and Architect replacements and Filter Signals's
   colored-square navigation into them were not exercised. A capability probe's
@@ -110,7 +110,7 @@ order is explicitly shown.
   was 1/0 ms. Harmony reported 37 Research Reinvented and 21 FilterSignals-owned
   patches without a demonstrated collision.
 - Evidence:
-  `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatResearch-20e1ee8296c34234bf392c8d2f49d144`.
+  `<harness-evidence-root>\TSCompatResearch-20e1ee8296c34234bf392c8d2f49d144`.
 - Limitation: clicking a Filter Signals status square into Research Reinvented's
   actual research interface was not exercised.
 
@@ -129,7 +129,7 @@ order is explicitly shown.
   measured 0 ms cold and warm. Despite VEF's large patch inventory, no runtime
   collision was observed on the exercised surface.
 - Evidence:
-  `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatVFE-e71478107e744da48077927a732595eb`.
+  `<harness-evidence-root>\TSCompatVFE-e71478107e744da48077927a732595eb`.
 - Limitation: an actual VFE production building and each VFE recipe family were
   not exercised, and this was not the requested full Vanilla Expanded stack.
 
@@ -145,7 +145,7 @@ order is explicitly shown.
   0 ms warm. Harmony reported only five Rimefeller-owned patches and no observed
   conflict with Filter Signals's rendering hooks.
 - Evidence:
-  `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatRimefeller-5f09c48900bf4e1f918cbfcd8e1b5501`.
+  `<harness-evidence-root>\TSCompatRimefeller-5f09c48900bf4e1f918cbfcd8e1b5501`.
 - Required follow-up: build and operate the oil chain, then compare the status
   for custom outputs against real production. Only after that reproduction can
   the team decide whether a provider belongs in Rimefeller-facing optional

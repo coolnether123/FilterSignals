@@ -5,6 +5,7 @@
     <AssemblyName>FilterSignals.Tests</AssemblyName>
     <RootNamespace>FilterSignals.Tests</RootNamespace>
     <Deterministic>true</Deterministic>
+    <RwtTestSupportProject Condition="'$(RwtTestSupportProject)' == ''">$(MSBuildThisFileDirectory)..\..\..\Worktrees\RimWorld-Tooling\phase-a\test-support\RimWorld.ModTestSupport\RimWorld.ModTestSupport.csproj</RwtTestSupportProject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Source\Domain\ClassificationResult.cs"
@@ -21,5 +22,8 @@
              Link="ClassificationNavigation.cs" />
     <Compile Include="..\Source\Presentation\ToolbarLayout.cs"
              Link="ToolbarLayout.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(RwtTestSupportProject)" />
   </ItemGroup>
 </Project>

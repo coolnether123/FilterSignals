@@ -182,7 +182,7 @@ namespace FilterSignals.Runtime
                         provider.GetProductionPaths(
                             item,
                             map,
-                            FilterSignalsSettings.Current
+                            FilterSignals.Bootstrap.FilterSignalsMod.Settings
                                 .ConsiderMaterialShortages);
                     if (supplied == null)
                     {
