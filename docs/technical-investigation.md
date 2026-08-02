@@ -9,7 +9,7 @@ decision is made by private `Listing_TreeThingFilter.Visible(ThingDef)`.
 Individual definition rows are drawn by private
 `Listing_TreeThingFilter.DoThingDef(ThingDef, int, Map)`.
 
-FilterSignals therefore uses:
+Filter Signals therefore uses:
 
 1. a prefix/finalizer around the shared filter window to draw the toolbar and
    scope the current presentation context;

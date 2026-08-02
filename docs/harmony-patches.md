@@ -16,7 +16,7 @@ Harmony owner: `CoolNether123.FilterSignals`
 | `Map.Dispose` | postfix | Release the map-owned cache |
 
 All patches are installed through Spine's `HarmonyUtil.PatchAll`. Errors and
-safety-gate skips always produce a FilterSignals warning; successful patch details
+safety-gate skips always produce a Filter Signals warning; successful patch details
 are emitted only in RimWorld developer mode.
 
 The isolated verification lane enumerated 14 patched target methods, including

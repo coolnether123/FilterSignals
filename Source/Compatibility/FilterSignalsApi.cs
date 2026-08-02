@@ -76,7 +76,7 @@ namespace FilterSignals.Compatibility
             if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentException(
-                    "FilterSignals " + kind + " ID is required.",
+                    "Filter Signals " + kind + " ID is required.",
                     nameof(item));
             }
 
@@ -86,7 +86,7 @@ namespace FilterSignals.Compatibility
                 StringComparison.Ordinal)))
             {
                 throw new InvalidOperationException(
-                    "Duplicate FilterSignals " + kind + " ID: " + id);
+                    "Duplicate Filter Signals " + kind + " ID: " + id);
             }
 
             items.Add(item);

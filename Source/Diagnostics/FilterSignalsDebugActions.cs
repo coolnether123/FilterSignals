@@ -15,7 +15,7 @@ namespace FilterSignals.Diagnostics
     {
         [DebugAction(
             "Filter Signals",
-            "Open FilterSignals filter fixture",
+            "Open Filter Signals filter fixture",
             actionType = DebugActionType.Action)]
         private static void OpenFixture()
         {
@@ -37,7 +37,7 @@ namespace FilterSignals.Diagnostics
 
         [DebugAction(
             "Filter Signals",
-            "Log FilterSignals fixture state",
+            "Log Filter Signals fixture state",
             actionType = DebugActionType.Action)]
         private static void LogFixtureState()
         {
@@ -59,7 +59,7 @@ namespace FilterSignals.Diagnostics
 
         [DebugAction(
             "Filter Signals",
-            "Run FilterSignals capability probes",
+            "Run Filter Signals capability probes",
             actionType = DebugActionType.Action)]
         private static void RunCapabilityProbes()
         {
@@ -79,7 +79,7 @@ namespace FilterSignals.Diagnostics
 
         [DebugAction(
             "Filter Signals",
-            "Log FilterSignals explanations",
+            "Log Filter Signals explanations",
             actionType = DebugActionType.Action)]
         private static void LogRepresentativeExplanations()
         {
@@ -124,7 +124,7 @@ namespace FilterSignals.Diagnostics
 
         [DebugAction(
             "Filter Signals",
-            "Measure FilterSignals classification cache",
+            "Measure Filter Signals classification cache",
             actionType = DebugActionType.Action)]
         private static void MeasureClassificationCache()
         {

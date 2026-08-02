@@ -39,7 +39,7 @@ Architect menu and never toggles the temporary view filter.
 Spine does not yet have a public Workshop or download URL, so this verified
 build is distributed in the local collection at
 `A:\Dev\RimWorld\Releases\1.6\2026-07-30-program-final`. Copy both
-`FilterSignals` and `Spine` into RimWorld's `Mods` directory, then enable
+`Filter Signals` and `Spine` into RimWorld's `Mods` directory, then enable
 Harmony, Spine, and Filter Signals in that order. No other gameplay mod in
 the collection is required.
 

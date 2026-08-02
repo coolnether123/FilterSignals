@@ -1,6 +1,6 @@
 # Compatibility API
 
-FilterSignals automatically understands production represented by resolved
+Filter Signals automatically understands production represented by resolved
 `RecipeDef` data. Framework authors only need this API when their production
 path is not represented that way.
 
@@ -32,7 +32,7 @@ usually the better integration.
 
 ## Cache invalidation
 
-FilterSignals handles vanilla research, building usability, pawn presence, and map
+Filter Signals handles vanilla research, building usability, pawn presence, and map
 lifecycle events. A framework whose custom state changes classification should
 call:
 

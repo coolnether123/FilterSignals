@@ -2,10 +2,15 @@
 
 ## Scope and confidence
 
-This is an evidence report, not a blanket compatibility promise. All valid runtime
-results below used `H:\Games\RimWorld1-6-4871Win64\RimWorldWin64.exe`, RimWorld
+This is an evidence report, not a blanket compatibility promise. These runtime
+rows exercised the same gameplay and UI behavior before the final identity
+migration. They remain behavioral baselines, but they do not prove the current
+package, assembly, Harmony-owner, or settings identity. Exact prior identity
+labels are intentionally omitted rather than rewritten into evidence that did
+not exist. All valid runtime results below used
+`H:\Games\RimWorld1-6-4871Win64\RimWorldWin64.exe`, RimWorld
 `1.6.4871 rev573`, developer mode enabled, Core only, and an isolated harness
-profile. Workshop folders on `D:` were inputs only. The investigated FilterSignals
+profile. Workshop folders on `D:` were inputs only. The investigated Filter Signals
 revision was `f0bdc59166c082a33095fd1d221b6e0f5fe990f0`; its DLL SHA-256 was
 `87747350840B362CFFDADDE48861CC943D819D083A8D147CDD9DAD91870C7C1D`.
 Spine's DLL SHA-256 was
@@ -14,21 +19,20 @@ Spine's DLL SHA-256 was
 The Workshop date below is the local Workshop folder timestamp, used as the
 download-snapshot proxy because Steam does not preserve a separate download
 receipt in these folders. Every pair included Harmony, RimWorld Agent, Spine,
-and FilterSignals in that order before the listed external mod unless the reversed
+and Filter Signals in that order before the listed external mod unless the reversed
 order is explicitly shown.
 
 ## Results
 
-### FilterSignals alone — compatible
+### Filter Signals alone — compatible
 
-- Mod: Filter Signals, `CoolNether123.FilterSignals`, local source at the
-  revision above; Core only; load order `Core > Harmony > RimWorld Agent > Spine
-  > Filter Signals`.
+- Mod behavior: Filter Signals, local source at the revision above; Core only;
+  load order `Core > Harmony > RimWorld Agent > Spine > Filter Signals`.
 - Scenario: fresh game, filter fixture, classification/cache probes, settings,
   save/reload, and removal-safety work from the project's preceding verification
   lane.
-- Evidence root:
-  `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\FilterSignals-c16476171867471a97186bbf5a507909`.
+- The immutable session path used the superseded identity and is intentionally
+  not relabeled as current Filter Signals evidence.
 
 ### Better Workbench Management — compatible in the exercised surface
 
@@ -36,14 +40,14 @@ order is explicitly shown.
   version `1.6.1.3`, snapshot `2025-07-13T22:48:10.8621144Z`. Its tested DLL
   SHA-256 was
   `0913320230337B8482C3903454A3E1417BAFB6A7AA80A3703D936736CBA827D4`.
-- Scenarios: BWM alone; FilterSignals before BWM; BWM before Spine/FilterSignals; fresh
+- Scenarios: BWM alone; Filter Signals before BWM; BWM before Spine/FilterSignals; fresh
   map; real fueled stove; real bill; bill-details ingredient filter; optional
-  FilterSignals toolbar; transient Locked view; saved filter-state non-mutation;
+  Filter Signals toolbar; transient Locked view; saved filter-state non-mutation;
   settings persistence; save/reload.
 - Both load orders reached play and reloaded without matching exceptions. The
-  real narrow bill window showed both mods' controls without overlap. FilterSignals
+  real narrow bill window showed both mods' controls without overlap. Filter Signals
   reported `filterUnchanged:true`, `allowedCount:467`.
-- Harmony ownership was separated: FilterSignals owned the ThingFilter drawing
+- Harmony ownership was separated: Filter Signals owned the ThingFilter drawing
   hooks; BWM owned its bill and `Dialog_BillConfig` hooks. No shared method had
   competing patches in the inspected inventory.
 - Evidence:
@@ -64,7 +68,7 @@ order is explicitly shown.
   `28DAA37ADE4144CAD2B7669EDFDA2201F9C0E8E99D4639853131E066026935B9`.
 - Scenario: fresh map, shared ThingFilter fixture, non-mutation, optional toolbar,
   capability probes, setting persistence, save/reload, Harmony inventory.
-- Result: no matching exception. FilterSignals exclusively owned shared ThingFilter
+- Result: no matching exception. Filter Signals exclusively owned shared ThingFilter
   rendering; ASF patched `ThingFilter.ExposeData` and a special filter worker.
   The fixture remained unchanged with 467 allowed definitions.
 - Evidence:
@@ -77,17 +81,17 @@ order is explicitly shown.
 
 - External: Dubs Mint Menus, `Dubwise.DubsMintMenus`, Workshop `1446523594`,
   version `1.3.1247`, snapshot `2025-07-13T22:48:10.4353841Z`.
-- Load order: `Core > Harmony > Agent > Spine > FilterSignals > Dubs Mint Menus`.
+- Load order: `Core > Harmony > Agent > Spine > Filter Signals > Dubs Mint Menus`.
 - Scenario: fresh map, shared filter fixture, non-mutation, capability and cache
   probes, toolbar, settings persistence, save/reload, Harmony summary.
 - Result: no matching exception; 467 definitions; the captured filter was
-  aligned and usable. Harmony reported 21 FilterSignals and 18 Mint Menus-owned
+  aligned and usable. Harmony reported 21 Filter Signals and 18 Mint Menus-owned
   patches without a demonstrated collision. Cold classification was 1 ms and
   warm classification 0 ms in this diagnostic run.
 - Evidence:
   `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatMint-64367224e73c449a8035941f7a7987b1`,
   especially `ipc\captures\ts-mint-filter-20260801-010709-393.png`.
-- Limitation: the Mint Menus research and Architect replacements and FilterSignals's
+- Limitation: the Mint Menus research and Architect replacements and Filter Signals's
   colored-square navigation into them were not exercised. A capability probe's
   `noSpawnCells` result is an inconclusive fixture precondition, not a mod error.
 
@@ -96,7 +100,7 @@ order is explicitly shown.
 - External: Research Reinvented, `PeteTimesSix.ResearchReinvented`, Workshop
   `2868392160`, no declared mod version, snapshot
   `2025-09-28T18:16:41.7290161Z`.
-- Load order: `Core > Harmony > Agent > Spine > FilterSignals > Research Reinvented`.
+- Load order: `Core > Harmony > Agent > Spine > Filter Signals > Research Reinvented`.
 - Scenario: fresh map, shared filter fixture, real classification invalidation
   probes, toolbar, settings persistence, save/reload, Harmony summary.
 - Result: no matching exception; filter unchanged with 471 definitions. The
@@ -107,7 +111,7 @@ order is explicitly shown.
   patches without a demonstrated collision.
 - Evidence:
   `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatResearch-20e1ee8296c34234bf392c8d2f49d144`.
-- Limitation: clicking a FilterSignals status square into Research Reinvented's
+- Limitation: clicking a Filter Signals status square into Research Reinvented's
   actual research interface was not exercised.
 
 ### Vanilla Expanded Framework + Vanilla Furniture Expanded — compatible with a documented limitation
@@ -117,7 +121,7 @@ order is explicitly shown.
   `2026-05-21T07:02:36.3857086Z`; Vanilla Furniture Expanded,
   `VanillaExpanded.VFECore`, Workshop `1718190143`, snapshot
   `2025-07-13T22:48:10.2967212Z`.
-- Load order: `Core > Harmony > Agent > Spine > FilterSignals > VEF > VFE`.
+- Load order: `Core > Harmony > Agent > Spine > Filter Signals > VEF > VFE`.
 - Scenario: content-expanded filter, classification invalidation, multi-recipe
   path selection, toolbar, setting persistence, save/reload, Harmony summary.
 - Result: no matching exception; filter unchanged with 510 definitions. Instance,
@@ -133,13 +137,13 @@ order is explicitly shown.
 
 - External: Rimefeller, `Dubwise.Rimefeller`, Workshop `1321849735`, version
   `1.2.1634`, snapshot `2025-07-13T22:48:10.4412432Z`.
-- Load order: `Core > Harmony > Agent > Spine > FilterSignals > Rimefeller`.
+- Load order: `Core > Harmony > Agent > Spine > Filter Signals > Rimefeller`.
 - Scenario: content-expanded filter, classification invalidation and multi-path
   recipe probes, toolbar, setting persistence, save/reload, Harmony summary.
 - Result: no matching exception; filter unchanged with 489 definitions. The
   ordinary recipe probes completed and the diagnostic cache measured 1 ms cold,
   0 ms warm. Harmony reported only five Rimefeller-owned patches and no observed
-  conflict with FilterSignals's rendering hooks.
+  conflict with Filter Signals's rendering hooks.
 - Evidence:
   `C:\Users\PrecisionX\AppData\Local\Temp\RimWorldAgentTasks\1.6\TSCompatRimefeller-5f09c48900bf4e1f918cbfcd8e1b5501`.
 - Required follow-up: build and operate the oil chain, then compare the status
@@ -149,7 +153,7 @@ order is explicitly shown.
 
 ## Findings and smallest defensible responses
 
-1. **Confirmed compatible:** FilterSignals alone and the exercised Better Workbench
+1. **Confirmed compatible:** Filter Signals alone and the exercised Better Workbench
    Management surfaces, including both reasonable load orders.
 2. **Compatible with documented limitation:** ASF framework, Dubs Mint Menus,
    Research Reinvented, and VEF/VFE on the exact surfaces above. Keep the
@@ -157,7 +161,7 @@ order is explicitly shown.
 3. **Inconclusive/integration candidate:** Rimefeller custom oil production.
    Gather an operational-chain reproduction before writing a provider. Such a
    provider is domain-specific and should not go in Spine.
-4. **Packaging limitation:** FilterSignals logs a metadata warning because the Spine
+4. **Packaging limitation:** Filter Signals logs a metadata warning because the Spine
    dependency has no download or Workshop URL. This is not a runtime conflict,
    but the release package should give users a resolvable Spine location.
 5. **Performance:** cache probes over 467–510 definitions were 0–1 ms cold and
