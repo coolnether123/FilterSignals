@@ -2,12 +2,12 @@ using Spine.UI.SettingsFramework;
 using UnityEngine;
 using Verse;
 
-namespace TechSenseFilters.Settings
+namespace FilterSignals.Settings
 {
-    internal sealed class TechSenseSettingsUi
+    internal sealed class FilterSignalsSettingsUi
     {
         private readonly SettingsListDrawer drawer =
-            new SettingsListDrawer(TechSenseSettingsRegistry.Hierarchy)
+            new SettingsListDrawer(FilterSignalsSettingsRegistry.Hierarchy)
             {
                 SimpleLabel = "Simple",
                 AdvancedLabel = "Advanced",
@@ -29,7 +29,7 @@ namespace TechSenseFilters.Settings
 
         internal void Draw(
             Rect rect,
-            TechSenseFiltersSettings settings)
+            FilterSignalsSettings settings)
         {
             drawer.Draw(
                 rect,

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using RimWorld;
-using TechSenseFilters.Domain;
+using FilterSignals.Domain;
 using Verse;
 
-namespace TechSenseFilters.Runtime
+namespace FilterSignals.Runtime
 {
     internal sealed class MapCapabilitySnapshot
     {
@@ -247,10 +247,10 @@ namespace TechSenseFilters.Runtime
             catch (System.Exception exception)
             {
                 int key = StableHash(
-                    "TechSense.AvailableOnNow." +
+                    "FilterSignals.AvailableOnNow." +
                     (recipe.defName ?? "<unnamed>"));
                 Log.ErrorOnce(
-                    "[TechSense Filters] RecipeDef.AvailableOnNow failed " +
+                    "[Filter Signals] RecipeDef.AvailableOnNow failed " +
                     "for recipe '" + (recipe.defName ?? "<unnamed>") +
                     "' on '" +
                     (building?.def?.defName ?? "<unknown source>") +

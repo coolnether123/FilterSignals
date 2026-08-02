@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <FilterSignals_Title>Filter Signals</FilterSignals_Title>
+  <FilterSignals_CanMakeShort>Can make</FilterSignals_CanMakeShort>
+  <FilterSignals_UnlockedShort>Unlocked</FilterSignals_UnlockedShort>
+  <FilterSignals_LockedShort>Locked</FilterSignals_LockedShort>
+  <FilterSignals_NotApplicableShort>N/A</FilterSignals_NotApplicableShort>
+  <FilterSignals_CanMake>Able to be produced in this colony</FilterSignals_CanMake>
+  <FilterSignals_Unlocked>Research unlocked</FilterSignals_Unlocked>
+  <FilterSignals_Locked>Cannot make yet</FilterSignals_Locked>
+  <FilterSignals_NotApplicable>Not applicable</FilterSignals_NotApplicable>
+  <FilterSignals_SmallVolume>Small-volume: 10 units = 1.</FilterSignals_SmallVolume>
+  <FilterSignals_ToggleTooltip>Click to show or hide this classification in this dialog only. Your allowed-item configuration is never changed.</FilterSignals_ToggleTooltip>
+  <FilterSignals_Settings_Feature_Label>Enable Filter Signals</FilterSignals_Settings_Feature_Label>
+  <FilterSignals_Settings_Feature_Tooltip>Adds transient production classifications to vanilla ThingFilter dialogs. Disabling this leaves every stored ThingFilter unchanged.</FilterSignals_Settings_Feature_Tooltip>
+  <FilterSignals_Settings_Toolbar_Label>Show optional filter toolbar</FilterSignals_Settings_Toolbar_Label>
+  <FilterSignals_Settings_Toolbar_Tooltip>Shows four temporary classification toggles above vanilla item filters. Hidden by default because the colored status squares remain available. These toggles never change allowed items.</FilterSignals_Settings_Toolbar_Tooltip>
+  <FilterSignals_Settings_Indicators_Label>Show status indicators</FilterSignals_Settings_Indicators_Label>
+  <FilterSignals_Settings_Indicators_Tooltip>Draws a compact colored indicator beside each visible item. Hover it for the production-path explanation.</FilterSignals_Settings_Indicators_Tooltip>
+  <FilterSignals_Settings_Materials_Label>Consider current material shortages</FilterSignals_Settings_Materials_Label>
+  <FilterSignals_Settings_Materials_Tooltip>When enabled, a technologically available recipe is shown as unavailable if none of an ingredient's allowed materials are present. Disabled by default because inventory changes are temporary.</FilterSignals_Settings_Materials_Tooltip>
+</LanguageData>

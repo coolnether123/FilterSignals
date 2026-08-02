@@ -2,8 +2,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <AssemblyName>TechSenseFilters.Tests</AssemblyName>
-    <RootNamespace>TechSenseFilters.Tests</RootNamespace>
+    <AssemblyName>FilterSignals.Tests</AssemblyName>
+    <RootNamespace>FilterSignals.Tests</RootNamespace>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>

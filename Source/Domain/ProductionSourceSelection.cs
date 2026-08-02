@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TechSenseFilters.Domain
+namespace FilterSignals.Domain
 {
     internal readonly struct ProductionSourceCandidate
     {

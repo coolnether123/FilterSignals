@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using RimWorld;
 using Spine.Caching;
-using TechSenseFilters.Compatibility;
-using TechSenseFilters.Domain;
-using TechSenseFilters.Settings;
+using FilterSignals.Compatibility;
+using FilterSignals.Domain;
+using FilterSignals.Settings;
 using Verse;
 
-namespace TechSenseFilters.Runtime
+namespace FilterSignals.Runtime
 {
     internal static class ClassificationService
     {
@@ -138,11 +138,11 @@ namespace TechSenseFilters.Runtime
             ThingDef item,
             Map map)
         {
-            IReadOnlyList<ITechSenseClassificationOverride> overrides =
-                TechSenseApi.GetClassificationOverrides();
+            IReadOnlyList<IFilterSignalsClassificationOverride> overrides =
+                FilterSignalsApi.GetClassificationOverrides();
             for (int i = 0; i < overrides.Count; i++)
             {
-                ITechSenseClassificationOverride itemOverride = overrides[i];
+                IFilterSignalsClassificationOverride itemOverride = overrides[i];
                 try
                 {
                     if (itemOverride.TryClassify(
@@ -171,18 +171,18 @@ namespace TechSenseFilters.Runtime
             ThingDef item,
             Map map)
         {
-            IReadOnlyList<ITechSenseProductionProvider> providers =
-                TechSenseApi.GetProductionProviders();
+            IReadOnlyList<IFilterSignalsProductionProvider> providers =
+                FilterSignalsApi.GetProductionProviders();
             for (int i = 0; i < providers.Count; i++)
             {
-                ITechSenseProductionProvider provider = providers[i];
+                IFilterSignalsProductionProvider provider = providers[i];
                 try
                 {
                     IEnumerable<ProductionPathAssessment> supplied =
                         provider.GetProductionPaths(
                             item,
                             map,
-                            TechSenseFiltersSettings.Current
+                            FilterSignalsSettings.Current
                                 .ConsiderMaterialShortages);
                     if (supplied == null)
                     {
@@ -245,9 +245,9 @@ namespace TechSenseFilters.Runtime
             string safeId = string.IsNullOrWhiteSpace(providerId)
                 ? "<unnamed>"
                 : providerId;
-            int key = StableHash("TechSense." + providerKind + "." + safeId);
+            int key = StableHash("FilterSignals." + providerKind + "." + safeId);
             Log.ErrorOnce(
-                "[TechSense Filters] " + providerKind + " '" + safeId +
+                "[Filter Signals] " + providerKind + " '" + safeId +
                 "' failed and was ignored: " + exception,
                 key);
         }

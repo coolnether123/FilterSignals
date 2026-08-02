@@ -18,6 +18,6 @@ Closest adjacent projects:
 - [Filter Manager](https://steamcommunity.com/sharedfiles/filedetails/?id=2812197851)
   saves static filter presets rather than dynamic colony-aware classifications.
 
-Decision: proceed. TechSense remains distinct through its four-state
+Decision: proceed. FilterSignals remains distinct through its four-state
 production-path model, targeted invalidation, explanations, non-mutating UI
 semantics, and compatibility API.

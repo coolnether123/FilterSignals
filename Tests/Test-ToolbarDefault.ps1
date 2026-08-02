@@ -4,9 +4,9 @@ $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
 $settings = [System.IO.File]::ReadAllText(
-    (Join-Path $root 'Source\Settings\TechSenseFiltersSettings.cs'))
+    (Join-Path $root 'Source\Settings\FilterSignalsSettings.cs'))
 $registry = [System.IO.File]::ReadAllText(
-    (Join-Path $root 'Source\Settings\TechSenseSettingsRegistry.cs'))
+    (Join-Path $root 'Source\Settings\FilterSignalsSettingsRegistry.cs'))
 $controller = [System.IO.File]::ReadAllText(
     (Join-Path $root 'Source\Presentation\FilterUiController.cs'))
 
@@ -26,7 +26,7 @@ if ($registry -notmatch
 if ($controller -notmatch
     '!settings\.ShowClassificationToolbar' -or
     $controller -notmatch
-    '!TechSenseFiltersSettings\.Current\.ShowClassificationToolbar')
+    '!FilterSignalsSettings\.Current\.ShowClassificationToolbar')
 {
     $failures.Add(
         'Hidden toolbar state must reserve no space or filter item rows.')

@@ -3,28 +3,28 @@ using HarmonyLib;
 using Spine.Api;
 using Spine.Harmony;
 using Spine.UI.ContextualSettings;
-using TechSenseFilters.Runtime;
-using TechSenseFilters.Settings;
+using FilterSignals.Runtime;
+using FilterSignals.Settings;
 using UnityEngine;
 using Verse;
 
-namespace TechSenseFilters.Bootstrap
+namespace FilterSignals.Bootstrap
 {
-    public sealed class TechSenseFiltersMod : Mod
+    public sealed class FilterSignalsMod : Mod
     {
         private static bool patchesInstalled;
         private static System.IDisposable tooltipSizingLease;
         private static IContextualSettingsLease contextualSettingsLease;
 
-        private readonly TechSenseFiltersSettings settings;
-        private readonly TechSenseSettingsUi settingsUi =
-            new TechSenseSettingsUi();
+        private readonly FilterSignalsSettings settings;
+        private readonly FilterSignalsSettingsUi settingsUi =
+            new FilterSignalsSettingsUi();
 
-        public TechSenseFiltersMod(ModContentPack content)
+        public FilterSignalsMod(ModContentPack content)
             : base(content)
         {
             SpineApi.Runtime.Require(new SpineRequirement(
-                "CoolNether123.TechSenseFilters",
+                "CoolNether123.FilterSignals",
                 new SemanticVersion(1, 1, 0),
                 SpineCapability.Settings |
                 SpineCapability.HarmonyPatching |
@@ -34,15 +34,15 @@ namespace TechSenseFilters.Bootstrap
             if (tooltipSizingLease == null)
             {
                 tooltipSizingLease = SpineApi.Tooltips.Acquire(
-                    "CoolNether123.TechSenseFilters");
+                    "CoolNether123.FilterSignals");
             }
 
-            settings = GetSettings<TechSenseFiltersSettings>();
-            TechSenseFiltersSettings.Bind(settings);
+            settings = GetSettings<FilterSignalsSettings>();
+            FilterSignalsSettings.Bind(settings);
             if (contextualSettingsLease == null)
             {
                 contextualSettingsLease = SpineApi.ContextualSettings.Acquire(
-                    "CoolNether123.TechSenseFilters",
+                    "CoolNether123.FilterSignals",
                     this,
                     settingsUi.Drawer,
                     settings);
@@ -55,7 +55,7 @@ namespace TechSenseFilters.Bootstrap
 
         public override string SettingsCategory()
         {
-            return "TechSense Filters";
+            return "Filter Signals";
         }
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -71,7 +71,7 @@ namespace TechSenseFilters.Bootstrap
             }
 
             var harmony = new HarmonyLib.Harmony(
-                "CoolNether123.TechSenseFilters");
+                "CoolNether123.FilterSignals");
             HarmonyUtil.PatchAll(
                 harmony,
                 Assembly.GetExecutingAssembly(),
@@ -88,13 +88,13 @@ namespace TechSenseFilters.Bootstrap
                             result.StartsWith("skipped:"))
                         {
                             Log.Warning(
-                                "[TechSense Filters] " + target + ": " +
+                                "[Filter Signals] " + target + ": " +
                                 result);
                         }
                         else if (Prefs.DevMode)
                         {
                             Log.Message(
-                                "[TechSense Filters] " + target + ": " +
+                                "[Filter Signals] " + target + ": " +
                                 result);
                         }
                     }

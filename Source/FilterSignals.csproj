@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <AssemblyName>TechSenseFilters</AssemblyName>
-    <RootNamespace>TechSenseFilters</RootNamespace>
+    <AssemblyName>FilterSignals</AssemblyName>
+    <RootNamespace>FilterSignals</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>true</Deterministic>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

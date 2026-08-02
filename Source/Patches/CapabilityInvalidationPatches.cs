@@ -1,9 +1,9 @@
 using HarmonyLib;
 using RimWorld;
-using TechSenseFilters.Runtime;
+using FilterSignals.Runtime;
 using Verse;
 
-namespace TechSenseFilters.Patches
+namespace FilterSignals.Patches
 {
     [HarmonyPatch(
         typeof(ResearchManager),

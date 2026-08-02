@@ -9,7 +9,7 @@ $rowPatch = [System.IO.File]::ReadAllText(
     (Join-Path $root 'Source\Patches\ThingFilterUiPatches.cs'))
 $language = [System.IO.File]::ReadAllText(
     (Join-Path $root `
-        'Languages\English\Keyed\TechSenseFilters.xml'))
+        'Languages\English\Keyed\FilterSignals.xml'))
 
 $indicator = [regex]::Match(
     $filterUi,
@@ -60,9 +60,9 @@ if ($rowPatch -notmatch
 }
 if ($indicator.Value -notmatch
     '(?s)thingDef\.IsStuff && thingDef\.smallVolume.*?' +
-    '"TechSense_SmallVolume"\.Translate\(\)' -or
+    '"FilterSignals_SmallVolume"\.Translate\(\)' -or
     $language -notmatch
-    '<TechSense_SmallVolume>Small-volume: 10 units = 1\.</TechSense_SmallVolume>')
+    '<FilterSignals_SmallVolume>Small-volume: 10 units = 1\.</FilterSignals_SmallVolume>')
 {
     Write-Error (
         'The square tooltip must carry the concise small-volume detail.')

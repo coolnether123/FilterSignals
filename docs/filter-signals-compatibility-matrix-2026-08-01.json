@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "investigatedUtc": "2026-08-01",
   "target": {
-    "name": "TechSense Filters",
-    "packageId": "CoolNether123.TechSenseFilters",
+    "name": "Filter Signals",
+    "packageId": "CoolNether123.FilterSignals",
     "source": "local git f0bdc59166c082a33095fd1d221b6e0f5fe990f0",
     "dllSha256": "87747350840B362CFFDADDE48861CC943D819D083A8D147CDD9DAD91870C7C1D"
   },
@@ -15,60 +15,60 @@
   },
   "rows": [
     {
-      "combination": "TechSense Filters alone",
-      "packageIds": ["CoolNether123.TechSenseFilters"],
+      "combination": "Filter Signals alone",
+      "packageIds": ["CoolNether123.FilterSignals"],
       "classification": "compatible",
-      "evidenceSession": "TechSenseFilters-c16476171867471a97186bbf5a507909"
+      "evidenceSession": "FilterSignals-c16476171867471a97186bbf5a507909"
     },
     {
-      "combination": "Better Workbench Management + TechSense Filters",
-      "packageIds": ["falconne.BWM", "CoolNether123.TechSenseFilters"],
+      "combination": "Better Workbench Management + Filter Signals",
+      "packageIds": ["falconne.BWM", "CoolNether123.FilterSignals"],
       "sourceVersion": "Workshop 935982361; 1.6.1.3; snapshot 2025-07-13T22:48:10.8621144Z",
-      "loadOrdersTested": ["TechSense>BWM", "BWM>Spine>TechSense"],
+      "loadOrdersTested": ["FilterSignals>BWM", "BWM>Spine>FilterSignals"],
       "classification": "compatible",
       "evidenceSessions": ["TSCompatTsBwm-23cfafca522746809b35a16a7da35c04", "TSCompatBwmTs-0b89533f046d4e12a71e8516b4e2c097", "TSCompatBwmOnly-9ba05bbc2fa044119a6893f331d91a1d"]
     },
     {
-      "combination": "Adaptive Storage Framework + TechSense Filters",
-      "packageIds": ["adaptive.storage.framework", "CoolNether123.TechSenseFilters"],
+      "combination": "Adaptive Storage Framework + Filter Signals",
+      "packageIds": ["adaptive.storage.framework", "CoolNether123.FilterSignals"],
       "sourceVersion": "Workshop 3033901359; undeclared; snapshot 2025-09-28T18:16:41.2679169Z",
-      "loadOrdersTested": ["TechSense>ASF"],
+      "loadOrdersTested": ["FilterSignals>ASF"],
       "classification": "compatible with a documented limitation",
       "limitation": "No concrete ASF storage content mod was loaded.",
       "evidenceSession": "TSCompatAsf-9b1ce74bc13044b3a7b79f710cc33e49"
     },
     {
-      "combination": "Dubs Mint Menus + TechSense Filters",
-      "packageIds": ["Dubwise.DubsMintMenus", "CoolNether123.TechSenseFilters"],
+      "combination": "Dubs Mint Menus + Filter Signals",
+      "packageIds": ["Dubwise.DubsMintMenus", "CoolNether123.FilterSignals"],
       "sourceVersion": "Workshop 1446523594; 1.3.1247; snapshot 2025-07-13T22:48:10.4353841Z",
-      "loadOrdersTested": ["TechSense>DubsMintMenus"],
+      "loadOrdersTested": ["FilterSignals>DubsMintMenus"],
       "classification": "compatible with a documented limitation",
       "limitation": "Research/Architect replacement navigation was not exercised.",
       "evidenceSession": "TSCompatMint-64367224e73c449a8035941f7a7987b1"
     },
     {
-      "combination": "Research Reinvented + TechSense Filters",
-      "packageIds": ["PeteTimesSix.ResearchReinvented", "CoolNether123.TechSenseFilters"],
+      "combination": "Research Reinvented + Filter Signals",
+      "packageIds": ["PeteTimesSix.ResearchReinvented", "CoolNether123.FilterSignals"],
       "sourceVersion": "Workshop 2868392160; undeclared; snapshot 2025-09-28T18:16:41.7290161Z",
-      "loadOrdersTested": ["TechSense>ResearchReinvented"],
+      "loadOrdersTested": ["FilterSignals>ResearchReinvented"],
       "classification": "compatible with a documented limitation",
       "limitation": "Status-square routing into the replacement research UI was not exercised.",
       "evidenceSession": "TSCompatResearch-20e1ee8296c34234bf392c8d2f49d144"
     },
     {
-      "combination": "VEF + Vanilla Furniture Expanded + TechSense Filters",
-      "packageIds": ["OskarPotocki.VanillaFactionsExpanded.Core", "VanillaExpanded.VFECore", "CoolNether123.TechSenseFilters"],
+      "combination": "VEF + Vanilla Furniture Expanded + Filter Signals",
+      "packageIds": ["OskarPotocki.VanillaFactionsExpanded.Core", "VanillaExpanded.VFECore", "CoolNether123.FilterSignals"],
       "sourceVersion": "Workshop 2023507013 snapshot 2026-05-21T07:02:36.3857086Z; Workshop 1718190143 snapshot 2025-07-13T22:48:10.2967212Z",
-      "loadOrdersTested": ["TechSense>VEF>VFE"],
+      "loadOrdersTested": ["FilterSignals>VEF>VFE"],
       "classification": "compatible with a documented limitation",
       "limitation": "Actual VFE production buildings and the full VE stack were not exercised.",
       "evidenceSession": "TSCompatVFE-e71478107e744da48077927a732595eb"
     },
     {
-      "combination": "Rimefeller + TechSense Filters",
-      "packageIds": ["Dubwise.Rimefeller", "CoolNether123.TechSenseFilters"],
+      "combination": "Rimefeller + Filter Signals",
+      "packageIds": ["Dubwise.Rimefeller", "CoolNether123.FilterSignals"],
       "sourceVersion": "Workshop 1321849735; 1.2.1634; snapshot 2025-07-13T22:48:10.4412432Z",
-      "loadOrdersTested": ["TechSense>Rimefeller"],
+      "loadOrdersTested": ["FilterSignals>Rimefeller"],
       "classification": "inconclusive",
       "limitation": "Custom oil production was not operated; ordinary RecipeDef behavior was stable.",
       "evidenceSession": "TSCompatRimefeller-5f09c48900bf4e1f918cbfcd8e1b5501"

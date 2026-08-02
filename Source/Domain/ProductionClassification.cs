@@ -1,4 +1,4 @@
-namespace TechSenseFilters.Domain
+namespace FilterSignals.Domain
 {
     public enum ProductionClassification
     {

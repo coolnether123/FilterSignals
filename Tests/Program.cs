@@ -1,8 +1,8 @@
 using System;
-using TechSenseFilters.Domain;
-using TechSenseFilters.Presentation;
+using FilterSignals.Domain;
+using FilterSignals.Presentation;
 
-namespace TechSenseFilters.Tests
+namespace FilterSignals.Tests
 {
     internal static class Program
     {
@@ -58,7 +58,7 @@ namespace TechSenseFilters.Tests
                 "navigation fails safely without a target",
                 NavigationFailsSafelyWithoutTarget);
 
-            Console.WriteLine("PASS: " + passed + " TechSense domain tests");
+            Console.WriteLine("PASS: " + passed + " FilterSignals domain tests");
             return 0;
         }
 

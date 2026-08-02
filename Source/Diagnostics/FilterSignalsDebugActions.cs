@@ -4,62 +4,62 @@ using System.Diagnostics;
 using System.Linq;
 using LudeonTK;
 using RimWorld;
-using TechSenseFilters.Domain;
-using TechSenseFilters.Runtime;
+using FilterSignals.Domain;
+using FilterSignals.Runtime;
 using UnityEngine;
 using Verse;
 
-namespace TechSenseFilters.Diagnostics
+namespace FilterSignals.Diagnostics
 {
-    internal static class TechSenseDebugActions
+    internal static class FilterSignalsDebugActions
     {
         [DebugAction(
-            "TechSense Filters",
-            "Open TechSense filter fixture",
+            "Filter Signals",
+            "Open FilterSignals filter fixture",
             actionType = DebugActionType.Action)]
         private static void OpenFixture()
         {
-            Dialog_TechSenseFixture fixture =
-                new Dialog_TechSenseFixture();
+            Dialog_FilterSignalsFixture fixture =
+                new Dialog_FilterSignalsFixture();
             Find.WindowStack.Add(fixture);
         }
 
         [DebugAction(
-            "TechSense Filters",
+            "Filter Signals",
             "Open small-volume tooltip fixture",
             actionType = DebugActionType.Action)]
         private static void OpenSmallVolumeTooltipFixture()
         {
-            Dialog_TechSenseFixture fixture =
-                new Dialog_TechSenseFixture("Gold");
+            Dialog_FilterSignalsFixture fixture =
+                new Dialog_FilterSignalsFixture("Gold");
             Find.WindowStack.Add(fixture);
         }
 
         [DebugAction(
-            "TechSense Filters",
-            "Log TechSense fixture state",
+            "Filter Signals",
+            "Log FilterSignals fixture state",
             actionType = DebugActionType.Action)]
         private static void LogFixtureState()
         {
-            Dialog_TechSenseFixture fixture =
-                Find.WindowStack.WindowOfType<Dialog_TechSenseFixture>();
+            Dialog_FilterSignalsFixture fixture =
+                Find.WindowStack.WindowOfType<Dialog_FilterSignalsFixture>();
             if (fixture == null)
             {
                 Log.Warning(
-                    "[TechSense Filters] fixtureState=open:false");
+                    "[Filter Signals] fixtureState=open:false");
                 return;
             }
 
             Log.Message(
-                "[TechSense Filters] fixtureState=open:true " +
+                "[Filter Signals] fixtureState=open:true " +
                 "filterUnchanged:" + fixture.FilterUnchanged.ToString()
                     .ToLowerInvariant() + " " +
                 "allowedCount:" + fixture.AllowedCount);
         }
 
         [DebugAction(
-            "TechSense Filters",
-            "Run TechSense capability probes",
+            "Filter Signals",
+            "Run FilterSignals capability probes",
             actionType = DebugActionType.Action)]
         private static void RunCapabilityProbes()
         {
@@ -67,7 +67,7 @@ namespace TechSenseFilters.Diagnostics
             if (map == null)
             {
                 Log.Warning(
-                    "[TechSense Filters] capabilityProbes=failed noMap");
+                    "[Filter Signals] capabilityProbes=failed noMap");
                 return;
             }
 
@@ -78,8 +78,8 @@ namespace TechSenseFilters.Diagnostics
         }
 
         [DebugAction(
-            "TechSense Filters",
-            "Log TechSense explanations",
+            "Filter Signals",
+            "Log FilterSignals explanations",
             actionType = DebugActionType.Action)]
         private static void LogRepresentativeExplanations()
         {
@@ -106,7 +106,7 @@ namespace TechSenseFilters.Diagnostics
                 }
 
                 Log.Message(
-                    "[TechSense Filters] explanation classification=" +
+                    "[Filter Signals] explanation classification=" +
                     result.Classification + " item=" + item.defName +
                     " path=" + (result.PathLabel ?? string.Empty) +
                     " text=\"" + result.Explanation + "\"");
@@ -117,14 +117,14 @@ namespace TechSenseFilters.Diagnostics
             }
 
             Log.Message(
-                "[TechSense Filters] explanationCoverage=" +
+                "[Filter Signals] explanationCoverage=" +
                 (4 - remaining.Count) + "/4 missing=" +
                 string.Join(",", remaining.Select(value => value.ToString())));
         }
 
         [DebugAction(
-            "TechSense Filters",
-            "Measure TechSense classification cache",
+            "Filter Signals",
+            "Measure FilterSignals classification cache",
             actionType = DebugActionType.Action)]
         private static void MeasureClassificationCache()
         {
@@ -153,7 +153,7 @@ namespace TechSenseFilters.Diagnostics
 
             timer.Stop();
             Log.Message(
-                "[TechSense Filters] cacheProbe items=" + items.Length +
+                "[Filter Signals] cacheProbe items=" + items.Length +
                 " coldMs=" + coldMilliseconds +
                 " warmMs=" + timer.ElapsedMilliseconds +
                 " startTick=" + gameTick +
@@ -167,7 +167,7 @@ namespace TechSenseFilters.Diagnostics
             if (sourceDef == null)
             {
                 Log.Warning(
-                    "[TechSense Filters] conditionalInstanceProbe=failed " +
+                    "[Filter Signals] conditionalInstanceProbe=failed " +
                     "missingSourceDef");
                 return;
             }
@@ -188,17 +188,17 @@ namespace TechSenseFilters.Diagnostics
                         out oddSource))
                 {
                     Log.Warning(
-                        "[TechSense Filters] conditionalInstanceProbe=failed " +
+                        "[Filter Signals] conditionalInstanceProbe=failed " +
                         "noSpawnCells");
                     return;
                 }
 
                 var recipe = new RecipeDef
                 {
-                    defName = "TechSense_ConditionalInstanceProbe",
+                    defName = "FilterSignals_ConditionalInstanceProbe",
                     label = "conditional instance probe",
                     workerClass =
-                        typeof(RecipeWorker_TechSenseConditionalInstanceProbe)
+                        typeof(RecipeWorker_FilterSignalsConditionalInstanceProbe)
                 };
                 DefinitionProductionIndex index =
                     DefinitionProductionIndex.Build();
@@ -214,7 +214,7 @@ namespace TechSenseFilters.Diagnostics
                         sourceDef.label);
 
                 Log.Message(
-                    "[TechSense Filters] conditionalInstanceProbe=complete " +
+                    "[Filter Signals] conditionalInstanceProbe=complete " +
                     "sourceDef=" + sourceDef.defName +
                     " rejectedCell=" + oddSource.Position +
                     " acceptedCell=" + evenSource.Position +
@@ -245,7 +245,7 @@ namespace TechSenseFilters.Diagnostics
             if (sourceDef == null)
             {
                 Log.Warning(
-                    "[TechSense Filters] workstationProbe=failed " +
+                    "[Filter Signals] workstationProbe=failed " +
                     "missingSourceDef");
                 return;
             }
@@ -306,7 +306,7 @@ namespace TechSenseFilters.Diagnostics
                             before.Classification)
                     {
                         Log.Message(
-                            "[TechSense Filters] workstationProbe=complete " +
+                            "[Filter Signals] workstationProbe=complete " +
                             "tick=" + gameTick +
                             " recipe=" + recipes[recipeIndex].defName +
                             " product=" + product.defName +
@@ -325,7 +325,7 @@ namespace TechSenseFilters.Diagnostics
             }
 
             Log.Warning(
-                "[TechSense Filters] workstationProbe=failed " +
+                "[Filter Signals] workstationProbe=failed " +
                 "noDeterministicCandidate");
         }
 
@@ -397,7 +397,7 @@ namespace TechSenseFilters.Diagnostics
                     ProductionClassification.CannotMakeYet)
                 {
                     Log.Message(
-                        "[TechSense Filters] researchProbe=complete " +
+                        "[Filter Signals] researchProbe=complete " +
                         "tick=" + gameTick +
                         "recipe=" + recipe.defName +
                         "product=" + product.defName +
@@ -412,7 +412,7 @@ namespace TechSenseFilters.Diagnostics
             }
 
             Log.Warning(
-                "[TechSense Filters] researchProbe=failed " +
+                "[Filter Signals] researchProbe=failed " +
                 "noDeterministicCandidate");
         }
 
@@ -439,7 +439,7 @@ namespace TechSenseFilters.Diagnostics
             if (group == null)
             {
                 Log.Warning(
-                    "[TechSense Filters] multiPathProbe=failed " +
+                    "[Filter Signals] multiPathProbe=failed " +
                     "noDefinitionCandidate");
                 return;
             }
@@ -452,7 +452,7 @@ namespace TechSenseFilters.Diagnostics
             ClassificationResult result =
                 ClassificationService.Get(group.Key, map);
             Log.Message(
-                "[TechSense Filters] multiPathProbe=complete " +
+                "[Filter Signals] multiPathProbe=complete " +
                 "product=" + group.Key.defName +
                 "pathCount=" + recipes.Length +
                 "paths=" +
@@ -497,7 +497,7 @@ namespace TechSenseFilters.Diagnostics
         }
     }
 
-    public sealed class RecipeWorker_TechSenseConditionalInstanceProbe :
+    public sealed class RecipeWorker_FilterSignalsConditionalInstanceProbe :
         RecipeWorker
     {
         public override bool AvailableOnNow(
@@ -508,7 +508,7 @@ namespace TechSenseFilters.Diagnostics
         }
     }
 
-    internal sealed class Dialog_TechSenseFixture : Window
+    internal sealed class Dialog_FilterSignalsFixture : Window
     {
         private readonly ThingFilter filter =
             ThingFilter.CreateOnlyEverStorableThingFilter();
@@ -516,7 +516,7 @@ namespace TechSenseFilters.Diagnostics
             new ThingFilterUI.UIState();
         private readonly int initialFingerprint;
 
-        internal Dialog_TechSenseFixture(string initialSearch = null)
+        internal Dialog_FilterSignalsFixture(string initialSearch = null)
         {
             initialFingerprint = Fingerprint(filter);
             if (!string.IsNullOrWhiteSpace(initialSearch))
@@ -544,7 +544,7 @@ namespace TechSenseFilters.Diagnostics
             Text.Font = GameFont.Medium;
             Widgets.Label(
                 new Rect(inRect.x, inRect.y, inRect.width, 30f),
-                "TechSense Filters verification fixture");
+                "Filter Signals verification fixture");
             Text.Font = GameFont.Small;
             string status = FilterUnchanged
                 ? "Permanent filter state: unchanged"

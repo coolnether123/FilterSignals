@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
-using TechSenseFilters.Presentation;
+using FilterSignals.Presentation;
 using UnityEngine;
 using Verse;
 
-namespace TechSenseFilters.Patches
+namespace FilterSignals.Patches
 {
     [HarmonyPatch(
         typeof(ThingFilterUI),

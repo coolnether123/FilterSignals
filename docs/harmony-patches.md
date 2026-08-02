@@ -1,6 +1,6 @@
 # Harmony patch inventory
 
-Harmony owner: `CoolNether123.TechSenseFilters`
+Harmony owner: `CoolNether123.FilterSignals`
 
 | Target | Patch | Purpose |
 | --- | --- | --- |
@@ -16,7 +16,7 @@ Harmony owner: `CoolNether123.TechSenseFilters`
 | `Map.Dispose` | postfix | Release the map-owned cache |
 
 All patches are installed through Spine's `HarmonyUtil.PatchAll`. Errors and
-safety-gate skips always produce a TechSense warning; successful patch details
+safety-gate skips always produce a FilterSignals warning; successful patch details
 are emitted only in RimWorld developer mode.
 
 The isolated verification lane enumerated 14 patched target methods, including

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TechSenseFilters.Domain
+namespace FilterSignals.Domain
 {
     internal enum ProductionNavigationKind
     {

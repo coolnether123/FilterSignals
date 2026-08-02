@@ -2,14 +2,14 @@ using System;
 using System.Runtime.CompilerServices;
 using RimWorld;
 using Spine.UI.ContextualSettings;
-using TechSenseFilters.Bootstrap;
-using TechSenseFilters.Domain;
-using TechSenseFilters.Runtime;
-using TechSenseFilters.Settings;
+using FilterSignals.Bootstrap;
+using FilterSignals.Domain;
+using FilterSignals.Runtime;
+using FilterSignals.Settings;
 using UnityEngine;
 using Verse;
 
-namespace TechSenseFilters.Presentation
+namespace FilterSignals.Presentation
 {
     internal static class FilterUiController
     {
@@ -38,8 +38,8 @@ namespace TechSenseFilters.Presentation
                     _ => new FilterPresentationState());
             current = new FilterDialogContext(state, effectiveMap);
 
-            TechSenseFiltersSettings settings =
-                TechSenseFiltersSettings.Current;
+            FilterSignalsSettings settings =
+                FilterSignalsSettings.Current;
             if (!settings.FeatureEnabled ||
                 !settings.ShowClassificationToolbar)
             {
@@ -66,8 +66,8 @@ namespace TechSenseFilters.Presentation
         internal static bool ShouldShow(ThingDef thingDef)
         {
             if (current == null ||
-                !TechSenseFiltersSettings.Current.FeatureEnabled ||
-                !TechSenseFiltersSettings.Current.ShowClassificationToolbar)
+                !FilterSignalsSettings.Current.FeatureEnabled ||
+                !FilterSignalsSettings.Current.ShowClassificationToolbar)
             {
                 return true;
             }
@@ -85,8 +85,8 @@ namespace TechSenseFilters.Presentation
         {
             if (listing == null ||
                 thingDef == null ||
-                !TechSenseFiltersSettings.Current.FeatureEnabled ||
-                !TechSenseFiltersSettings.Current.ShowStatusIndicators)
+                !FilterSignalsSettings.Current.FeatureEnabled ||
+                !FilterSignalsSettings.Current.ShowStatusIndicators)
             {
                 return;
             }
@@ -131,7 +131,7 @@ namespace TechSenseFilters.Presentation
 
             if (thingDef.IsStuff && thingDef.smallVolume)
             {
-                tooltip += "\n" + "TechSense_SmallVolume".Translate();
+                tooltip += "\n" + "FilterSignals_SmallVolume".Translate();
             }
 
             if (navigation.Length > 0)
@@ -149,7 +149,7 @@ namespace TechSenseFilters.Presentation
                     : ContextualSettingsTarget.Exact(
                         "presentation.indicators",
                         "feature.enabled");
-            if (TechSenseFiltersMod.ContextualSettings?.Bind(
+            if (FilterSignalsMod.ContextualSettings?.Bind(
                 interactionRect,
                 settingsTarget,
                 new ContextualSettingsBindingOptions(priority: 20)) == true)
@@ -173,7 +173,7 @@ namespace TechSenseFilters.Presentation
             FilterPresentationState state,
             ToolbarLayoutPlan layout)
         {
-            if (TechSenseFiltersMod.ContextualSettings?.Bind(
+            if (FilterSignalsMod.ContextualSettings?.Bind(
                 rect,
                 ContextualSettingsTarget.Group("presentation.toolbar"),
                 new ContextualSettingsBindingOptions(priority: 0)) == true)
@@ -185,7 +185,7 @@ namespace TechSenseFilters.Presentation
             Rect titleRect = ToRect(rect, layout.Title);
             TextAnchor previousAnchor = Text.Anchor;
             Text.Anchor = TextAnchor.MiddleLeft;
-            Widgets.Label(titleRect, "TechSense_Title".Translate());
+            Widgets.Label(titleRect, "FilterSignals_Title".Translate());
             Text.Anchor = previousAnchor;
 
             ProductionClassification[] classifications =
@@ -216,8 +216,8 @@ namespace TechSenseFilters.Presentation
                         0.34f);
                 string buttonTooltip =
                     ClassificationPresentation.FullLabel(classification) +
-                    "\n" + "TechSense_ToggleTooltip".Translate();
-                if (TechSenseFiltersMod.ContextualSettings?.Bind(
+                    "\n" + "FilterSignals_ToggleTooltip".Translate();
+                if (FilterSignalsMod.ContextualSettings?.Bind(
                     buttonRect,
                     ContextualSettingsTarget.Exact(
                         "presentation.toolbar",

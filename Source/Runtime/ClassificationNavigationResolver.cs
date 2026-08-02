@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
-using TechSenseFilters.Domain;
+using FilterSignals.Domain;
 using Verse;
 
-namespace TechSenseFilters.Runtime
+namespace FilterSignals.Runtime
 {
     internal sealed class ClassificationNavigationTarget
     {

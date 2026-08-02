@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using RimWorld;
-using TechSenseFilters.Domain;
-using TechSenseFilters.Runtime;
+using FilterSignals.Domain;
+using FilterSignals.Runtime;
 using Verse;
 
-namespace TechSenseFilters.Presentation
+namespace FilterSignals.Presentation
 {
     internal static class ClassificationNavigationController
     {
@@ -34,7 +34,7 @@ namespace TechSenseFilters.Presentation
             catch (Exception exception)
             {
                 Log.ErrorOnce(
-                    "[TechSense Filters] Navigation failed safely without " +
+                    "[Filter Signals] Navigation failed safely without " +
                     "changing the filter: " + exception,
                     207481903);
                 return false;

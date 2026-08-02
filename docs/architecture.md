@@ -54,7 +54,7 @@ the single status line "Able to be produced in this colony" rather than
 repeating its research or workstation state. Because vanilla registers a
 tooltip for the entire item row first, the square clears current-frame tooltips
 only while the pointer is inside its 18-by-18 interaction rectangle, then
-registers the TechSense tooltip. This gives the square one unambiguous tooltip
+registers the FilterSignals tooltip. This gives the square one unambiguous tooltip
 while preserving the vanilla item description everywhere else on the row.
 For small-volume materials such as gold and silver, the row patch temporarily
 adds the current definition to RimWorld's own suppression list while vanilla
@@ -107,7 +107,7 @@ cache.
 an internal domain policy because separating the pure "any actual instance may
 win" reduction from RimWorld objects is what makes the conditional
 `RecipeWorker` regression testable. The recommended action is to keep it local
-to TechSense; do not promote it to Spine or shared tooling unless another
+to FilterSignals; do not promote it to Spine or shared tooling unless another
 production consumer needs the same policy.
 
 `MapCapabilitySnapshot.RecipeAvailableOnInstance` and its local `StableHash`

@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using TechSenseFilters.Domain;
+using FilterSignals.Domain;
 using Verse;
 
-namespace TechSenseFilters.Compatibility
+namespace FilterSignals.Compatibility
 {
     /// <summary>
     /// Adds definition-driven production paths that vanilla RecipeDefs cannot express.
     /// Providers must be deterministic for a given map revision and must not mutate game state.
     /// </summary>
-    public interface ITechSenseProductionProvider
+    public interface IFilterSignalsProductionProvider
     {
         string Id { get; }
 

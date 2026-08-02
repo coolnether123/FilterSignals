@@ -9,7 +9,7 @@ decision is made by private `Listing_TreeThingFilter.Visible(ThingDef)`.
 Individual definition rows are drawn by private
 `Listing_TreeThingFilter.DoThingDef(ThingDef, int, Map)`.
 
-TechSense therefore uses:
+FilterSignals therefore uses:
 
 1. a prefix/finalizer around the shared filter window to draw the toolbar and
    scope the current presentation context;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using TechSenseFilters.Domain;
+using FilterSignals.Domain;
 
-namespace TechSenseFilters.Presentation
+namespace FilterSignals.Presentation
 {
     internal sealed class FilterPresentationState
     {

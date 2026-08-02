@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace TechSenseFilters.Runtime
+namespace FilterSignals.Runtime
 {
     internal sealed class DefinitionProductionIndex
     {

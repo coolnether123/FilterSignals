@@ -2,13 +2,13 @@ $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
 $diagnostics = [System.IO.File]::ReadAllText(
-    (Join-Path $root 'Source\Diagnostics\TechSenseDebugActions.cs'))
+    (Join-Path $root 'Source\Diagnostics\FilterSignalsDebugActions.cs'))
 
 if ($diagnostics -notmatch
     '(?s)"Open small-volume tooltip fixture".*?' +
-    'new Dialog_TechSenseFixture\("Gold"\)' -or
+    'new Dialog_FilterSignalsFixture\("Gold"\)' -or
     $diagnostics -notmatch
-    '(?s)Dialog_TechSenseFixture\(string initialSearch = null\).*?' +
+    '(?s)Dialog_FilterSignalsFixture\(string initialSearch = null\).*?' +
     'uiState\.quickSearch\.filter\.Text = initialSearch')
 {
     Write-Error (

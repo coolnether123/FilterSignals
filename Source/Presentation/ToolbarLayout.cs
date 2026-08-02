@@ -1,6 +1,6 @@
 using System;
 
-namespace TechSenseFilters.Presentation
+namespace FilterSignals.Presentation
 {
     internal enum ToolbarLayoutMode
     {

@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TechSenseFilters.Runtime;
+using FilterSignals.Runtime;
 using Verse;
 
-namespace TechSenseFilters.Compatibility
+namespace FilterSignals.Compatibility
 {
-    public static class TechSenseApi
+    public static class FilterSignalsApi
     {
-        private static readonly List<ITechSenseProductionProvider>
-            ProductionProviders = new List<ITechSenseProductionProvider>();
-        private static readonly List<ITechSenseClassificationOverride>
+        private static readonly List<IFilterSignalsProductionProvider>
+            ProductionProviders = new List<IFilterSignalsProductionProvider>();
+        private static readonly List<IFilterSignalsClassificationOverride>
             ClassificationOverrides =
-                new List<ITechSenseClassificationOverride>();
+                new List<IFilterSignalsClassificationOverride>();
 
         public static void RegisterProductionProvider(
-            ITechSenseProductionProvider provider)
+            IFilterSignalsProductionProvider provider)
         {
             Register(
                 provider,
@@ -25,7 +25,7 @@ namespace TechSenseFilters.Compatibility
         }
 
         public static void RegisterClassificationOverride(
-            ITechSenseClassificationOverride classificationOverride)
+            IFilterSignalsClassificationOverride classificationOverride)
         {
             Register(
                 classificationOverride,
@@ -44,7 +44,7 @@ namespace TechSenseFilters.Compatibility
             ClassificationService.Invalidate(map);
         }
 
-        internal static IReadOnlyList<ITechSenseProductionProvider>
+        internal static IReadOnlyList<IFilterSignalsProductionProvider>
             GetProductionProviders()
         {
             return ProductionProviders
@@ -52,7 +52,7 @@ namespace TechSenseFilters.Compatibility
                 .ToArray();
         }
 
-        internal static IReadOnlyList<ITechSenseClassificationOverride>
+        internal static IReadOnlyList<IFilterSignalsClassificationOverride>
             GetClassificationOverrides()
         {
             return ClassificationOverrides
@@ -76,7 +76,7 @@ namespace TechSenseFilters.Compatibility
             if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentException(
-                    "TechSense " + kind + " ID is required.",
+                    "FilterSignals " + kind + " ID is required.",
                     nameof(item));
             }
 
@@ -86,7 +86,7 @@ namespace TechSenseFilters.Compatibility
                 StringComparison.Ordinal)))
             {
                 throw new InvalidOperationException(
-                    "Duplicate TechSense " + kind + " ID: " + id);
+                    "Duplicate FilterSignals " + kind + " ID: " + id);
             }
 
             items.Add(item);

@@ -1,62 +1,62 @@
 using System.Collections.Generic;
 using Spine.UI.SettingsFramework;
-using TechSenseFilters.Runtime;
+using FilterSignals.Runtime;
 
-namespace TechSenseFilters.Settings
+namespace FilterSignals.Settings
 {
-    internal static class TechSenseSettingsRegistry
+    internal static class FilterSignalsSettingsRegistry
     {
         internal static readonly IReadOnlyList<SettingDefinition> Definitions =
             new[]
             {
                 Toggle(
                     "feature.enabled",
-                    nameof(TechSenseFiltersSettings.FeatureEnabled),
-                    "Enable TechSense Filters",
-                    "TechSense_Settings_Feature_Label",
+                    nameof(FilterSignalsSettings.FeatureEnabled),
+                    "Enable Filter Signals",
+                    "FilterSignals_Settings_Feature_Label",
                     "Adds transient production classifications to vanilla " +
                     "ThingFilter dialogs. Disabling this leaves every stored " +
                     "ThingFilter unchanged.",
-                    "TechSense_Settings_Feature_Tooltip",
+                    "FilterSignals_Settings_Feature_Tooltip",
                     true,
                     0,
                     null,
                     true),
                 Toggle(
                     "presentation.toolbar",
-                    nameof(TechSenseFiltersSettings.ShowClassificationToolbar),
+                    nameof(FilterSignalsSettings.ShowClassificationToolbar),
                     "Show optional filter toolbar",
-                    "TechSense_Settings_Toolbar_Label",
+                    "FilterSignals_Settings_Toolbar_Label",
                     "Shows four temporary classification toggles above " +
                     "vanilla item filters. Hidden by default because the " +
                     "colored status squares remain available.",
-                    "TechSense_Settings_Toolbar_Tooltip",
+                    "FilterSignals_Settings_Toolbar_Tooltip",
                     false,
                     10,
                     "feature.enabled",
                     true),
                 Toggle(
                     "presentation.indicators",
-                    nameof(TechSenseFiltersSettings.ShowStatusIndicators),
+                    nameof(FilterSignalsSettings.ShowStatusIndicators),
                     "Show status indicators",
-                    "TechSense_Settings_Indicators_Label",
+                    "FilterSignals_Settings_Indicators_Label",
                     "Draws a compact colored indicator beside each visible " +
                     "item. Hover it for the production-path explanation.",
-                    "TechSense_Settings_Indicators_Tooltip",
+                    "FilterSignals_Settings_Indicators_Tooltip",
                     true,
                     20,
                     "feature.enabled",
                     true),
                 Toggle(
                     "classification.materials",
-                    nameof(TechSenseFiltersSettings.ConsiderMaterialShortages),
+                    nameof(FilterSignalsSettings.ConsiderMaterialShortages),
                     "Consider current material shortages",
-                    "TechSense_Settings_Materials_Label",
+                    "FilterSignals_Settings_Materials_Label",
                     "When enabled, a technologically available recipe is " +
                     "shown as unavailable if none of an ingredient's allowed " +
                     "materials are present. Disabled by default because " +
                     "inventory changes are temporary.",
-                    "TechSense_Settings_Materials_Tooltip",
+                    "FilterSignals_Settings_Materials_Tooltip",
                     false,
                     30,
                     "feature.enabled",

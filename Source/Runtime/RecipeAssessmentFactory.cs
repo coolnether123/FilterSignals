@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
-using TechSenseFilters.Domain;
-using TechSenseFilters.Settings;
+using FilterSignals.Domain;
+using FilterSignals.Settings;
 using Verse;
 
-namespace TechSenseFilters.Runtime
+namespace FilterSignals.Runtime
 {
     internal static class RecipeAssessmentFactory
     {
@@ -30,7 +30,7 @@ namespace TechSenseFilters.Runtime
             string pathLabel = sourceSelection.PathLabel;
             bool pawnCapable = snapshot.HasCapablePawn(recipe);
             bool materialsAvailable =
-                !TechSenseFiltersSettings.Current.ConsiderMaterialShortages ||
+                !FilterSignalsSettings.Current.ConsiderMaterialShortages ||
                 MaterialsAvailable(recipe, map);
             IReadOnlyList<ResearchProjectDef> missingResearch =
                 MissingResearch(recipe);

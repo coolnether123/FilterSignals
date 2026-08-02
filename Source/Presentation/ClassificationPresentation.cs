@@ -1,8 +1,8 @@
-using TechSenseFilters.Domain;
+using FilterSignals.Domain;
 using UnityEngine;
 using Verse;
 
-namespace TechSenseFilters.Presentation
+namespace FilterSignals.Presentation
 {
     internal static class ClassificationPresentation
     {
@@ -12,13 +12,13 @@ namespace TechSenseFilters.Presentation
             switch (classification)
             {
                 case ProductionClassification.CanMakeNow:
-                    return "TechSense_CanMakeShort".Translate();
+                    return "FilterSignals_CanMakeShort".Translate();
                 case ProductionClassification.ResearchUnlocked:
-                    return "TechSense_UnlockedShort".Translate();
+                    return "FilterSignals_UnlockedShort".Translate();
                 case ProductionClassification.CannotMakeYet:
-                    return "TechSense_LockedShort".Translate();
+                    return "FilterSignals_LockedShort".Translate();
                 default:
-                    return "TechSense_NotApplicableShort".Translate();
+                    return "FilterSignals_NotApplicableShort".Translate();
             }
         }
 
@@ -28,13 +28,13 @@ namespace TechSenseFilters.Presentation
             switch (classification)
             {
                 case ProductionClassification.CanMakeNow:
-                    return "TechSense_CanMake".Translate();
+                    return "FilterSignals_CanMake".Translate();
                 case ProductionClassification.ResearchUnlocked:
-                    return "TechSense_Unlocked".Translate();
+                    return "FilterSignals_Unlocked".Translate();
                 case ProductionClassification.CannotMakeYet:
-                    return "TechSense_Locked".Translate();
+                    return "FilterSignals_Locked".Translate();
                 default:
-                    return "TechSense_NotApplicable".Translate();
+                    return "FilterSignals_NotApplicable".Translate();
             }
         }
 

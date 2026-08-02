@@ -4,10 +4,10 @@
   "resolver": "Resolve-RwtEnvironment",
   "purpose": "Compile",
   "rimWorldVersion": "1.6",
-  "project": "Source/Mod.csproj",
+  "project": "Source/FilterSignals.csproj",
   "configuration": "Release",
-  "assemblyName": "TechSenseFilters",
-  "packageId": "CoolNether123.TechSenseFilters",
+  "assemblyName": "FilterSignals",
+  "packageId": "CoolNether123.FilterSignals",
   "dependencies": [
     "harmony",
     "spine"

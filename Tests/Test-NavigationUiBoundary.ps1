@@ -13,7 +13,7 @@ $presentation = [System.IO.File]::ReadAllText(
         'Source\Presentation\ClassificationPresentation.cs'))
 $language = [System.IO.File]::ReadAllText(
     (Join-Path $root `
-        'Languages\English\Keyed\TechSenseFilters.xml'))
+        'Languages\English\Keyed\FilterSignals.xml'))
 
 $failures = [System.Collections.Generic.List[string]]::new()
 $buildOption = [regex]::Match(
@@ -71,7 +71,7 @@ if ($presentation -notmatch
         'A square with no navigation action must add no navigation text.')
 }
 if ($language -notmatch
-    '<TechSense_CanMake>Able to be produced in this colony</TechSense_CanMake>')
+    '<FilterSignals_CanMake>Able to be produced in this colony</FilterSignals_CanMake>')
 {
     $failures.Add(
         'A producible item must use the requested concise colony wording.')
