@@ -45,7 +45,7 @@ the collection is required.
 ## Settings
 
 The normal RimWorld mod settings page can enable the optional filter toolbar,
-controls status indicators, and chooses whether current material shortages
+control status indicators, and choose whether current material shortages
 count against **Can make**. The toolbar and material-shortage check are
 disabled by default so the stockpile panel stays close to vanilla.
 

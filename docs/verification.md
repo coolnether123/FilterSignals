@@ -79,3 +79,11 @@ save/reload. The final combined lane
 `coolnether-suite-355cca1875a740909cbc91d9c1a59c57` proves the renamed package,
 assembly, and Harmony identity coexist in the complete suite: it reached a map,
 reported eight Filter Signals-owned patches, and produced no target-mod Error.
+## Final release-candidate gate — 2026-08-03
+
+Passed 17 contracts (38 assertions), tooltip-ownership, navigation, compact
+volume, toolbar-default, clean build, and package checks. Live verification
+with all eight gameplay mods showed compact status squares, one stable tooltip,
+no grey artifacts, and a hidden-by-default toolbar. The UI/content stack also
+loaded with RimHUD, Better Pawn Control, Achtung, Vanilla Expanded production,
+Rimatomics, and Rimefeller without a Filter Signals exception.

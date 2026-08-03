@@ -23,7 +23,7 @@
     <li>brrainz.harmony</li>
     <li>CoolNether123.Spine</li>
   </loadAfter>
-  <description>See what your colony can make directly inside RimWorld item filters.
+  <description>See what this colony can produce directly inside RimWorld item filters.
 
-Filter Signals adds transient Can make, Unlocked, Locked, and N/A views plus compact status markers and explanations. It never changes the saved allow/deny state of a filter.</description>
+Compact status squares distinguish producible, unlocked, locked, and unavailable items. Click a square to jump to a usable workstation, relevant research, or an Architect option when one exists. The optional toolbar is hidden by default, and view filtering never changes saved allow or deny choices.</description>
 </ModMetaData>
