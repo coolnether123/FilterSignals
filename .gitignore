@@ -7,3 +7,7 @@ Engineering/artifacts/
 Engineering/build-result.json
 1.6/Assemblies/build/
 1.6/Assemblies/*.log
+
+# Local developer fixtures. Never part of the release payload, and their
+# built assemblies go stale the moment the shipping mod moves on.
+Developer/
