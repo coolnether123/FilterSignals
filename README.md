@@ -36,11 +36,7 @@ Architect menu and never toggles the temporary view filter.
 
 ## Installation
 
-SpineLib is available on the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3778463813).
-
-Filter Signals needs Harmony and Spine. Harmony is on the Steam Workshop; Spine
-is not published there yet, so take a build from
-[coolnether123/Spine](https://github.com/coolnether123/Spine).
+Filter Signals needs Harmony and [SpineLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3778463813). Both are available on the Steam Workshop; repository builds are at [coolnether123/Spine](https://github.com/coolnether123/Spine).
 
 Copy both `FilterSignals` and `Spine` into RimWorld's `Mods` directory, then
 enable Harmony, SpineLib, and Filter Signals in that order. No other mod is
