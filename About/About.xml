@@ -23,7 +23,12 @@
     <li>brrainz.harmony</li>
     <li>CoolNether123.Spine</li>
   </loadAfter>
-  <description>See what this colony can produce directly inside RimWorld item filters.
+  <description>Shows what your colony can actually make, right inside RimWorld's item filters.
 
-Compact status squares distinguish producible, unlocked, locked, and unavailable items. Click a square to jump to a usable workstation, relevant research, or an Architect option when one exists. The optional toolbar is hidden by default, and view filtering never changes saved allow or deny choices.</description>
+- A status square beside each item: producible, unlocked, locked, or unavailable
+- Click a square to jump to a workstation, research project, or Architect option
+- Optional filter toolbar, off by default
+- Changing the view never touches your saved allow and deny choices
+
+Requires Harmony and Spine.</description>
 </ModMetaData>
