@@ -9,6 +9,10 @@ using Verse;
 
 namespace FilterSignals.Runtime
 {
+    /// <summary>
+    /// Orchestrates indexing, map snapshots, integrations, and bounded caches
+    /// behind the single classification entry point used by presentation.
+    /// </summary>
     internal static class ClassificationService
     {
         private const int SnapshotMaxAgeTicks = 120;
@@ -37,8 +41,13 @@ namespace FilterSignals.Runtime
             if (state.Snapshot == null ||
                 gameTick - state.Snapshot.GameTick >= SnapshotMaxAgeTicks)
             {
+                // A short safety refresh covers pawn, fuel, breakdown, and
+                // power changes without Harmony hooks on their hot paths.
                 state.Snapshot =
                     MapCapabilitySnapshot.Capture(map, index, gameTick);
+
+                // Cached answers are meaningful only for the snapshot that
+                // produced them.
                 state.Results.Reset();
             }
 
@@ -114,6 +123,8 @@ namespace FilterSignals.Runtime
                 EvaluateOverrides(item, map);
             if (classificationOverride != null)
             {
+                // Overrides exist for semantics that cannot compose as paths,
+                // so they intentionally bypass vanilla and provider results.
                 return classificationOverride;
             }
 
@@ -156,6 +167,8 @@ namespace FilterSignals.Runtime
                 }
                 catch (Exception exception)
                 {
+                    // Compatibility failures are isolated so one integration
+                    // cannot suppress vanilla or other providers' answers.
                     LogProviderFailure(
                         itemOverride.Id,
                         "classification override",
@@ -199,6 +212,8 @@ namespace FilterSignals.Runtime
                 }
                 catch (Exception exception)
                 {
+                    // Providers are optional inputs; their failure must not
+                    // make the filter UI unavailable.
                     LogProviderFailure(
                         provider.Id,
                         "production provider",
@@ -266,6 +281,10 @@ namespace FilterSignals.Runtime
             }
         }
 
+        /// <summary>
+        /// Keeps each map's snapshot and results together so invalidation and
+        /// disposal cannot accidentally cross colony boundaries.
+        /// </summary>
         private sealed class MapState
         {
             internal readonly BoundedLruCache<ThingDef, ClassificationResult>

@@ -2,6 +2,10 @@ using System.Collections.Generic;
 
 namespace FilterSignals.Domain
 {
+    /// <summary>
+    /// Captures the capabilities of one real workstation instance for the
+    /// engine-free source-selection policy.
+    /// </summary>
     internal readonly struct ProductionSourceCandidate
     {
         internal ProductionSourceCandidate(
@@ -24,6 +28,10 @@ namespace FilterSignals.Domain
             CurrentlyUsableForBills && RecipeAvailableOnInstance;
     }
 
+    /// <summary>
+    /// Preserves the strongest workstation evidence so the UI can distinguish
+    /// absence, bill-giver failure, and recipe rejection.
+    /// </summary>
     internal readonly struct ProductionSourceSelection
     {
         internal ProductionSourceSelection(
@@ -47,6 +55,10 @@ namespace FilterSignals.Domain
         internal bool SourceUsable { get; }
     }
 
+    /// <summary>
+    /// Ensures any usable instance can win instead of collapsing a building
+    /// definition to a misleading colony-wide Boolean.
+    /// </summary>
     internal static class ProductionSourceSelector
     {
         internal static ProductionSourceSelection Select(

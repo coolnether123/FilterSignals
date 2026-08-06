@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace FilterSignals.Domain
 {
+    /// <summary>
+    /// Applies classification precedence to production paths in a pure layer
+    /// that can be tested without loading RimWorld.
+    /// </summary>
     public static class ProductionClassifier
     {
         public static ClassificationResult Classify(
@@ -27,6 +31,9 @@ namespace FilterSignals.Domain
 
             ProductionPathAssessment ready =
                 candidates.FirstOrDefault(path => path.CanMakeNow);
+
+            // One viable route is enough; a blocked alternative must not
+            // downgrade an item the colony can already produce.
             if (ready != null)
             {
                 return new ClassificationResult(

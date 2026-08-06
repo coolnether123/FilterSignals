@@ -4,6 +4,10 @@ using FilterSignals.Runtime;
 
 namespace FilterSignals.Settings
 {
+    /// <summary>
+    /// Declares the settings hierarchy once for Spine's UI, persistence, and
+    /// contextual navigation facilities.
+    /// </summary>
     internal static class FilterSignalsSettingsRegistry
     {
         internal static readonly IReadOnlyList<SettingDefinition> Definitions =

@@ -8,6 +8,10 @@ using Verse;
 
 namespace FilterSignals.Bootstrap
 {
+    /// <summary>
+    /// Connects Filter Signals to Spine so shared settings, tooltip sizing,
+    /// and guarded Harmony installation have one mod-lifetime owner.
+    /// </summary>
     public sealed class FilterSignalsMod : SpineMod<FilterSignalsSettings>
     {
         private static System.IDisposable tooltipSizingLease;

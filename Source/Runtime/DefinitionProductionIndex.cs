@@ -4,6 +4,10 @@ using Verse;
 
 namespace FilterSignals.Runtime
 {
+    /// <summary>
+    /// Precomputes definition-only recipe relationships so per-row work can
+    /// focus on the small amount of colony state that actually changes.
+    /// </summary>
     internal sealed class DefinitionProductionIndex
     {
         private readonly Dictionary<ThingDef, List<RecipeDef>> recipesByProduct;
@@ -98,6 +102,8 @@ namespace FilterSignals.Runtime
 
             foreach (List<RecipeDef> recipes in recipesByProduct.Values)
             {
+                // Definition load order is not a stable player-facing tie
+                // breaker for classification or navigation.
                 recipes.Sort((left, right) =>
                     string.Compare(
                         left.defName,

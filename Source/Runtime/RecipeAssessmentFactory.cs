@@ -7,6 +7,10 @@ using Verse;
 
 namespace FilterSignals.Runtime
 {
+    /// <summary>
+    /// Translates RimWorld recipe and colony state into the domain model while
+    /// keeping engine queries out of classification policy.
+    /// </summary>
     internal static class RecipeAssessmentFactory
     {
         internal static ProductionPathAssessment Evaluate(

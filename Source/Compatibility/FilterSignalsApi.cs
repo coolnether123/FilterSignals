@@ -6,6 +6,10 @@ using Verse;
 
 namespace FilterSignals.Compatibility
 {
+    /// <summary>
+    /// Provides the narrow extension boundary for production systems that
+    /// cannot describe themselves with ordinary RimWorld recipes.
+    /// </summary>
     public static class FilterSignalsApi
     {
         private static readonly List<IFilterSignalsProductionProvider>

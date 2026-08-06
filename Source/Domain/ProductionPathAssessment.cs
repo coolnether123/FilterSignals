@@ -2,6 +2,10 @@ using System;
 
 namespace FilterSignals.Domain
 {
+    /// <summary>
+    /// Represents one independently viable way to make an item so competing
+    /// recipes and mod integrations can be reduced by pure policy.
+    /// </summary>
     public sealed class ProductionPathAssessment
     {
         public ProductionPathAssessment(

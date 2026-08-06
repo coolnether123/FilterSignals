@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace FilterSignals.Domain
 {
+    /// <summary>
+    /// Names the safe UI destinations a status square may advertise.
+    /// </summary>
     internal enum ProductionNavigationKind
     {
         None,
@@ -12,6 +15,10 @@ namespace FilterSignals.Domain
         SelectBuildOption
     }
 
+    /// <summary>
+    /// Describes one recipe's possible destination using stable identifiers
+    /// so selection policy remains independent of RimWorld objects.
+    /// </summary>
     internal sealed class ProductionNavigationCandidate
     {
         internal ProductionNavigationCandidate(
@@ -45,6 +52,9 @@ namespace FilterSignals.Domain
         internal string BuildTargetId { get; }
     }
 
+    /// <summary>
+    /// Carries the single deterministic action chosen for an indicator click.
+    /// </summary>
     internal readonly struct ProductionNavigationDecision
     {
         internal ProductionNavigationDecision(
@@ -79,6 +89,10 @@ namespace FilterSignals.Domain
                 0);
     }
 
+    /// <summary>
+    /// Reduces recipe candidates to one safe action without coupling domain
+    /// policy to tabs, designators, maps, or cameras.
+    /// </summary>
     internal static class ProductionNavigationPolicy
     {
         internal static ProductionNavigationDecision Decide(
@@ -96,6 +110,9 @@ namespace FilterSignals.Domain
                         StringComparer.Ordinal)
                     .ToArray() ??
                 Array.Empty<ProductionNavigationCandidate>();
+
+            // Stable ordering prevents an item's click destination from
+            // changing with definition or provider enumeration order.
 
             switch (classification)
             {

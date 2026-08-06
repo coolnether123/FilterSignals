@@ -3,6 +3,10 @@ using Verse;
 
 namespace FilterSignals.Settings
 {
+    /// <summary>
+    /// Stores the few durable player choices while dialog-specific filtering
+    /// remains transient presentation state.
+    /// </summary>
     public sealed class FilterSignalsSettings : ModSettings
     {
         public bool FeatureEnabled = true;

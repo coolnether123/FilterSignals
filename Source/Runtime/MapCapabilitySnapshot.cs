@@ -5,6 +5,10 @@ using Verse;
 
 namespace FilterSignals.Runtime
 {
+    /// <summary>
+    /// Freezes the map capabilities needed by a classification pass so many
+    /// filter rows share bounded, internally consistent colony observations.
+    /// </summary>
     internal sealed class MapCapabilitySnapshot
     {
         private readonly Dictionary<ThingDef, List<Building>> sources;
@@ -57,6 +61,9 @@ namespace FilterSignals.Runtime
                     instanceIndex++)
                 {
                     Building building = instances[instanceIndex];
+
+                    // Modded RecipeWorkers may accept one instance of a
+                    // building definition and reject another.
                     bool billGiverUsable =
                         !(building is IBillGiver billGiver) ||
                         billGiver.CurrentlyUsableForBills();
@@ -214,6 +221,8 @@ namespace FilterSignals.Runtime
 
             foreach (List<Building> instances in sources.Values)
             {
+                // Navigation must select the same usable building until the
+                // map itself changes, regardless of lister enumeration order.
                 instances.Sort((left, right) =>
                     left.thingIDNumber.CompareTo(right.thingIDNumber));
             }
@@ -229,6 +238,8 @@ namespace FilterSignals.Runtime
                     !pawn.InMentalState &&
                     (pawn.IsColonist || pawn.IsColonyMech))
                 {
+                    // Guests, downed pawns, and pawns unable to work should
+                    // not make a cosmetic signal claim a usable recipe.
                     pawns.Add(pawn);
                 }
             }
@@ -246,6 +257,8 @@ namespace FilterSignals.Runtime
             }
             catch (System.Exception exception)
             {
+                // AvailableOnNow is an extensibility boundary. One broken
+                // RecipeWorker must not break the entire filter dialog.
                 int key = StableHash(
                     "FilterSignals.AvailableOnNow." +
                     (recipe.defName ?? "<unnamed>"));
