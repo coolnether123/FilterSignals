@@ -246,9 +246,11 @@ namespace FilterSignals.Runtime
             AddMissingResearch(
                 missing,
                 buildable?.researchPrerequisites);
+#if FILTER_SIGNALS_HAS_DESIGNATION_NAVIGATION
             AddMissingResearch(
                 missing,
                 buildable?.designationCategory?.researchPrerequisites);
+#endif
             return missing
                 .OrderBy(
                     project => project.defName,

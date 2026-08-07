@@ -16,6 +16,7 @@ namespace FilterSignals.Patches
         }
     }
 
+#if FILTER_SIGNALS_HAS_MAP_DISPOSE
     [HarmonyPatch(
         typeof(Map),
         nameof(Map.Dispose))]
@@ -26,5 +27,6 @@ namespace FilterSignals.Patches
             ClassificationService.Release(__instance);
         }
     }
+#endif
 
 }

@@ -5,9 +5,24 @@
     <AssemblyName>FilterSignals</AssemblyName>
     <RootNamespace>FilterSignals</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>..\1.6\Assemblies\</OutputPath>
+    <Configurations>1.6;1.5;1.4;1.3;1.2;1.1</Configurations>
+    <DisableImplicitConfigurationDefines>true</DisableImplicitConfigurationDefines>
+    <OutputPath>..\$(Configuration)\Assemblies\</OutputPath>
     <RwtUseHarmony>true</RwtUseHarmony>
     <RwtUseSpine>true</RwtUseSpine>
     <RwtUseUnityImGui>true</RwtUseUnityImGui>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' != '1.6'">
+    <DefineConstants>FILTER_SIGNALS_LEGACY_UI;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == '1.5'">
+    <DefineConstants>FILTER_SIGNALS_LEGACY_UI;FILTER_SIGNALS_HAS_MAP_DISPOSE;FILTER_SIGNALS_HAS_RESEARCH_SELECT;FILTER_SIGNALS_HAS_DESIGNATION_NAVIGATION;FILTER_SIGNALS_HAS_MECHS;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == '1.4'">
+    <DefineConstants>FILTER_SIGNALS_LEGACY_UI;FILTER_SIGNALS_HAS_DESIGNATION_NAVIGATION;FILTER_SIGNALS_HAS_MECHS;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == '1.3'">
+    <DefineConstants>FILTER_SIGNALS_LEGACY_UI;FILTER_SIGNALS_HAS_RESEARCH_SELECT;TRACE</DefineConstants>
   </PropertyGroup>
 </Project>

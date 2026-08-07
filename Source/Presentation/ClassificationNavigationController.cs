@@ -68,7 +68,9 @@ namespace FilterSignals.Presentation
             }
 
             Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Research);
+#if FILTER_SIGNALS_HAS_RESEARCH_SELECT
             researchWindow.Select(target.Research);
+#endif
             return true;
         }
 
@@ -101,6 +103,9 @@ namespace FilterSignals.Presentation
         {
             DesignationCategoryDef category =
                 target?.designationCategory;
+#if !FILTER_SIGNALS_HAS_DESIGNATION_NAVIGATION
+            return null;
+#else
             if (category == null || !category.Visible)
             {
                 return null;
@@ -118,6 +123,7 @@ namespace FilterSignals.Presentation
             }
 
             return null;
+#endif
         }
 
         private static Designator_Build FindBuildDesignator(

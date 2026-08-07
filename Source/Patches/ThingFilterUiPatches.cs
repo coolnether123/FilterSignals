@@ -15,7 +15,7 @@ namespace FilterSignals.Patches
     {
         private static void Prefix(
             ref Rect rect,
-            ThingFilterUI.UIState state,
+            object state,
             Map map)
         {
             FilterUiController.BeginAndDraw(ref rect, state, map);

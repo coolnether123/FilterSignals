@@ -93,9 +93,14 @@ namespace FilterSignals.Runtime
             bool hasSkillRequirement =
                 recipe.skillRequirements != null &&
                 recipe.skillRequirements.Count > 0;
+#if FILTER_SIGNALS_HAS_MECHS
+            bool hasMechanitorRequirement = recipe.mechanitorOnlyRecipe;
+#else
+            bool hasMechanitorRequirement = false;
+#endif
             if (!hasWorkRequirement &&
                 !hasSkillRequirement &&
-                !recipe.mechanitorOnlyRecipe)
+                !hasMechanitorRequirement)
             {
                 return true;
             }
@@ -103,11 +108,13 @@ namespace FilterSignals.Runtime
             for (int i = 0; i < capablePawns.Count; i++)
             {
                 Pawn pawn = capablePawns[i];
-                if (recipe.mechanitorOnlyRecipe &&
+#if FILTER_SIGNALS_HAS_MECHS
+                if (hasMechanitorRequirement &&
                     !MechanitorUtility.IsMechanitor(pawn))
                 {
                     continue;
                 }
+#endif
 
                 if (recipe.requiredGiverWorkType != null &&
                     pawn.WorkTypeIsDisabled(recipe.requiredGiverWorkType))
@@ -236,7 +243,11 @@ namespace FilterSignals.Runtime
                     !pawn.Dead &&
                     !pawn.Downed &&
                     !pawn.InMentalState &&
+#if FILTER_SIGNALS_HAS_MECHS
                     (pawn.IsColonist || pawn.IsColonyMech))
+#else
+                    pawn.IsColonist)
+#endif
                 {
                     // Guests, downed pawns, and pawns unable to work should
                     // not make a cosmetic signal claim a usable recipe.

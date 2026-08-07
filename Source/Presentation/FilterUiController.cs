@@ -16,10 +16,10 @@ namespace FilterSignals.Presentation
         private const float ToolbarOuterPadding = 4f;
         private const float StatusIndicatorRightInset = 45f;
         private static readonly ConditionalWeakTable<
-            ThingFilterUI.UIState,
+            object,
             FilterPresentationState> States =
                 new ConditionalWeakTable<
-                    ThingFilterUI.UIState,
+                    object,
                     FilterPresentationState>();
 
         [ThreadStatic]
@@ -27,7 +27,7 @@ namespace FilterSignals.Presentation
 
         internal static void BeginAndDraw(
             ref Rect rect,
-            ThingFilterUI.UIState uiState,
+            object uiState,
             Map map)
         {
             Map effectiveMap = map ?? Find.CurrentMap;
