@@ -23,6 +23,6 @@
     <DefineConstants>FILTER_SIGNALS_LEGACY_UI;FILTER_SIGNALS_HAS_DESIGNATION_NAVIGATION;FILTER_SIGNALS_HAS_MECHS;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == '1.3'">
-    <DefineConstants>FILTER_SIGNALS_LEGACY_UI;FILTER_SIGNALS_HAS_RESEARCH_SELECT;TRACE</DefineConstants>
+    <DefineConstants>FILTER_SIGNALS_LEGACY_UI;TRACE</DefineConstants>
   </PropertyGroup>
 </Project>
