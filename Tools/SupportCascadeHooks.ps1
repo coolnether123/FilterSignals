@@ -15,7 +15,14 @@ $aboutXml = @"
   <description>Show production and research status beside filter rows. RimWorld $Version support build.</description>
 </ModMetaData>
 "@
-$loadFoldersXml = "<?xml version=`"1.0`" encoding=`"utf-8`?><loadFolders><v$Version><li>/</li></v$Version></loadFolders>"
+$loadFoldersXml = @"
+<?xml version="1.0" encoding="utf-8"?>
+<loadFolders>
+  <v$Version>
+    <li>/</li>
+  </v$Version>
+</loadFolders>
+"@
 if ($Phase -eq 'after-merge') {
     [System.IO.File]::WriteAllText((Join-Path $repository 'About\About.xml'), $aboutXml)
     [System.IO.File]::WriteAllText((Join-Path $repository 'LoadFolders.xml'), $loadFoldersXml)
