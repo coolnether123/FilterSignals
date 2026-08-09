@@ -13,13 +13,15 @@ namespace FilterSignals.Runtime
             Map map,
             Building productionSource,
             ResearchProjectDef research,
-            BuildableDef buildable)
+            BuildableDef buildable,
+            Designator_Build buildDesignator)
         {
             Decision = decision;
             Map = map;
             ProductionSource = productionSource;
             Research = research;
             Buildable = buildable;
+            BuildDesignator = buildDesignator;
         }
 
         internal ProductionNavigationDecision Decision { get; }
@@ -27,11 +29,44 @@ namespace FilterSignals.Runtime
         internal Building ProductionSource { get; }
         internal ResearchProjectDef Research { get; }
         internal BuildableDef Buildable { get; }
-        internal bool IsActionable => Decision.IsActionable;
+        internal Designator_Build BuildDesignator { get; }
+        internal bool IsActionable
+        {
+            get
+            {
+                if (!Decision.IsActionable)
+                {
+                    return false;
+                }
+
+                switch (Decision.Kind)
+                {
+                    case ProductionNavigationKind.SelectProductionSource:
+                        return ProductionSource != null &&
+                            ProductionSource.Spawned &&
+                            ProductionSource.Map != null &&
+                            Map != null &&
+                            Find.CurrentMap == Map &&
+                            ProductionSource.Map == Map;
+                    case ProductionNavigationKind.OpenResearch:
+                        return Research != null && !Research.IsFinished;
+                    case ProductionNavigationKind.SelectBuildOption:
+                        return Buildable != null &&
+                            BuildDesignator != null &&
+                            BuildDesignator.Visible &&
+                            BuildDesignator.PlacingDef == Buildable &&
+                            Map != null &&
+                            Find.CurrentMap == Map;
+                    default:
+                        return false;
+                }
+            }
+        }
 
         internal static ClassificationNavigationTarget None =>
             new ClassificationNavigationTarget(
                 ProductionNavigationDecision.None,
+                null,
                 null,
                 null,
                 null,
@@ -54,6 +89,27 @@ namespace FilterSignals.Runtime
                 return ClassificationNavigationTarget.None;
             }
 
+            try
+            {
+                return ResolveCore(item, map, result);
+            }
+            catch (System.Exception exception)
+            {
+                ClassificationDiagnostics.LogFailure(
+                    "navigation resolution",
+                    ClassificationDiagnostics.SafeId(() => item.defName),
+                    "the indicator was treated as non-actionable",
+                    exception);
+                return ClassificationNavigationTarget.None;
+            }
+        }
+
+        private static ClassificationNavigationTarget ResolveCore(
+            ThingDef item,
+            Map map,
+            ClassificationResult result)
+        {
+
             DefinitionProductionIndex index =
                 ClassificationService.ProductionIndex;
             MapCapabilitySnapshot snapshot =
@@ -67,6 +123,8 @@ namespace FilterSignals.Runtime
             var researchTargets =
                 new Dictionary<string, ResearchProjectDef>();
             var buildTargets = new Dictionary<string, BuildableDef>();
+            var buildDesignators =
+                new Dictionary<string, Designator_Build>();
 
             for (int recipeIndex = 0;
                 recipeIndex < recipes.Count;
@@ -81,7 +139,8 @@ namespace FilterSignals.Runtime
                         index);
                 IReadOnlyList<ThingDef> sourceDefs =
                     index.SourcesFor(recipe);
-                Building usableSource = assessment.CanMakeNow
+                Building usableSource = assessment.CanMakeNow &&
+                    Find.CurrentMap == map
                     ? snapshot.FindUsableSource(recipe, sourceDefs)
                     : null;
                 string productionSourceId = usableSource == null
@@ -94,6 +153,7 @@ namespace FilterSignals.Runtime
 
                 ResearchProjectDef research = null;
                 BuildableDef buildable = null;
+                Designator_Build buildDesignator = null;
                 if (!assessment.ResearchUnlocked)
                 {
                     IReadOnlyList<ResearchProjectDef> missing =
@@ -106,6 +166,7 @@ namespace FilterSignals.Runtime
                         ResolveBuildRequirement(sourceDefs, map);
                     research = requirement.Research;
                     buildable = requirement.Buildable;
+                    buildDesignator = requirement.BuildDesignator;
                 }
 
                 string researchId = research == null
@@ -122,6 +183,10 @@ namespace FilterSignals.Runtime
                 if (buildable != null)
                 {
                     buildTargets[buildId] = buildable;
+                    if (buildDesignator != null)
+                    {
+                        buildDesignators[buildId] = buildDesignator;
+                    }
                 }
 
                 candidates.Add(new ProductionNavigationCandidate(
@@ -132,12 +197,13 @@ namespace FilterSignals.Runtime
                     assessment.SourcePresent,
                     productionSourceId,
                     researchId,
-                    buildId));
+                    buildId,
+                    assessment.Reason));
             }
 
             ProductionNavigationDecision decision =
                 ProductionNavigationPolicy.Decide(
-                    result.Classification,
+                    result,
                     candidates);
             if (!decision.IsActionable)
             {
@@ -153,12 +219,16 @@ namespace FilterSignals.Runtime
             buildTargets.TryGetValue(
                 decision.TargetId,
                 out BuildableDef selectedBuildable);
+            buildDesignators.TryGetValue(
+                decision.TargetId,
+                out Designator_Build selectedDesignator);
             return new ClassificationNavigationTarget(
                 decision,
                 map,
                 selectedSource,
                 selectedResearch,
-                selectedBuildable);
+                selectedBuildable,
+                selectedDesignator);
         }
 
         private static BuildRequirement ResolveBuildRequirement(
@@ -234,9 +304,90 @@ namespace FilterSignals.Runtime
                 }
             }
 
-            return buildable.BuildableByPlayer
-                ? BuildRequirement.ForBuildable(buildable)
-                : BuildRequirement.None;
+            if (!buildable.BuildableByPlayer ||
+                Find.CurrentMap != map ||
+                Find.MainTabsRoot == null ||
+                MainButtonDefOf.Architect == null)
+            {
+                return BuildRequirement.None;
+            }
+
+            Designator_Build designator = FindBuildDesignator(buildable);
+            return designator == null
+                ? BuildRequirement.None
+                : BuildRequirement.ForBuildable(buildable, designator);
+        }
+
+        private static Designator_Build FindBuildDesignator(
+            BuildableDef target)
+        {
+            DesignationCategoryDef category =
+                target?.designationCategory;
+            if (category == null || !category.Visible)
+            {
+                return null;
+            }
+
+            var matches = new List<Designator_Build>();
+            foreach (Designator designator in
+                category.AllResolvedAndIdeoDesignators)
+            {
+                CollectBuildDesignators(
+                    designator,
+                    target,
+                    matches);
+            }
+
+            return SelectValidatedBuildDesignator(matches);
+        }
+
+        private static Designator_Build SelectValidatedBuildDesignator(
+            IReadOnlyList<Designator_Build> matches)
+        {
+            // A custom Designator_Build can expose the same PlacingDef while
+            // changing selection semantics. Require the exact RimWorld 1.6
+            // runtime type and its Assembly-CSharp identity before sharing it
+            // between the tooltip and click path.
+            if (matches == null || matches.Count != 1)
+            {
+                return null;
+            }
+
+            Designator_Build candidate = matches[0];
+            System.Type runtimeType = candidate?.GetType();
+            return runtimeType == typeof(Designator_Build) &&
+                runtimeType.Assembly == typeof(Designator_Build).Assembly
+                ? candidate
+                : null;
+        }
+
+        private static void CollectBuildDesignators(
+            Designator designator,
+            BuildableDef target,
+            ICollection<Designator_Build> matches)
+        {
+            if (designator == null || !designator.Visible)
+            {
+                return;
+            }
+
+            if (designator is Designator_Build build &&
+                build.PlacingDef == target)
+            {
+                matches.Add(build);
+            }
+
+            if (designator is Designator_Dropdown dropdown)
+            {
+                IReadOnlyList<Designator> elements = dropdown.Elements;
+                for (int index = 0; index < elements.Count; index++)
+                {
+                    CollectBuildDesignators(
+                        elements[index],
+                        target,
+                        matches);
+                }
+            }
         }
 
         private static ResearchProjectDef MissingBuildResearch(
@@ -280,30 +431,34 @@ namespace FilterSignals.Runtime
         {
             private BuildRequirement(
                 ResearchProjectDef research,
-                BuildableDef buildable)
+                BuildableDef buildable,
+                Designator_Build buildDesignator)
             {
                 Research = research;
                 Buildable = buildable;
+                BuildDesignator = buildDesignator;
             }
 
             internal ResearchProjectDef Research { get; }
             internal BuildableDef Buildable { get; }
+            internal Designator_Build BuildDesignator { get; }
             internal bool IsActionable =>
                 Research != null || Buildable != null;
 
             internal static BuildRequirement None =>
-                new BuildRequirement(null, null);
+                new BuildRequirement(null, null, null);
 
             internal static BuildRequirement ForResearch(
                 ResearchProjectDef research)
             {
-                return new BuildRequirement(research, null);
+                return new BuildRequirement(research, null, null);
             }
 
             internal static BuildRequirement ForBuildable(
-                BuildableDef buildable)
+                BuildableDef buildable,
+                Designator_Build designator)
             {
-                return new BuildRequirement(null, buildable);
+                return new BuildRequirement(null, buildable, designator);
             }
         }
     }

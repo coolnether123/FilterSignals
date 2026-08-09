@@ -52,7 +52,10 @@ namespace FilterSignals.Compatibility
             GetProductionProviders()
         {
             return ProductionProviders
-                .OrderBy(provider => provider.Id, StringComparer.Ordinal)
+                .OrderBy(
+                    provider => ClassificationDiagnostics.SafeId(
+                        () => provider.Id),
+                    StringComparer.Ordinal)
                 .ToArray();
         }
 
@@ -60,7 +63,10 @@ namespace FilterSignals.Compatibility
             GetClassificationOverrides()
         {
             return ClassificationOverrides
-                .OrderBy(item => item.Id, StringComparer.Ordinal)
+                .OrderBy(
+                    item => ClassificationDiagnostics.SafeId(
+                        () => item.Id),
+                    StringComparer.Ordinal)
                 .ToArray();
         }
 
@@ -76,7 +82,42 @@ namespace FilterSignals.Compatibility
                 throw new ArgumentNullException(nameof(item));
             }
 
-            string id = getId(item);
+            string id = ReadRegistrationId(item, getId, kind);
+            foreach (T existing in items)
+            {
+                string existingId = ReadRegistrationId(existing, getId, kind);
+                if (string.Equals(
+                    existingId,
+                    id,
+                    StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException(
+                        "Duplicate Filter Signals " + kind + " ID: " + id);
+                }
+            }
+
+            items.Add(item);
+            ClassificationService.InvalidateAll();
+        }
+
+        private static string ReadRegistrationId<T>(
+            T item,
+            Func<T, string> getId,
+            string kind)
+            where T : class
+        {
+            string id;
+            try
+            {
+                id = getId(item);
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidOperationException(
+                    "Filter Signals " + kind + " ID could not be read.",
+                    exception);
+            }
+
             if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentException(
@@ -84,17 +125,7 @@ namespace FilterSignals.Compatibility
                     nameof(item));
             }
 
-            if (items.Any(existing => string.Equals(
-                getId(existing),
-                id,
-                StringComparison.Ordinal)))
-            {
-                throw new InvalidOperationException(
-                    "Duplicate Filter Signals " + kind + " ID: " + id);
-            }
-
-            items.Add(item);
-            ClassificationService.InvalidateAll();
+            return id;
         }
     }
 }

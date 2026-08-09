@@ -35,6 +35,16 @@ if ($clear -lt 0 -or $tip -lt 0 -or $clear -gt $tip)
         'before registering its own tooltip.')
     exit 1
 }
+if ($indicator.Value -notmatch
+    '(?s)if \(!Mouse\.IsOver\(interactionRect\)\)\s*\{\s*return;\s*\}.*?' +
+    'TooltipHandler\.ClearTooltipsFrom\(interactionRect\).*?' +
+    'TooltipHandler\.TipRegion\(interactionRect')
+{
+    Write-Error (
+        'The Filter Signals tooltip must be owned only inside the small ' +
+        'status-square interaction rectangle.')
+    exit 1
+}
 if ($filterUi -notmatch
     'private const float StatusIndicatorRightInset = 45f' -or
     $indicator.Value -notmatch
@@ -48,6 +58,8 @@ if ($filterUi -notmatch
 if ($rowPatch -notmatch
     'ref List<ThingDef> ___suppressSmallVolumeTags' -or
     $rowPatch -notmatch
+    '(?s)if \(!FilterUiController\.StatusIndicatorsActive\)\s*\{\s*return;\s*\}' -or
+    $rowPatch -notmatch
     '___suppressSmallVolumeTags\.Add\(tDef\)' -or
     $rowPatch -notmatch
     '(?s)private static Exception Finalizer\(.*?' +
@@ -55,7 +67,16 @@ if ($rowPatch -notmatch
 {
     Write-Error (
         'The vanilla /10 marker must be suppressed only during the patched ' +
-        'item row and restored even when drawing fails.')
+        'item row while indicators are active, and restored even when drawing ' +
+        'fails.')
+    exit 1
+}
+if ($filterUi -notmatch
+    'internal static bool StatusIndicatorsActive\s*=>\s*\r?\n?\s*FilterSignalsMod\.Settings\.FeatureEnabled[\s\S]*?' +
+    'FilterSignalsMod\.Settings\.ShowStatusIndicators')
+{
+    Write-Error (
+        'Feature-off and indicator-off states must retain vanilla row behavior.')
     exit 1
 }
 if ($indicator.Value -notmatch

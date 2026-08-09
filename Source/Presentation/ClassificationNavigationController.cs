@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using RimWorld;
 using FilterSignals.Domain;
 using FilterSignals.Runtime;
@@ -47,7 +46,10 @@ namespace FilterSignals.Presentation
             Building source = target.ProductionSource;
             if (source == null ||
                 !source.Spawned ||
-                source.Map == null)
+                source.Map == null ||
+                target.Map == null ||
+                Find.CurrentMap != source.Map ||
+                Find.CurrentMap != target.Map)
             {
                 return false;
             }
@@ -60,6 +62,7 @@ namespace FilterSignals.Presentation
             ClassificationNavigationTarget target)
         {
             if (target.Research == null ||
+                target.Research.IsFinished ||
                 Find.MainTabsRoot == null ||
                 MainButtonDefOf.Research?.TabWindow
                     is not MainTabWindow_Research researchWindow)
@@ -76,6 +79,7 @@ namespace FilterSignals.Presentation
             ClassificationNavigationTarget target)
         {
             if (target.Buildable == null ||
+                target.BuildDesignator == null ||
                 target.Map == null ||
                 Find.MainTabsRoot == null ||
                 MainButtonDefOf.Architect == null ||
@@ -84,72 +88,15 @@ namespace FilterSignals.Presentation
                 return false;
             }
 
-            Designator_Build designator =
-                FindBuildDesignator(target.Buildable);
-            if (designator == null)
+            if (!target.BuildDesignator.Visible ||
+                target.BuildDesignator.PlacingDef != target.Buildable)
             {
                 return false;
             }
 
             Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Architect);
-            Find.DesignatorManager.Select(designator);
+            Find.DesignatorManager.Select(target.BuildDesignator);
             return true;
-        }
-
-        private static Designator_Build FindBuildDesignator(
-            BuildableDef target)
-        {
-            DesignationCategoryDef category =
-                target?.designationCategory;
-            if (category == null || !category.Visible)
-            {
-                return null;
-            }
-
-            foreach (Designator designator in
-                category.AllResolvedAndIdeoDesignators)
-            {
-                Designator_Build match =
-                    FindBuildDesignator(designator, target);
-                if (match != null)
-                {
-                    return match;
-                }
-            }
-
-            return null;
-        }
-
-        private static Designator_Build FindBuildDesignator(
-            Designator designator,
-            BuildableDef target)
-        {
-            if (designator == null || !designator.Visible)
-            {
-                return null;
-            }
-
-            if (designator is Designator_Build build &&
-                build.PlacingDef == target)
-            {
-                return build;
-            }
-
-            if (designator is Designator_Dropdown dropdown)
-            {
-                IReadOnlyList<Designator> elements = dropdown.Elements;
-                for (int index = 0; index < elements.Count; index++)
-                {
-                    Designator_Build match =
-                        FindBuildDesignator(elements[index], target);
-                    if (match != null)
-                    {
-                        return match;
-                    }
-                }
-            }
-
-            return null;
         }
     }
 }

@@ -71,30 +71,32 @@ namespace FilterSignals.Presentation
                     if (decision.Kind ==
                         ProductionNavigationKind.SelectBuildOption)
                     {
-                        return "Workbench missing.";
+                        return "FilterSignals_WorkbenchMissing".Translate();
                     }
 
-                    if (result.Explanation.IndexOf(
-                        "material",
-                        System.StringComparison.OrdinalIgnoreCase) >= 0)
+                    switch (result.Reason)
                     {
-                        return "Missing materials.";
+                        case ClassificationReason.MaterialShortage:
+                            return "FilterSignals_MissingMaterials".Translate();
+                        case ClassificationReason.NoCapableColonist:
+                            return "FilterSignals_NoCapableColonist".Translate();
+                        case ClassificationReason.MissingProductionSource:
+                            return string.IsNullOrWhiteSpace(result.PathLabel)
+                                ? "FilterSignals_NotCurrentlyUsable".Translate()
+                                : "FilterSignals_NeedsProductionSource".Translate(
+                                    result.PathLabel);
+                        case ClassificationReason.ProductionSourceUnavailable:
+                            return "FilterSignals_NotCurrentlyUsable".Translate();
+                        default:
+                            return string.IsNullOrWhiteSpace(result.PathLabel)
+                                ? "FilterSignals_NotCurrentlyUsable".Translate()
+                                : "FilterSignals_NeedsProductionSource".Translate(
+                                    result.PathLabel);
                     }
-
-                    if (result.Explanation.IndexOf(
-                        "colonist",
-                        System.StringComparison.OrdinalIgnoreCase) >= 0)
-                    {
-                        return "No capable colonist.";
-                    }
-
-                    return string.IsNullOrWhiteSpace(result.PathLabel)
-                        ? "Not currently usable."
-                        : "Needs " + result.PathLabel + ".";
                 case ProductionClassification.CannotMakeYet:
-                    return "Research required.";
+                    return "FilterSignals_ResearchRequired".Translate();
                 default:
-                    return "This colony is unable to make it.";
+                    return "FilterSignals_UnableToMake".Translate();
             }
         }
 
@@ -104,11 +106,11 @@ namespace FilterSignals.Presentation
             switch (decision.Kind)
             {
                 case ProductionNavigationKind.SelectProductionSource:
-                    return "Click to select the workbench.";
+                    return "FilterSignals_Navigation_SelectSource".Translate();
                 case ProductionNavigationKind.OpenResearch:
-                    return "Click to open research.";
+                    return "FilterSignals_Navigation_OpenResearch".Translate();
                 case ProductionNavigationKind.SelectBuildOption:
-                    return "Click to open Architect.";
+                    return "FilterSignals_Navigation_OpenArchitect".Translate();
                 default:
                     return string.Empty;
             }

@@ -19,7 +19,7 @@ namespace FilterSignals.Runtime
             MapCapabilitySnapshot snapshot,
             DefinitionProductionIndex index)
         {
-            bool researchUnlocked = recipe.AvailableNow;
+            bool researchUnlocked = RecipeAvailableNow(recipe);
             IReadOnlyList<ThingDef> sourceDefs = index.SourcesFor(recipe);
             ThingDef preferredSource =
                 sourceDefs.Count > 0 ? sourceDefs[0] : null;
@@ -48,6 +48,13 @@ namespace FilterSignals.Runtime
                 pawnCapable,
                 materialsAvailable,
                 pathLabel);
+            ClassificationReason reason = DetermineReason(
+                researchUnlocked,
+                sourceSelection.SourcePresent,
+                sourceSelection.BillGiverUsable,
+                sourceSelection.SourceUsable,
+                pawnCapable,
+                materialsAvailable);
 
             return new ProductionPathAssessment(
                 pathLabel,
@@ -57,7 +64,10 @@ namespace FilterSignals.Runtime
                 pawnCapable,
                 materialsAvailable,
                 lockedReason,
-                unavailableReason);
+                unavailableReason,
+                reason,
+                recipe?.defName,
+                true);
         }
 
         internal static IReadOnlyList<ResearchProjectDef> MissingResearch(
@@ -101,7 +111,74 @@ namespace FilterSignals.Runtime
                 return true;
             }
 
-            return !recipe.PotentiallyMissingIngredients(null, map).Any();
+            try
+            {
+                return !recipe.PotentiallyMissingIngredients(null, map).Any();
+            }
+            catch (System.Exception exception)
+            {
+                ClassificationDiagnostics.LogFailure(
+                    "material worker",
+                    recipe.defName,
+                    "ingredient availability was deferred as unavailable",
+                    exception);
+                return false;
+            }
+        }
+
+        private static bool RecipeAvailableNow(RecipeDef recipe)
+        {
+            if (recipe == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                return recipe.AvailableNow;
+            }
+            catch (System.Exception exception)
+            {
+                ClassificationDiagnostics.LogFailure(
+                    "recipe availability",
+                    recipe.defName,
+                    "the recipe was treated as unavailable",
+                    exception);
+                return false;
+            }
+        }
+
+        private static ClassificationReason DetermineReason(
+            bool researchUnlocked,
+            bool sourcePresent,
+            bool billGiverUsable,
+            bool sourceUsable,
+            bool pawnCapable,
+            bool materialsAvailable)
+        {
+            if (!researchUnlocked)
+            {
+                return ClassificationReason.ResearchRequired;
+            }
+
+            if (!sourcePresent)
+            {
+                return ClassificationReason.MissingProductionSource;
+            }
+
+            if (!billGiverUsable || !sourceUsable)
+            {
+                return ClassificationReason.ProductionSourceUnavailable;
+            }
+
+            if (!pawnCapable)
+            {
+                return ClassificationReason.NoCapableColonist;
+            }
+
+            return materialsAvailable
+                ? ClassificationReason.General
+                : ClassificationReason.MaterialShortage;
         }
 
         private static string BuildLockedReason(

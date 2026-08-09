@@ -29,7 +29,8 @@ namespace FilterSignals.Domain
             bool sourcePresent,
             string productionSourceTargetId = null,
             string researchTargetId = null,
-            string buildTargetId = null)
+            string buildTargetId = null,
+            ClassificationReason reason = ClassificationReason.General)
         {
             PathId = pathId ?? string.Empty;
             PathLabel = pathLabel ?? string.Empty;
@@ -40,6 +41,7 @@ namespace FilterSignals.Domain
                 productionSourceTargetId ?? string.Empty;
             ResearchTargetId = researchTargetId ?? string.Empty;
             BuildTargetId = buildTargetId ?? string.Empty;
+            Reason = reason;
         }
 
         internal string PathId { get; }
@@ -50,6 +52,7 @@ namespace FilterSignals.Domain
         internal string ProductionSourceTargetId { get; }
         internal string ResearchTargetId { get; }
         internal string BuildTargetId { get; }
+        internal ClassificationReason Reason { get; }
     }
 
     /// <summary>
@@ -96,7 +99,7 @@ namespace FilterSignals.Domain
     internal static class ProductionNavigationPolicy
     {
         internal static ProductionNavigationDecision Decide(
-            ProductionClassification classification,
+            ClassificationResult result,
             IEnumerable<ProductionNavigationCandidate> candidates)
         {
             ProductionNavigationCandidate[] ordered =
@@ -114,11 +117,34 @@ namespace FilterSignals.Domain
             // Stable ordering prevents an item's click destination from
             // changing with definition or provider enumeration order.
 
-            switch (classification)
+            if (result == null ||
+                !result.IsVanillaRecipePath ||
+                result.PathId.Length == 0)
+            {
+                return ProductionNavigationDecision.None;
+            }
+
+            ProductionNavigationCandidate[] winningPath =
+                ordered.Where(candidate =>
+                    string.Equals(
+                        candidate.PathId,
+                        result.PathId,
+                        StringComparison.Ordinal) &&
+                    candidate.Reason == result.Reason)
+                .ToArray();
+            if (winningPath.Length != 1)
+            {
+                // A duplicate or missing domain identity is ambiguous. The
+                // displayed classification remains useful, but navigation
+                // must not guess at a different production path.
+                return ProductionNavigationDecision.None;
+            }
+
+            switch (result.Classification)
             {
                 case ProductionClassification.CanMakeNow:
                     return Choose(
-                        ordered.Where(candidate =>
+                        winningPath.Where(candidate =>
                             candidate.CanMakeNow &&
                             candidate.ProductionSourceTargetId.Length > 0),
                         ProductionNavigationKind.SelectProductionSource,
@@ -126,14 +152,14 @@ namespace FilterSignals.Domain
                             candidate.ProductionSourceTargetId);
                 case ProductionClassification.CannotMakeYet:
                     return Choose(
-                        ordered.Where(candidate =>
+                        winningPath.Where(candidate =>
                             !candidate.ResearchUnlocked &&
                             candidate.ResearchTargetId.Length > 0),
                         ProductionNavigationKind.OpenResearch,
                         candidate => candidate.ResearchTargetId);
                 case ProductionClassification.ResearchUnlocked:
                     ProductionNavigationCandidate[] unlocked =
-                        ordered.Where(candidate =>
+                        winningPath.Where(candidate =>
                             candidate.ResearchUnlocked &&
                             !candidate.SourcePresent &&
                             (candidate.ResearchTargetId.Length > 0 ||

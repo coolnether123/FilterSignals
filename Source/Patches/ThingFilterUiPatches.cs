@@ -81,6 +81,16 @@ namespace FilterSignals.Patches
                 return;
             }
 
+            // The vanilla marker is suppressed only while the replacement
+            // status square owns this row. The state captures that decision
+            // so a setting transition during row drawing cannot leak it.
+            if (!FilterUiController.StatusIndicatorsActive)
+            {
+                return;
+            }
+
+            __state.SuppressSmallVolumeMarker = true;
+
             if (___suppressSmallVolumeTags == null)
             {
                 ___suppressSmallVolumeTags = new List<ThingDef>();
@@ -131,12 +141,13 @@ namespace FilterSignals.Patches
             ref List<ThingDef> currentSuppressions,
             RowPatchState state)
         {
-            if (state.AddedSuppression)
+            if (state.SuppressSmallVolumeMarker && state.AddedSuppression)
             {
                 state.SuppressionList?.Remove(tDef);
             }
 
-            if (state.CreatedSuppressionList &&
+            if (state.SuppressSmallVolumeMarker &&
+                state.CreatedSuppressionList &&
                 ReferenceEquals(currentSuppressions, state.SuppressionList))
             {
                 currentSuppressions = null;
@@ -149,6 +160,7 @@ namespace FilterSignals.Patches
             internal List<ThingDef> SuppressionList;
             internal bool CreatedSuppressionList;
             internal bool AddedSuppression;
+            internal bool SuppressSmallVolumeMarker;
         }
     }
 }

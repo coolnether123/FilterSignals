@@ -7,7 +7,17 @@ Engineering/artifacts/
 Engineering/build-result.json
 1.6/Assemblies/build/
 1.6/Assemblies/*.log
+1.6/Assemblies/*.pdb
 
-# Local developer fixtures. Never part of the release payload, and their
-# built assemblies go stale the moment the shipping mod moves on.
-Developer/
+# Local developer fixtures. Keep the reproducible fixture source and metadata
+# in Git, but never track generated build output or fixture assemblies.
+Developer/*
+!Developer/FilterSignals.TestFixture/
+!Developer/FilterSignals.TestFixture/About/
+!Developer/FilterSignals.TestFixture/About/About.xml
+!Developer/FilterSignals.TestFixture/README.md
+!Developer/FilterSignals.TestFixture/Source/
+!Developer/FilterSignals.TestFixture/Source/FilterSignals.TestFixture.csproj
+!Developer/FilterSignals.TestFixture/Source/FilterSignalsDebugActions.cs
+Developer/FilterSignals.TestFixture/1.6/Assemblies/*.dll
+Developer/FilterSignals.TestFixture/1.6/Assemblies/*.pdb

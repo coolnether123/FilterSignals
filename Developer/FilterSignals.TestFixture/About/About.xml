@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Filter Signals Test Fixture</name>
+  <author>CoolNether123</author>
+  <packageId>CoolNether123.FilterSignals.TestFixture</packageId>
+  <supportedVersions><li>1.6</li></supportedVersions>
+  <modDependencies><li><packageId>CoolNether123.FilterSignals</packageId><displayName>Filter Signals</displayName></li></modDependencies>
+  <loadAfter><li>CoolNether123.FilterSignals</li></loadAfter>
+  <description>Developer-only Filter Signals verification actions. Do not include in release packages.</description>
+</ModMetaData>

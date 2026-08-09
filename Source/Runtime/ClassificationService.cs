@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using Spine.Caching;
 using FilterSignals.Compatibility;
@@ -43,8 +44,25 @@ namespace FilterSignals.Runtime
             {
                 // A short safety refresh covers pawn, fuel, breakdown, and
                 // power changes without Harmony hooks on their hot paths.
-                state.Snapshot =
-                    MapCapabilitySnapshot.Capture(map, index, gameTick);
+                try
+                {
+                    state.Snapshot =
+                        MapCapabilitySnapshot.Capture(map, index, gameTick);
+                }
+                catch (Exception exception)
+                {
+                    state.Snapshot = null;
+                    state.Results.Reset();
+                    ClassificationDiagnostics.LogFailure(
+                        "map capability snapshot",
+                        ClassificationDiagnostics.SafeId(
+                            () => map?.uniqueID.ToString()),
+                        "classification was treated as unavailable",
+                        exception);
+                    return new ClassificationResult(
+                        ProductionClassification.NotApplicable,
+                        "Classification is currently unavailable.");
+                }
 
                 // Cached answers are meaningful only for the snapshot that
                 // produced them.
@@ -56,11 +74,34 @@ namespace FilterSignals.Runtime
                 return cached;
             }
 
-            ClassificationResult result = Evaluate(item, map, state.Snapshot);
-            state.Results.AddOrUpdate(
-                item,
-                result,
-                EstimatedEntryBytes);
+            ClassificationResult result;
+            bool cacheResult = true;
+            try
+            {
+                result = Evaluate(item, map, state.Snapshot);
+            }
+            catch (Exception exception)
+            {
+                ClassificationDiagnostics.LogFailure(
+                    "classification evaluation",
+                    item.defName,
+                    "the item was treated as not applicable",
+                    exception);
+                result = new ClassificationResult(
+                    ProductionClassification.NotApplicable,
+                    "Classification is currently unavailable.");
+                // An evaluation exception is transient. Do not turn its
+                // defensive fallback into the answer for this item until the
+                // next snapshot invalidation.
+                cacheResult = false;
+            }
+            if (cacheResult)
+            {
+                state.Results.AddOrUpdate(
+                    item,
+                    result,
+                    EstimatedEntryBytes);
+            }
             return result;
         }
 
@@ -170,7 +211,8 @@ namespace FilterSignals.Runtime
                     // Compatibility failures are isolated so one integration
                     // cannot suppress vanilla or other providers' answers.
                     LogProviderFailure(
-                        itemOverride.Id,
+                        ClassificationDiagnostics.SafeId(
+                            () => itemOverride.Id),
                         "classification override",
                         exception);
                 }
@@ -202,12 +244,43 @@ namespace FilterSignals.Runtime
                         continue;
                     }
 
+                    var suppliedPaths = new List<ProductionPathAssessment>();
                     foreach (ProductionPathAssessment path in supplied)
                     {
                         if (path != null)
                         {
-                            paths.Add(path);
+                            suppliedPaths.Add(path);
                         }
+                    }
+
+                    bool stablePathKeys = suppliedPaths.Count > 1 &&
+                        suppliedPaths.All(path =>
+                            !string.IsNullOrWhiteSpace(path.PathId)) &&
+                        suppliedPaths.Select(path => path.PathId)
+                            .Distinct(StringComparer.Ordinal).Count() ==
+                            suppliedPaths.Count;
+                    if (stablePathKeys)
+                    {
+                        suppliedPaths.Sort((left, right) =>
+                        {
+                            int idComparison = string.Compare(
+                                left.PathId,
+                                right.PathId,
+                                StringComparison.Ordinal);
+                            return idComparison != 0
+                                ? idComparison
+                                : string.Compare(
+                                    left.PathLabel,
+                                    right.PathLabel,
+                                    StringComparison.Ordinal);
+                        });
+                    }
+
+                    for (int pathIndex = 0;
+                        pathIndex < suppliedPaths.Count;
+                        pathIndex++)
+                    {
+                        paths.Add(suppliedPaths[pathIndex]);
                     }
                 }
                 catch (Exception exception)
@@ -215,7 +288,8 @@ namespace FilterSignals.Runtime
                     // Providers are optional inputs; their failure must not
                     // make the filter UI unavailable.
                     LogProviderFailure(
-                        provider.Id,
+                        ClassificationDiagnostics.SafeId(
+                            () => provider.Id),
                         "production provider",
                         exception);
                 }
@@ -260,25 +334,11 @@ namespace FilterSignals.Runtime
             string safeId = string.IsNullOrWhiteSpace(providerId)
                 ? "<unnamed>"
                 : providerId;
-            int key = StableHash("FilterSignals." + providerKind + "." + safeId);
-            Log.ErrorOnce(
-                "[Filter Signals] " + providerKind + " '" + safeId +
-                "' failed and was ignored: " + exception,
-                key);
-        }
-
-        private static int StableHash(string value)
-        {
-            unchecked
-            {
-                int hash = 17;
-                for (int i = 0; i < value.Length; i++)
-                {
-                    hash = (hash * 31) + value[i];
-                }
-
-                return hash;
-            }
+            ClassificationDiagnostics.LogFailure(
+                providerKind,
+                safeId,
+                "it was ignored",
+                exception);
         }
 
         /// <summary>

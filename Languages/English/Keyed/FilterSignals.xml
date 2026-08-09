@@ -9,6 +9,16 @@
   <FilterSignals_Unlocked>Research unlocked</FilterSignals_Unlocked>
   <FilterSignals_Locked>Cannot make yet</FilterSignals_Locked>
   <FilterSignals_NotApplicable>Not applicable</FilterSignals_NotApplicable>
+  <FilterSignals_WorkbenchMissing>Workbench missing.</FilterSignals_WorkbenchMissing>
+  <FilterSignals_MissingMaterials>Missing materials.</FilterSignals_MissingMaterials>
+  <FilterSignals_NoCapableColonist>No capable colonist.</FilterSignals_NoCapableColonist>
+  <FilterSignals_NotCurrentlyUsable>Not currently usable.</FilterSignals_NotCurrentlyUsable>
+  <FilterSignals_NeedsProductionSource>Needs {0}.</FilterSignals_NeedsProductionSource>
+  <FilterSignals_ResearchRequired>Research required.</FilterSignals_ResearchRequired>
+  <FilterSignals_UnableToMake>This colony is unable to make it.</FilterSignals_UnableToMake>
+  <FilterSignals_Navigation_SelectSource>Click to select the workbench.</FilterSignals_Navigation_SelectSource>
+  <FilterSignals_Navigation_OpenResearch>Click to open research.</FilterSignals_Navigation_OpenResearch>
+  <FilterSignals_Navigation_OpenArchitect>Click to open Architect.</FilterSignals_Navigation_OpenArchitect>
   <FilterSignals_SmallVolume>Small-volume: 10 units = 1.</FilterSignals_SmallVolume>
   <FilterSignals_ToggleTooltip>Click to show or hide this classification in this dialog only. Your allowed-item configuration is never changed.</FilterSignals_ToggleTooltip>
   <FilterSignals_Settings_Feature_Label>Enable Filter Signals</FilterSignals_Settings_Feature_Label>

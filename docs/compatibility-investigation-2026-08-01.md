@@ -161,9 +161,12 @@ order is explicitly shown.
 3. **Inconclusive/integration candidate:** Rimefeller custom oil production.
    Gather an operational-chain reproduction before writing a provider. Such a
    provider is domain-specific and should not go in Spine.
-4. **Packaging limitation:** Filter Signals logs a metadata warning because the Spine
-   dependency has no download or Workshop URL. This is not a runtime conflict,
-   but the release package should give users a resolvable Spine location.
+4. **Historical packaging limitation:** the investigated pre-metadata-update
+   package logged a warning because its Spine dependency had no download or
+   Workshop URL. This was not a runtime conflict. The current `About.xml`
+   supplies both the Spine Workshop location and its GitHub repository, so the
+   historical packaging observation must not be read as a current release
+   limitation.
 5. **Performance:** cache probes over 467–510 definitions were 0–1 ms cold and
    0 ms warm. Concurrent whole-game TPS samples varied too widely to support a
    comparative claim, so performance compatibility remains unproven rather than

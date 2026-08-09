@@ -61,10 +61,12 @@ namespace FilterSignals.Presentation
 
     internal static class ToolbarLayout
     {
+        internal const float TitleHorizontalPadding = 6f;
+
         private const int ButtonCount = 4;
         private const float Padding = 3f;
         private const float Gap = 3f;
-        private const float TitleWidth = 74f;
+        private const float DefaultTitleWidth = 74f;
         private const float InlineHeight = 30f;
         private const float ButtonHeight = 26f;
         private const float StackedTitleHeight = 20f;
@@ -73,10 +75,21 @@ namespace FilterSignals.Presentation
 
         internal static ToolbarLayoutPlan Calculate(float width)
         {
+            return Calculate(width, DefaultTitleWidth);
+        }
+
+        internal static ToolbarLayoutPlan Calculate(
+            float width,
+            float titleWidth)
+        {
             float safeWidth = IsFinite(width)
                 ? Math.Max(0f, width)
                 : 0f;
-            float inlineButtonsX = Padding + TitleWidth + 2f;
+            float safeTitleWidth = IsFinite(titleWidth)
+                ? Math.Max(0f, titleWidth)
+                : DefaultTitleWidth;
+            float titleX = Padding;
+            float inlineButtonsX = titleX + safeTitleWidth + Gap;
             float inlineButtonWidth =
                 (safeWidth - inlineButtonsX - Padding -
                     (Gap * (ButtonCount - 1))) /
@@ -98,9 +111,9 @@ namespace FilterSignals.Presentation
                     ToolbarLayoutMode.Inline,
                     InlineHeight,
                     new LayoutRect(
-                        Padding + 3f,
+                        titleX,
                         0f,
-                        TitleWidth,
+                        safeTitleWidth,
                         InlineHeight),
                     inlineButtons);
             }
@@ -120,7 +133,7 @@ namespace FilterSignals.Presentation
                     (contentWidth - (Gap * (columns - 1))) /
                     columns);
             float buttonsY =
-                Padding + StackedTitleHeight + 2f;
+                Padding + StackedTitleHeight + Gap;
             var stackedButtons = new LayoutRect[ButtonCount];
             for (int index = 0; index < ButtonCount; index++)
             {
@@ -144,9 +157,9 @@ namespace FilterSignals.Presentation
                     : ToolbarLayoutMode.SingleColumn,
                 height,
                 new LayoutRect(
-                    Padding + 3f,
+                    titleX,
                     Padding,
-                    Math.Max(0f, contentWidth - 6f),
+                    contentWidth,
                     StackedTitleHeight),
                 stackedButtons);
         }

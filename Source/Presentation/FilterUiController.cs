@@ -47,14 +47,18 @@ namespace FilterSignals.Presentation
             }
 
             float toolbarWidth = Mathf.Max(0f, rect.width - 6f);
+            string title = "FilterSignals_Title".Translate();
+            float titleWidth =
+                Text.CalcSize(title).x +
+                ToolbarLayout.TitleHorizontalPadding;
             ToolbarLayoutPlan layout =
-                ToolbarLayout.Calculate(toolbarWidth);
+                ToolbarLayout.Calculate(toolbarWidth, titleWidth);
             Rect toolbarRect = new Rect(
                 rect.x + 3f,
                 rect.y + 2f,
                 toolbarWidth,
                 layout.Height);
-            DrawToolbar(toolbarRect, state, layout);
+            DrawToolbar(toolbarRect, state, layout, title);
             rect.yMin += layout.Height + ToolbarOuterPadding;
         }
 
@@ -62,6 +66,10 @@ namespace FilterSignals.Presentation
         {
             current = null;
         }
+
+        internal static bool StatusIndicatorsActive =>
+            FilterSignalsMod.Settings.FeatureEnabled &&
+            FilterSignalsMod.Settings.ShowStatusIndicators;
 
         internal static bool ShouldShow(ThingDef thingDef)
         {
@@ -85,8 +93,7 @@ namespace FilterSignals.Presentation
         {
             if (listing == null ||
                 thingDef == null ||
-                !FilterSignalsMod.Settings.FeatureEnabled ||
-                !FilterSignalsMod.Settings.ShowStatusIndicators)
+                !StatusIndicatorsActive)
             {
                 return;
             }
@@ -108,16 +115,21 @@ namespace FilterSignals.Presentation
             GUI.color = previous;
 
             Rect interactionRect = iconRect.ExpandedBy(3f);
+            if (!Mouse.IsOver(interactionRect))
+            {
+                return;
+            }
+
             ClassificationNavigationTarget target =
-                Mouse.IsOver(interactionRect)
-                    ? ClassificationNavigationResolver.Resolve(
-                        thingDef,
-                        effectiveMap,
-                        result)
-                    : ClassificationNavigationTarget.None;
+                ClassificationNavigationResolver.Resolve(
+                    thingDef,
+                    effectiveMap,
+                    result);
             string navigation =
-                ClassificationPresentation.NavigationTooltip(
-                    target.Decision);
+                target.IsActionable
+                    ? ClassificationPresentation.NavigationTooltip(
+                        target.Decision)
+                    : string.Empty;
             string explanation =
                 ClassificationPresentation.BriefExplanation(
                     result,
@@ -171,7 +183,8 @@ namespace FilterSignals.Presentation
         private static void DrawToolbar(
             Rect rect,
             FilterPresentationState state,
-            ToolbarLayoutPlan layout)
+            ToolbarLayoutPlan layout,
+            string title)
         {
             if (FilterSignalsMod.ContextualSettings?.Bind(
                 rect,
@@ -184,9 +197,18 @@ namespace FilterSignals.Presentation
             Widgets.DrawMenuSection(rect);
             Rect titleRect = ToRect(rect, layout.Title);
             TextAnchor previousAnchor = Text.Anchor;
-            Text.Anchor = TextAnchor.MiddleLeft;
-            Widgets.Label(titleRect, "FilterSignals_Title".Translate());
-            Text.Anchor = previousAnchor;
+            bool previousWordWrap = Text.WordWrap;
+            try
+            {
+                Text.Anchor = TextAnchor.MiddleLeft;
+                Text.WordWrap = false;
+                Widgets.Label(titleRect, title);
+            }
+            finally
+            {
+                Text.Anchor = previousAnchor;
+                Text.WordWrap = previousWordWrap;
+            }
 
             ProductionClassification[] classifications =
             {

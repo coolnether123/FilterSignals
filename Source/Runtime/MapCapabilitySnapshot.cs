@@ -65,8 +65,7 @@ namespace FilterSignals.Runtime
                     // Modded RecipeWorkers may accept one instance of a
                     // building definition and reject another.
                     bool billGiverUsable =
-                        !(building is IBillGiver billGiver) ||
-                        billGiver.CurrentlyUsableForBills();
+                        CurrentlyUsableForBills(building);
                     bool recipeAvailable =
                         billGiverUsable &&
                         RecipeAvailableOnInstance(recipe, building);
@@ -168,8 +167,7 @@ namespace FilterSignals.Runtime
                 {
                     Building building = instances[instanceIndex];
                     bool billGiverUsable =
-                        !(building is IBillGiver billGiver) ||
-                        billGiver.CurrentlyUsableForBills();
+                        CurrentlyUsableForBills(building);
                     if (billGiverUsable &&
                         RecipeAvailableOnInstance(recipe, building))
                     {
@@ -259,31 +257,36 @@ namespace FilterSignals.Runtime
             {
                 // AvailableOnNow is an extensibility boundary. One broken
                 // RecipeWorker must not break the entire filter dialog.
-                int key = StableHash(
-                    "FilterSignals.AvailableOnNow." +
-                    (recipe.defName ?? "<unnamed>"));
-                Log.ErrorOnce(
-                    "[Filter Signals] RecipeDef.AvailableOnNow failed " +
-                    "for recipe '" + (recipe.defName ?? "<unnamed>") +
-                    "' on '" +
-                    (building?.def?.defName ?? "<unknown source>") +
-                    "' and that source instance was ignored: " + exception,
-                    key);
+                ClassificationDiagnostics.LogFailure(
+                    "RecipeDef.AvailableOnNow",
+                    recipe.defName,
+                    "source '" +
+                        (building?.def?.defName ?? "<unknown source>") +
+                        "' was ignored",
+                    exception);
                 return false;
             }
         }
 
-        private static int StableHash(string value)
+        private static bool CurrentlyUsableForBills(Building building)
         {
-            unchecked
+            if (!(building is IBillGiver billGiver))
             {
-                int hash = 17;
-                for (int i = 0; i < value.Length; i++)
-                {
-                    hash = (hash * 31) + value[i];
-                }
+                return true;
+            }
 
-                return hash;
+            try
+            {
+                return billGiver.CurrentlyUsableForBills();
+            }
+            catch (System.Exception exception)
+            {
+                ClassificationDiagnostics.LogFailure(
+                    "IBillGiver.CurrentlyUsableForBills",
+                    building?.def?.defName,
+                    "source instance was treated as unusable",
+                    exception);
+                return false;
             }
         }
     }

@@ -39,7 +39,10 @@ namespace FilterSignals.Domain
                 return new ClassificationResult(
                     ProductionClassification.CanMakeNow,
                     "Can be produced at " + ready.PathLabel + ".",
-                    ready.PathLabel);
+                    ready.PathLabel,
+                    ready.Reason,
+                    ready.PathId,
+                    ready.IsVanillaRecipePath);
             }
 
             ProductionPathAssessment unlocked =
@@ -50,9 +53,13 @@ namespace FilterSignals.Domain
                     ProductionClassification.ResearchUnlocked,
                     ExplainUnlockedButUnavailable(unlocked),
                     unlocked.PathLabel,
-                    !unlocked.MaterialsAvailable
-                        ? ClassificationReason.MaterialShortage
-                        : ClassificationReason.General);
+                    unlocked.Reason != ClassificationReason.General
+                        ? unlocked.Reason
+                        : !unlocked.MaterialsAvailable
+                            ? ClassificationReason.MaterialShortage
+                            : ClassificationReason.General,
+                    unlocked.PathId,
+                    unlocked.IsVanillaRecipePath);
             }
 
             ProductionPathAssessment locked = candidates[0];
@@ -62,7 +69,12 @@ namespace FilterSignals.Domain
             return new ClassificationResult(
                 ProductionClassification.CannotMakeYet,
                 explanation,
-                locked.PathLabel);
+                locked.PathLabel,
+                locked.Reason != ClassificationReason.General
+                    ? locked.Reason
+                    : ClassificationReason.ResearchRequired,
+                locked.PathId,
+                locked.IsVanillaRecipePath);
         }
 
         private static string ExplainUnlockedButUnavailable(

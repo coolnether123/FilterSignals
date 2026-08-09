@@ -1,14 +1,27 @@
 {
   "schemaVersion": 2,
-  "updatedUtc": "2026-08-02",
+  "updatedUtc": "2026-08-09",
   "target": {
     "name": "Filter Signals",
     "packageId": "CoolNether123.FilterSignals",
-    "sourceCommit": "d540a4e7895bc610ca602643382154c85d6541a7",
+    "sourceCommit": null,
+    "sourceCommitStatus": "Dirty pass-six worktree; no clean current provenance claimed",
     "assembly": "FilterSignals.dll",
-    "dllSha256": "F3AE39FD4ED9F1D655E206A6C0C4764D1AD2EF9E7F04A1519E97186C32BCAFDB"
+    "dllSizeBytes": 54784,
+    "dllSha256": "544044E3D282F55E82C8FBF7E620A743FB56C509F1301DCE734C7621DBD20A4C",
+    "localCandidate": {
+      "status": "Exact-hash load/map/log smoke verified; pass-five UI evidence inherited because pass six was ABI-only; sanctioned wrapper pending shared manifest repair",
+      "recordedUtc": "2026-08-09",
+      "dllSizeBytes": 54784,
+      "dllSha256": "544044E3D282F55E82C8FBF7E620A743FB56C509F1301DCE734C7621DBD20A4C"
+    },
+    "historicalAug7Evidence": {
+      "sourceCommit": "793ad06f1ca09d5708be72666f2bd3491847655e",
+      "dllSizeBytes": 47616,
+      "dllSha256": "C76D01E03D22E22C8B6FFCBA072CDE57B3FDA24D2FB22A320BB71F2DA7B51E2F"
+    }
   },
-  "evidenceScope": "Behavioral baselines only; package and assembly identity require a post-rename runtime rerun.",
+  "evidenceScope": "Current pass-six exact-hash load/map/log smoke, inherited pass-five direct-collision and visual evidence (pass six changed only constructor ABI), pass-four production/research compatibility evidence, and historical Aug. 7 evidence. The sanctioned wrapper remains externally blocked.",
   "runtimeBaseline": {
     "rimWorldVersion": "1.6.4871 rev573",
     "dlc": ["Core"],
@@ -19,14 +32,26 @@
       "combination": "Filter Signals alone",
       "externalPackageIds": [],
       "baselineClassification": "compatible",
-      "postRenameRuntimeStatus": "pending"
+      "postRenameRuntimeStatus": "current-pass-five-verified-scoped"
+    },
+    {
+      "combination": "Direct filter and bill UI collision stack + Filter Signals",
+      "externalPackageIds": [
+        "Jaxe.FilterManager",
+        "Mlie.StockpileStackLimit",
+        "Mlie.RecipeIcons",
+        "Andromeda.NiceBillTab"
+      ],
+      "baselineClassification": "compatible in exercised filter/settings/save-load surface",
+      "sourceVersion": "Harness-resolved local Workshop snapshots on 2026-08-09",
+      "postRenameRuntimeStatus": "current-pass-five-verified-scoped"
     },
     {
       "combination": "Better Workbench Management + Filter Signals",
       "externalPackageIds": ["falconne.BWM"],
       "sourceVersion": "Workshop 935982361; 1.6.1.3; snapshot 2025-07-13T22:48:10.8621144Z",
       "baselineClassification": "compatible",
-      "postRenameRuntimeStatus": "pending"
+      "postRenameRuntimeStatus": "current-pass-four-verified-scoped"
     },
     {
       "combination": "Adaptive Storage Framework + Filter Signals",
@@ -34,7 +59,7 @@
       "sourceVersion": "Workshop 3033901359; snapshot 2025-09-28T18:16:41.2679169Z",
       "baselineClassification": "compatible with a documented limitation",
       "limitation": "No concrete Adaptive Storage content mod was loaded.",
-      "postRenameRuntimeStatus": "pending"
+      "postRenameRuntimeStatus": "current-pass-four-verified-scoped"
     },
     {
       "combination": "Dubs Mint Menus + Filter Signals",
@@ -42,7 +67,7 @@
       "sourceVersion": "Workshop 1446523594; 1.3.1247; snapshot 2025-07-13T22:48:10.4353841Z",
       "baselineClassification": "compatible with a documented limitation",
       "limitation": "Replacement Research and Architect navigation was not exercised.",
-      "postRenameRuntimeStatus": "pending"
+      "postRenameRuntimeStatus": "current-pass-four-verified-scoped"
     },
     {
       "combination": "Research Reinvented + Filter Signals",
@@ -50,7 +75,7 @@
       "sourceVersion": "Workshop 2868392160; snapshot 2025-09-28T18:16:41.7290161Z",
       "baselineClassification": "compatible with a documented limitation",
       "limitation": "Routing into the replacement research UI was not exercised.",
-      "postRenameRuntimeStatus": "pending"
+      "postRenameRuntimeStatus": "historical-verified-scoped"
     },
     {
       "combination": "Vanilla Expanded Framework and Furniture + Filter Signals",
@@ -58,7 +83,7 @@
       "sourceVersion": "Workshop snapshots 2026-05-21 and 2025-07-13",
       "baselineClassification": "compatible with a documented limitation",
       "limitation": "Actual expanded production buildings and the full content stack were not exercised.",
-      "postRenameRuntimeStatus": "pending"
+      "postRenameRuntimeStatus": "current-pass-four-framework-verified-scoped"
     },
     {
       "combination": "Rimefeller + Filter Signals",
@@ -66,7 +91,7 @@
       "sourceVersion": "Workshop 1321849735; 1.2.1634; snapshot 2025-07-13T22:48:10.4412432Z",
       "baselineClassification": "inconclusive",
       "limitation": "Custom oil production was not operated; ordinary RecipeDef behavior was stable.",
-      "postRenameRuntimeStatus": "pending"
+      "postRenameRuntimeStatus": "current-pass-four-load-and-probe-verified-scoped"
     }
   ]
 }
