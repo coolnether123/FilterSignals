@@ -183,10 +183,67 @@ CLI exceeded its wrapper timeout before a fresh pass-six UI capture, so the
 wrapping proof remains the pass-five visual evidence; the exact pass-six lane
 is a load/map/log smoke test, not a claimed fresh UI click.
 
-The final assembly remains a runtime-verified diagnostic candidate rather than
-a sanctioned wrapper artifact until the shared manifest defect is repaired.
+At that checkpoint the assembly remained a runtime-verified diagnostic
+candidate rather than a sanctioned wrapper artifact.
 
 The resolver manifest identifies the RimWorld 1.6 compile/runtime depot as
 `1.6.4871 rev573`, while the captured `Player.log` reports
 `1.6.4871 rev574`. This environment discrepancy remains part of the evidence
 and is not treated as resolved or silently normalized.
+
+## Sanctioned release package gate — 2026-08-10
+
+After the shared depot resolver was corrected to ignore the unavailable
+benchmark reference for compile resolution, the repository-owned
+`Tools\Build-Version.ps1 -Configuration 1.6` entrypoint completed through the
+sanctioned `Invoke-RimWorldBuild.ps1` workflow. It compiled source commit
+`95215cc2ed9a7cf98a3bc5c7c41a7a244bd43a81` with zero errors, recorded
+`SourceDirty=false`, and produced a deterministic 57,856-byte
+`FilterSignals.dll` with SHA-256
+`A3D65C70B9AF8C2281DCF28886D9472AEA1816DD867EBF0E532CC6D3B8D2CA1D`.
+The intentionally untracked repository-local `AGENTS.md` was excluded from the
+status query without staging or modifying it.
+
+The build result is
+`A:\Dev\RimWorld\Temp\FilterSignals-release-build-20260810-r4\build-result.json`.
+It records tooling commit `59a07ec53affcf93041727abbbe83c14fd6370c3`,
+manifest SHA-256
+`2B85365E144D8D4F5FCCBEF1BC4029928866D23208733CF2FDAFF526F0033638`,
+and common-props SHA-256
+`42EA70E0E56A001BF4B185F2DA9E60100AB07B076552827E8359C668F8F0739B`.
+The shared tooling worktree was dirty with separately owned infrastructure
+changes, so the exact inputs are recorded instead of claiming clean tooling
+provenance.
+
+`New-RwtReleasePackage` staged the allowlisted package at
+`A:\Dev\RimWorld\Releases\FilterSignals\1.0.0-1.6-20260810-final` with only
+`About`, `1.6\Assemblies\FilterSignals.dll`, `Languages`, and `LICENSE`.
+It excluded the PDB, source, tests, and developer fixture and returned
+`RWT-BUILD-RELEASE-PACKAGE-VALID`; an independent `Test-RwtPackage` call also
+returned `RWT-BUILD-PACKAGE-VALID`.
+
+The matching distribution archive is
+`A:\Dev\RimWorld\Releases\FilterSignals\FilterSignals-1.0.0-RimWorld-1.6-final.zip`.
+It is 254,416 bytes with SHA-256
+`E2FDA4B0F37450EB3AF0145A24A56483AD49BC5B7CD35AFA818AA262109373DD`.
+
+The exact packaged hash ran in isolated session
+`1.0.0-1.6-20260810-final-377a9ec6f1884ac08600a9eb86c00cd7` with Core, Harmony,
+RimWorld Agent, Spine, and the separately staged developer fixture. It reached
+a ready map, rendered classification squares, kept all 467 filter definitions
+unchanged, invoked the focused filter fixture, registered eight Filter
+Signals-owned Harmony patches, and produced no `error`, `exception`, or
+`fatal` match in `Player.log`.
+The staged snapshot DLL matched the package hash. Shutdown completed with exit
+code 0 and `ForcedTermination=false`.
+
+The preceding sanctioned build from the patch-equivalent local cascade
+lineage separately exercised all six fixture actions, representative
+explanations, and the cold/warm cache probe. Those results are supporting
+behavioral evidence only; the session above is the exact final-hash runtime
+claim.
+
+The exact package captured the default-hidden toolbar and status-square UI.
+Windows focus arbitration prevented a reliable fresh toolbar-on click, so the
+toolbar wrapping proof remains the pass-five capture from the same unchanged
+toolbar source. No fresh sanctioned-hash toolbar-on interaction is claimed.

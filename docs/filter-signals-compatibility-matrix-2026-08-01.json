@@ -1,19 +1,30 @@
 {
   "schemaVersion": 2,
-  "updatedUtc": "2026-08-09",
+  "updatedUtc": "2026-08-11",
   "target": {
     "name": "Filter Signals",
     "packageId": "CoolNether123.FilterSignals",
-    "sourceCommit": null,
-    "sourceCommitStatus": "Dirty pass-six worktree; no clean current provenance claimed",
+    "sourceCommit": "95215cc2ed9a7cf98a3bc5c7c41a7a244bd43a81",
+    "sourceCommitStatus": "Sanctioned wrapper recorded SourceDirty=false; the intentionally untracked local AGENTS.md was excluded from status without staging it",
     "assembly": "FilterSignals.dll",
-    "dllSizeBytes": 54784,
-    "dllSha256": "544044E3D282F55E82C8FBF7E620A743FB56C509F1301DCE734C7621DBD20A4C",
+    "dllSizeBytes": 57856,
+    "dllSha256": "A3D65C70B9AF8C2281DCF28886D9472AEA1816DD867EBF0E532CC6D3B8D2CA1D",
     "localCandidate": {
-      "status": "Exact-hash load/map/log smoke verified; pass-five UI evidence inherited because pass six was ABI-only; sanctioned wrapper pending shared manifest repair",
-      "recordedUtc": "2026-08-09",
-      "dllSizeBytes": 54784,
-      "dllSha256": "544044E3D282F55E82C8FBF7E620A743FB56C509F1301DCE734C7621DBD20A4C"
+      "status": "Sanctioned wrapper build, allowlisted release package, exact-hash map/log/Harmony/fixture smoke, and clean shutdown verified; toolbar-on visual remains inherited from the unchanged pass-five UI source",
+      "recordedUtc": "2026-08-11",
+      "dllSizeBytes": 57856,
+      "dllSha256": "A3D65C70B9AF8C2281DCF28886D9472AEA1816DD867EBF0E532CC6D3B8D2CA1D",
+      "releasePackage": "A:\\Dev\\RimWorld\\Releases\\FilterSignals\\1.0.0-1.6-20260810-final",
+      "releaseZip": "A:\\Dev\\RimWorld\\Releases\\FilterSignals\\FilterSignals-1.0.0-RimWorld-1.6-final.zip",
+      "releaseZipSha256": "E2FDA4B0F37450EB3AF0145A24A56483AD49BC5B7CD35AFA818AA262109373DD",
+      "runtimeSession": "1.0.0-1.6-20260810-final-377a9ec6f1884ac08600a9eb86c00cd7"
+    },
+    "buildProvenance": {
+      "toolingCommit": "59a07ec53affcf93041727abbbe83c14fd6370c3",
+      "toolingDirty": true,
+      "versionManifestSha256": "2B85365E144D8D4F5FCCBEF1BC4029928866D23208733CF2FDAFF526F0033638",
+      "commonModPropsSha256": "42EA70E0E56A001BF4B185F2DA9E60100AB07B076552827E8359C668F8F0739B",
+      "buildResult": "A:\\Dev\\RimWorld\\Temp\\FilterSignals-release-build-20260810-r4\\build-result.json"
     },
     "historicalAug7Evidence": {
       "sourceCommit": "793ad06f1ca09d5708be72666f2bd3491847655e",
@@ -21,7 +32,7 @@
       "dllSha256": "C76D01E03D22E22C8B6FFCBA072CDE57B3FDA24D2FB22A320BB71F2DA7B51E2F"
     }
   },
-  "evidenceScope": "Current pass-six exact-hash load/map/log smoke, inherited pass-five direct-collision and visual evidence (pass six changed only constructor ABI), pass-four production/research compatibility evidence, and historical Aug. 7 evidence. The sanctioned wrapper remains externally blocked.",
+  "evidenceScope": "Current sanctioned-package exact-hash map/log/Harmony/fixture smoke, inherited pass-five direct-collision and toolbar visual evidence (toolbar source is unchanged), pass-four production/research compatibility evidence, and historical Aug. 7 evidence. The shared tooling worktree was dirty and its exact commit and input hashes are recorded.",
   "runtimeBaseline": {
     "rimWorldVersion": "1.6.4871 rev573",
     "dlc": ["Core"],
