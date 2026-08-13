@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using LudeonTK;
 using RimWorld;
 using FilterSignals.Domain;
@@ -384,11 +385,7 @@ namespace FilterSignals.Diagnostics
                     projectIndex < projects.Count;
                     projectIndex++)
                 {
-                    Find.ResearchManager.FinishProject(
-                        projects[projectIndex],
-                        doCompletionDialog: false,
-                        researcher: null,
-                        doCompletionLetter: false);
+                    FinishResearchProject(projects[projectIndex]);
                 }
 
                 ClassificationResult after =
@@ -414,6 +411,58 @@ namespace FilterSignals.Diagnostics
             Log.Warning(
                 "[Filter Signals] researchProbe=failed " +
                 "noDeterministicCandidate");
+        }
+
+        private static void FinishResearchProject(
+            ResearchProjectDef project)
+        {
+            if (project == null || Find.ResearchManager == null)
+            {
+                return;
+            }
+
+            MethodInfo[] methods = Find.ResearchManager.GetType()
+                .GetMethods(
+                    BindingFlags.Instance |
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic)
+                .Where(method => method.Name == "FinishProject")
+                .ToArray();
+            for (int methodIndex = 0;
+                methodIndex < methods.Length;
+                methodIndex++)
+            {
+                ParameterInfo[] parameters =
+                    methods[methodIndex].GetParameters();
+                if (parameters.Length == 0 ||
+                    parameters[0].ParameterType !=
+                        typeof(ResearchProjectDef))
+                {
+                    continue;
+                }
+
+                object[] arguments = new object[parameters.Length];
+                arguments[0] = project;
+                for (int parameterIndex = 1;
+                    parameterIndex < parameters.Length;
+                    parameterIndex++)
+                {
+                    ParameterInfo parameter = parameters[parameterIndex];
+                    arguments[parameterIndex] =
+                        parameter.ParameterType == typeof(bool)
+                            ? (object)false
+                            : null;
+                }
+
+                methods[methodIndex].Invoke(
+                    Find.ResearchManager,
+                    arguments);
+                return;
+            }
+
+            Log.Warning(
+                "[Filter Signals] researchProbe=failed " +
+                "finishProjectApiUnavailable");
         }
 
         private static void RunMultiPathDefinitionProbe(Map map)
@@ -512,17 +561,23 @@ namespace FilterSignals.Diagnostics
     {
         private readonly ThingFilter filter =
             ThingFilter.CreateOnlyEverStorableThingFilter();
+#if FILTER_FIXTURE_MODERN_UI
         private readonly ThingFilterUI.UIState uiState =
             new ThingFilterUI.UIState();
+#else
+        private Vector2 scrollPosition;
+#endif
         private readonly int initialFingerprint;
 
         internal Dialog_FilterSignalsFixture(string initialSearch = null)
         {
             initialFingerprint = Fingerprint(filter);
+#if FILTER_FIXTURE_MODERN_UI
             if (!string.IsNullOrWhiteSpace(initialSearch))
             {
                 uiState.quickSearch.filter.Text = initialSearch;
             }
+#endif
 
             doCloseX = true;
             draggable = true;
@@ -558,11 +613,25 @@ namespace FilterSignals.Diagnostics
                 inRect.y + 58f,
                 inRect.width,
                 inRect.height - 58f);
+#if FILTER_FIXTURE_MODERN_UI
             ThingFilterUI.DoThingFilterConfigWindow(
                 filterRect,
                 uiState,
                 filter,
                 map: Find.CurrentMap);
+#else
+            ThingFilterUI.DoThingFilterConfigWindow(
+                filterRect,
+                ref scrollPosition,
+                filter,
+                null,
+                1,
+                null,
+                null,
+                false,
+                null,
+                Find.CurrentMap);
+#endif
         }
 
         private static int Fingerprint(ThingFilter thingFilter)

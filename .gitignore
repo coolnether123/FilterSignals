@@ -19,5 +19,5 @@ Developer/*
 !Developer/FilterSignals.TestFixture/Source/
 !Developer/FilterSignals.TestFixture/Source/FilterSignals.TestFixture.csproj
 !Developer/FilterSignals.TestFixture/Source/FilterSignalsDebugActions.cs
-Developer/FilterSignals.TestFixture/1.6/Assemblies/*.dll
-Developer/FilterSignals.TestFixture/1.6/Assemblies/*.pdb
+Developer/FilterSignals.TestFixture/*/Assemblies/*.dll
+Developer/FilterSignals.TestFixture/*/Assemblies/*.pdb
