@@ -24,7 +24,7 @@ if ($settings -notmatch
         'The settings field must retain its false fresh-install default.')
 }
 if ($registry -notmatch
-    '"presentation\.toolbar"[\s\S]{0,400}?nameof\(FilterSignalsSettings\.ShowClassificationToolbar\)')
+    '"presentation\.toolbar"[\s\S]{0,400}?settings\s*=>\s*settings\.ShowClassificationToolbar')
 {
     $failures.Add(
         'The persisted toolbar definition must bind to the defaulted field.')

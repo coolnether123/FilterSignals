@@ -23,11 +23,12 @@ namespace FilterSignals.Bootstrap
             : base(
                 content,
                 "CoolNether123.FilterSignals",
-                new SemanticVersion(1, 0, 0),
-                FilterSignalsSettingsRegistry.Definitions,
+                new SemanticVersion(1, 1, 0),
+                FilterSignalsSettingsRegistry.Schema.Definitions,
                 SpineCapability.HarmonyPatching |
                 SpineCapability.BoundedCaches |
-                SpineCapability.TooltipSizing,
+                SpineCapability.TooltipSizing |
+                SpineCapability.SettingsSchema,
                 new ModSettingsPageOptions { RowHeight = 34f })
         {
             if (tooltipSizingLease == null)

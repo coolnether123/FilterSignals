@@ -1,4 +1,3 @@
-using Spine.Api;
 using Verse;
 
 namespace FilterSignals.Settings
@@ -16,9 +15,7 @@ namespace FilterSignals.Settings
 
         public override void ExposeData()
         {
-            SpineApi.Settings.Scribe(
-                this,
-                FilterSignalsSettingsRegistry.Definitions);
+            FilterSignalsSettingsRegistry.Schema.Scribe(this);
             base.ExposeData();
         }
     }
