@@ -33,7 +33,9 @@ if ($source -notmatch 'FILTER_FIXTURE_MODERN_UI' -or
     $project -notmatch 'FILTER_FIXTURE_LEGACY_UI' -or
     $source -notmatch 'FILTER_FIXTURE_LUDEON_TK' -or
     $project -notmatch 'FILTER_FIXTURE_HAS_RECIPE_WORKER_PART' -or
-    $source -notmatch 'FILTER_FIXTURE_HAS_STORABLE_FILTER_FACTORY')
+    $source -notmatch 'FILTER_FIXTURE_HAS_STORABLE_FILTER_FACTORY' -or
+    $project -notmatch 'FILTER_FIXTURE_LEGACY_DEBUG_ACTION' -or
+    $source -notmatch 'FilterSignalsFixtureGameComponent')
 {
     throw 'Fixture UI and runtime API differences must be explicitly version-gated.'
 }

@@ -14,35 +14,38 @@ using Verse;
 
 namespace FilterSignals.Diagnostics
 {
-    internal static class FilterSignalsDebugActions
+    public static class FilterSignalsDebugActions
     {
-        [DebugAction(
-            "Filter Signals",
-            "Open Filter Signals filter fixture",
-            actionType = DebugActionType.Action)]
-        private static void OpenFixture()
+#if FILTER_FIXTURE_LEGACY_DEBUG_ACTION
+        [DebugAction("Open Filter Signals filter fixture", "Filter Signals", actionType = DebugActionType.Action)]
+#else
+        [DebugAction("Filter Signals", "Open Filter Signals filter fixture", actionType = DebugActionType.Action)]
+#endif
+        public static void OpenFixture()
         {
             Dialog_FilterSignalsFixture fixture =
                 new Dialog_FilterSignalsFixture();
             Find.WindowStack.Add(fixture);
         }
 
-        [DebugAction(
-            "Filter Signals",
-            "Open small-volume tooltip fixture",
-            actionType = DebugActionType.Action)]
-        private static void OpenSmallVolumeTooltipFixture()
+#if FILTER_FIXTURE_LEGACY_DEBUG_ACTION
+        [DebugAction("Open small-volume tooltip fixture", "Filter Signals", actionType = DebugActionType.Action)]
+#else
+        [DebugAction("Filter Signals", "Open small-volume tooltip fixture", actionType = DebugActionType.Action)]
+#endif
+        public static void OpenSmallVolumeTooltipFixture()
         {
             Dialog_FilterSignalsFixture fixture =
                 new Dialog_FilterSignalsFixture("Gold");
             Find.WindowStack.Add(fixture);
         }
 
-        [DebugAction(
-            "Filter Signals",
-            "Log Filter Signals fixture state",
-            actionType = DebugActionType.Action)]
-        private static void LogFixtureState()
+#if FILTER_FIXTURE_LEGACY_DEBUG_ACTION
+        [DebugAction("Log Filter Signals fixture state", "Filter Signals", actionType = DebugActionType.Action)]
+#else
+        [DebugAction("Filter Signals", "Log Filter Signals fixture state", actionType = DebugActionType.Action)]
+#endif
+        public static void LogFixtureState()
         {
             Dialog_FilterSignalsFixture fixture =
                 Find.WindowStack.WindowOfType<Dialog_FilterSignalsFixture>();
@@ -60,11 +63,12 @@ namespace FilterSignals.Diagnostics
                 "allowedCount:" + fixture.AllowedCount);
         }
 
-        [DebugAction(
-            "Filter Signals",
-            "Run Filter Signals capability probes",
-            actionType = DebugActionType.Action)]
-        private static void RunCapabilityProbes()
+#if FILTER_FIXTURE_LEGACY_DEBUG_ACTION
+        [DebugAction("Run Filter Signals capability probes", "Filter Signals", actionType = DebugActionType.Action)]
+#else
+        [DebugAction("Filter Signals", "Run Filter Signals capability probes", actionType = DebugActionType.Action)]
+#endif
+        public static void RunCapabilityProbes()
         {
             Map map = Find.CurrentMap;
             if (map == null)
@@ -80,11 +84,12 @@ namespace FilterSignals.Diagnostics
             RunMultiPathDefinitionProbe(map);
         }
 
-        [DebugAction(
-            "Filter Signals",
-            "Log Filter Signals explanations",
-            actionType = DebugActionType.Action)]
-        private static void LogRepresentativeExplanations()
+#if FILTER_FIXTURE_LEGACY_DEBUG_ACTION
+        [DebugAction("Log Filter Signals explanations", "Filter Signals", actionType = DebugActionType.Action)]
+#else
+        [DebugAction("Filter Signals", "Log Filter Signals explanations", actionType = DebugActionType.Action)]
+#endif
+        public static void LogRepresentativeExplanations()
         {
             Map map = Find.CurrentMap;
             var remaining = new HashSet<ProductionClassification>(
@@ -125,11 +130,12 @@ namespace FilterSignals.Diagnostics
                 string.Join(",", remaining.Select(value => value.ToString())));
         }
 
-        [DebugAction(
-            "Filter Signals",
-            "Measure Filter Signals classification cache",
-            actionType = DebugActionType.Action)]
-        private static void MeasureClassificationCache()
+#if FILTER_FIXTURE_LEGACY_DEBUG_ACTION
+        [DebugAction("Measure Filter Signals classification cache", "Filter Signals", actionType = DebugActionType.Action)]
+#else
+        [DebugAction("Filter Signals", "Measure Filter Signals classification cache", actionType = DebugActionType.Action)]
+#endif
+        public static void MeasureClassificationCache()
         {
             Map map = Find.CurrentMap;
             ThingDef[] items =
@@ -552,7 +558,9 @@ namespace FilterSignals.Diagnostics
 #if FILTER_FIXTURE_HAS_STORABLE_FILTER_FACTORY
             return ThingFilter.CreateOnlyEverStorableThingFilter();
 #else
-            return new ThingFilter();
+            ThingFilter filter = new ThingFilter();
+            filter.SetAllowAll(null);
+            return filter;
 #endif
         }
     }
@@ -569,6 +577,35 @@ namespace FilterSignals.Diagnostics
 #endif
         {
             return thing != null && thing.Position.x % 2 == 0;
+        }
+    }
+
+    public sealed class FilterSignalsFixtureGameComponent : GameComponent
+    {
+        private bool hasRun;
+
+        public FilterSignalsFixtureGameComponent(Game game)
+        {
+        }
+
+        public override void GameComponentTick()
+        {
+            if (hasRun || Find.CurrentMap == null)
+            {
+                return;
+            }
+
+            hasRun = true;
+            FilterSignalsDebugActions.OpenFixture();
+            FilterSignalsDebugActions.LogFixtureState();
+            FilterSignalsDebugActions.LogRepresentativeExplanations();
+            FilterSignalsDebugActions.MeasureClassificationCache();
+            FilterSignalsDebugActions.RunCapabilityProbes();
+        }
+
+        public override void ExposeData()
+        {
+            Scribe_Values.Look(ref hasRun, "filterSignalsFixtureHasRun", false);
         }
     }
 
@@ -589,7 +626,9 @@ namespace FilterSignals.Diagnostics
 #if FILTER_FIXTURE_HAS_STORABLE_FILTER_FACTORY
             return ThingFilter.CreateOnlyEverStorableThingFilter();
 #else
-            return new ThingFilter();
+            ThingFilter filter = new ThingFilter();
+            filter.SetAllowAll(null);
+            return filter;
 #endif
         }
 
