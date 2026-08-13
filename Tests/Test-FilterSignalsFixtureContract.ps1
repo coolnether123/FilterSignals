@@ -19,6 +19,7 @@ foreach ($version in $expected)
 }
 
 $source = Get-Content -Raw -LiteralPath (Join-Path $root 'Developer\FilterSignals.TestFixture\Source\FilterSignalsDebugActions.cs')
+$project = Get-Content -Raw -LiteralPath (Join-Path $root 'Developer\FilterSignals.TestFixture\Source\FilterSignals.TestFixture.csproj')
 foreach ($token in @('fixtureState', 'explanationCoverage', 'cacheProbe', 'FinishResearchProject'))
 {
     if ($source -notmatch [regex]::Escape($token))
@@ -28,7 +29,8 @@ foreach ($token in @('fixtureState', 'explanationCoverage', 'cacheProbe', 'Finis
 }
 
 if ($source -notmatch 'FILTER_FIXTURE_MODERN_UI' -or
-    $source -notmatch 'FILTER_FIXTURE_LEGACY_UI')
+    $project -notmatch 'FILTER_FIXTURE_MODERN_UI' -or
+    $project -notmatch 'FILTER_FIXTURE_LEGACY_UI')
 {
     throw 'Fixture UI API must be explicitly version-gated.'
 }
