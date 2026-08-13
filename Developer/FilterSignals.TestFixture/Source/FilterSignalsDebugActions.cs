@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+#if FILTER_FIXTURE_LUDEON_TK
 using LudeonTK;
+#endif
 using RimWorld;
 using FilterSignals.Domain;
 using FilterSignals.Runtime;
@@ -95,7 +97,7 @@ namespace FilterSignals.Diagnostics
                 });
 
             foreach (ThingDef item in
-                ThingFilter.CreateOnlyEverStorableThingFilter()
+                    CreateFixtureFilter()
                     .AllowedThingDefs
                     .OrderBy(definition => definition.defName))
             {
@@ -131,7 +133,7 @@ namespace FilterSignals.Diagnostics
         {
             Map map = Find.CurrentMap;
             ThingDef[] items =
-                ThingFilter.CreateOnlyEverStorableThingFilter()
+                    CreateFixtureFilter()
                     .AllowedThingDefs
                     .OrderBy(definition => definition.shortHash)
                     .ToArray();
@@ -544,14 +546,27 @@ namespace FilterSignals.Diagnostics
                 WipeMode.Vanish) as Building;
             return building != null;
         }
+
+        private static ThingFilter CreateFixtureFilter()
+        {
+#if FILTER_FIXTURE_HAS_STORABLE_FILTER_FACTORY
+            return ThingFilter.CreateOnlyEverStorableThingFilter();
+#else
+            return new ThingFilter();
+#endif
+        }
     }
 
     public sealed class RecipeWorker_FilterSignalsConditionalInstanceProbe :
         RecipeWorker
     {
+#if FILTER_FIXTURE_HAS_RECIPE_WORKER_PART
         public override bool AvailableOnNow(
             Thing thing,
             BodyPartRecord part = null)
+#else
+        public override bool AvailableOnNow(Thing thing)
+#endif
         {
             return thing != null && thing.Position.x % 2 == 0;
         }
@@ -560,7 +575,7 @@ namespace FilterSignals.Diagnostics
     internal sealed class Dialog_FilterSignalsFixture : Window
     {
         private readonly ThingFilter filter =
-            ThingFilter.CreateOnlyEverStorableThingFilter();
+            CreateFixtureFilter();
 #if FILTER_FIXTURE_MODERN_UI
         private readonly ThingFilterUI.UIState uiState =
             new ThingFilterUI.UIState();
@@ -568,6 +583,15 @@ namespace FilterSignals.Diagnostics
         private Vector2 scrollPosition;
 #endif
         private readonly int initialFingerprint;
+
+        private static ThingFilter CreateFixtureFilter()
+        {
+#if FILTER_FIXTURE_HAS_STORABLE_FILTER_FACTORY
+            return ThingFilter.CreateOnlyEverStorableThingFilter();
+#else
+            return new ThingFilter();
+#endif
+        }
 
         internal Dialog_FilterSignalsFixture(string initialSearch = null)
         {
