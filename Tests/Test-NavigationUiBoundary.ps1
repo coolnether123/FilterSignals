@@ -182,7 +182,7 @@ if ($presentation -notmatch
         'A square with no navigation action must add no navigation text.')
 }
 if ($language -notmatch
-    '<FilterSignals_CanMake>Able to be produced in this colony</FilterSignals_CanMake>')
+    '<FilterSignals_CanMake>Your colony can make this item\.</FilterSignals_CanMake>')
 {
     $failures.Add(
         'A producible item must use the requested concise colony wording.')

@@ -71,7 +71,7 @@ production paths, overrides, and other ambiguous states do not advertise a
 click action; if clicked, they leave the storage panel open and unchanged.
 Hover text contains only the classification, a short reason, and an action
 instruction when a real navigation target exists. A fully satisfied path uses
-the single status line "Able to be produced in this colony" rather than
+the single status line "Your colony can make this item." rather than
 repeating its research or workstation state. Because vanilla registers a
 tooltip for the entire item row first, the square clears current-frame tooltips
 only while the pointer is inside its 18-by-18 interaction rectangle, then
@@ -83,8 +83,8 @@ feature and status indicators are enabled, so the replacement square owns the
 row. It restores the list in both normal and exceptional paths, including
 after a setting transition.
 This removes the inline `/10` notation without persisting or changing filter
-state. The square tooltip carries the concise equivalent, “Small-volume: 10
-units = 1.”
+state. The square tooltip carries the concise equivalent, "Small-volume: 10
+units = 1."
 
 Settings and patch installation use the standalone Spine dependency:
 

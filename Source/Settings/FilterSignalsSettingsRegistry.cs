@@ -21,9 +21,8 @@ namespace FilterSignals.Settings
                 "feature.enabled",
                 settings => settings.FeatureEnabled,
                 "Enable Filter Signals",
-                tooltip: "Adds transient production classifications to vanilla " +
-                    "ThingFilter dialogs. Disabling this leaves every stored " +
-                    "ThingFilter unchanged.")
+                tooltip: "Shows production status in vanilla item-filter " +
+                    "dialogs. Turning it off does not change saved filters.")
                 .ControlsChildren()
                 .ScribeAs("feature.enabled")
                 .Localized("FilterSignals_Settings_Feature_Label",
@@ -34,9 +33,10 @@ namespace FilterSignals.Settings
                     "presentation.toolbar",
                     settings => settings.ShowClassificationToolbar,
                     "Show optional filter toolbar",
-                    tooltip: "Shows four temporary classification toggles above " +
-                        "vanilla item filters. Hidden by default because the " +
-                        "colored status squares remain available.")
+                    tooltip: "Shows four buttons above item filters. They hide " +
+                        "or show status groups for the current dialog only. " +
+                        "The colored status squares remain available when the " +
+                        "toolbar is hidden.")
                 .ScribeAs("presentation.toolbar")
                 .Localized("FilterSignals_Settings_Toolbar_Label",
                     "FilterSignals_Settings_Toolbar_Tooltip");
@@ -44,9 +44,9 @@ namespace FilterSignals.Settings
                     "presentation.indicators",
                     settings => settings.ShowStatusIndicators,
                     "Show status indicators",
-                    tooltip: "Draws a compact colored indicator beside each " +
-                        "visible item. Hover it for the production-path " +
-                        "explanation.")
+                    tooltip: "Shows a colored status square beside each visible " +
+                        "item. Hover over it to see why the item has that " +
+                        "status.")
                 .ScribeAs("presentation.indicators")
                 .Localized("FilterSignals_Settings_Indicators_Label",
                     "FilterSignals_Settings_Indicators_Tooltip");
@@ -54,10 +54,10 @@ namespace FilterSignals.Settings
                     "classification.materials",
                     settings => settings.ConsiderMaterialShortages,
                     "Consider current material shortages",
-                    tooltip: "When enabled, a technologically available recipe is " +
-                        "shown as unavailable if none of an ingredient's allowed " +
-                        "materials are present. Disabled by default because " +
-                        "inventory changes are temporary.")
+                    tooltip: "When enabled, a recipe counts as unavailable if " +
+                        "the colony has none of an ingredient's allowed " +
+                        "materials. This check is off by default because " +
+                        "inventory changes often.")
                 .AdvancedOnly()
                 .ScribeAs("classification.materials")
                 .Localized("FilterSignals_Settings_Materials_Label",

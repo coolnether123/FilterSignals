@@ -5,8 +5,8 @@
   <FilterSignals_UnlockedShort>Unlocked</FilterSignals_UnlockedShort>
   <FilterSignals_LockedShort>Locked</FilterSignals_LockedShort>
   <FilterSignals_NotApplicableShort>N/A</FilterSignals_NotApplicableShort>
-  <FilterSignals_CanMake>Able to be produced in this colony</FilterSignals_CanMake>
-  <FilterSignals_Unlocked>Research unlocked</FilterSignals_Unlocked>
+  <FilterSignals_CanMake>Your colony can make this item.</FilterSignals_CanMake>
+  <FilterSignals_Unlocked>Research complete</FilterSignals_Unlocked>
   <FilterSignals_Locked>Cannot make yet</FilterSignals_Locked>
   <FilterSignals_NotApplicable>Not applicable</FilterSignals_NotApplicable>
   <FilterSignals_WorkbenchMissing>Workbench missing.</FilterSignals_WorkbenchMissing>
@@ -20,13 +20,13 @@
   <FilterSignals_Navigation_OpenResearch>Click to open research.</FilterSignals_Navigation_OpenResearch>
   <FilterSignals_Navigation_OpenArchitect>Click to open Architect.</FilterSignals_Navigation_OpenArchitect>
   <FilterSignals_SmallVolume>Small-volume: 10 units = 1.</FilterSignals_SmallVolume>
-  <FilterSignals_ToggleTooltip>Click to show or hide this classification in this dialog only. Your allowed-item configuration is never changed.</FilterSignals_ToggleTooltip>
+  <FilterSignals_ToggleTooltip>Click to show or hide this status in the current dialog. Your saved filter will not change.</FilterSignals_ToggleTooltip>
   <FilterSignals_Settings_Feature_Label>Enable Filter Signals</FilterSignals_Settings_Feature_Label>
-  <FilterSignals_Settings_Feature_Tooltip>Adds transient production classifications to vanilla ThingFilter dialogs. Disabling this leaves every stored ThingFilter unchanged.</FilterSignals_Settings_Feature_Tooltip>
+  <FilterSignals_Settings_Feature_Tooltip>Shows production status in vanilla item-filter dialogs. Turning it off does not change saved filters.</FilterSignals_Settings_Feature_Tooltip>
   <FilterSignals_Settings_Toolbar_Label>Show optional filter toolbar</FilterSignals_Settings_Toolbar_Label>
-  <FilterSignals_Settings_Toolbar_Tooltip>Shows four temporary classification toggles above vanilla item filters. Hidden by default because the colored status squares remain available. These toggles never change allowed items.</FilterSignals_Settings_Toolbar_Tooltip>
+  <FilterSignals_Settings_Toolbar_Tooltip>Shows four buttons above item filters. They hide or show status groups for the current dialog only. The colored status squares remain available when the toolbar is hidden.</FilterSignals_Settings_Toolbar_Tooltip>
   <FilterSignals_Settings_Indicators_Label>Show status indicators</FilterSignals_Settings_Indicators_Label>
-  <FilterSignals_Settings_Indicators_Tooltip>Draws a compact colored indicator beside each visible item. Hover it for the production-path explanation.</FilterSignals_Settings_Indicators_Tooltip>
+  <FilterSignals_Settings_Indicators_Tooltip>Shows a colored status square beside each visible item. Hover over it to see why the item has that status.</FilterSignals_Settings_Indicators_Tooltip>
   <FilterSignals_Settings_Materials_Label>Consider current material shortages</FilterSignals_Settings_Materials_Label>
-  <FilterSignals_Settings_Materials_Tooltip>When enabled, a technologically available recipe is shown as unavailable if none of an ingredient's allowed materials are present. Disabled by default because inventory changes are temporary.</FilterSignals_Settings_Materials_Tooltip>
+  <FilterSignals_Settings_Materials_Tooltip>When enabled, a recipe counts as unavailable if the colony has none of an ingredient's allowed materials. This check is off by default because inventory changes often.</FilterSignals_Settings_Materials_Tooltip>
 </LanguageData>

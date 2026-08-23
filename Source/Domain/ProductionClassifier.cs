@@ -26,7 +26,7 @@ namespace FilterSignals.Domain
             {
                 return new ClassificationResult(
                     ProductionClassification.NotApplicable,
-                    "This colony is unable to make this item.");
+                    "Your colony cannot make this item.");
             }
 
             ProductionPathAssessment ready =
@@ -38,7 +38,7 @@ namespace FilterSignals.Domain
             {
                 return new ClassificationResult(
                     ProductionClassification.CanMakeNow,
-                    "Can be produced at " + ready.PathLabel + ".",
+                    "Your colony can make this at " + ready.PathLabel + ".",
                     ready.PathLabel,
                     ready.Reason,
                     ready.PathId,

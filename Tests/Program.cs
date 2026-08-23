@@ -95,7 +95,7 @@ namespace FilterSignals.Tests
                 ProductionClassification.NotApplicable,
                 result.Classification);
             Contains(
-                "This colony is unable to make this item",
+                "Your colony cannot make this item.",
                 result.Explanation);
             NotContains("player", result.Explanation);
         }

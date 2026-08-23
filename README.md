@@ -1,26 +1,25 @@
 # Filter Signals
 
-Filter Signals adds colony-aware manufacturing information to RimWorld 1.6
-item-filter dialogs. It answers four different questions without changing the
-filter itself:
+Filter Signals shows what your colony can make in RimWorld 1.6 item-filter
+dialogs. Filter Signals uses four statuses without changing the filter itself:
 
-- **Can make**: at least one production path is unlocked and currently usable.
-- **Unlocked**: research is complete, but a workstation, capable pawn, or
+- **Can make** means at least one production path is unlocked and usable now.
+- **Unlocked** means research is complete, but a workstation, capable pawn, or
   optional material requirement is missing.
-- **Locked**: production exists, but its research or another colony prerequisite
-  is not complete.
-- **N/A**: no known production path exists.
+- **Locked** means production exists, but its research or another colony
+  prerequisite is not complete.
+- **N/A** means no known production path exists.
 
 The colored square beside each item shows one short status explanation on
 hover, without stacking the item's normal description underneath it.
-Small-volume materials explain “10 units = 1” there instead of displaying
+Small-volume materials explain "10 units = 1" there instead of displaying
 RimWorld's inline `/10` marker in the item row.
 Clicking it navigates to a usable workstation, the relevant research project,
 or an available Architect build option when a safe vanilla target exists.
 Architect navigation preserves the current camera position. If no action is
 available, clicking the square leaves the storage panel open and unchanged.
 The colored squares are the default interface. An optional four-button toolbar
-can temporarily hide or show classifications only in the open dialog; it is
+can hide or show classifications for the current dialog; it is
 disabled by default and can be enabled in mod settings. Saved allow/deny
 choices are never rewritten.
 
@@ -36,7 +35,10 @@ Architect menu and never toggles the temporary view filter.
 
 ## Installation
 
-Filter Signals needs Harmony and [SpineLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3778463813). Both are available on the Steam Workshop; repository builds are at [coolnether123/Spine](https://github.com/coolnether123/Spine).
+Filter Signals needs Harmony and
+[SpineLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3778463813).
+Both are available on the Steam Workshop. You can also build SpineLib from the
+[Spine repository](https://github.com/coolnether123/Spine).
 
 Copy both `FilterSignals` and `Spine` into RimWorld's `Mods` directory, then
 enable Harmony, SpineLib, and Filter Signals in that order. No other mod is
@@ -56,10 +58,12 @@ automatically. Mods with nonstandard production systems can register a provider
 or final classification override through the public API documented in
 [`docs/compatibility.md`](docs/compatibility.md).
 
-Implementation and verification details are in [`docs/architecture.md`](docs/architecture.md)
-and [`docs/verification.md`](docs/verification.md).
+Implementation and verification details are in
+[`docs/architecture.md`](docs/architecture.md) and
+[`docs/verification.md`](docs/verification.md).
+
 ## Developer verification
 
 Live debug actions are isolated in
-`Developer/FilterSignals.TestFixture`. Build and load that folder only for harness
-verification; it is not part of the Filter Signals shipping package.
+`Developer/FilterSignals.TestFixture`. Build and load that folder only for
+harness verification. It is not part of the Filter Signals shipping package.
