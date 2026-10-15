@@ -11,7 +11,7 @@ $repository = [System.IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $toolingRoot = [Environment]::GetEnvironmentVariable('RWT_CASCADE_TOOLING_ROOT')
 if ([string]::IsNullOrWhiteSpace($toolingRoot))
 {
-    $toolingRoot = 'A:\Dev\RimWorld\Worktrees\RimWorld-Tooling\phase-a'
+    $toolingRoot = 'H:\Dev\RimWorld\Worktrees\RimWorld-Tooling\phase-a'
 }
 
 if ([string]::IsNullOrWhiteSpace($OutputRoot))
