@@ -22,5 +22,5 @@ localized and concise.
 
 Metadata, `Tools\CascadeManifest.json`, project files, and all files under
 `Tests` define current support and verification. Follow
-`A:\Dev\RimWorld\AGENTS.md` for shared build/runtime work and run every affected
+`H:\Dev\RimWorld\AGENTS.md` for shared build/runtime work and run every affected
 executable and PowerShell boundary test.
